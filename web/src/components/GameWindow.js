@@ -1,12 +1,14 @@
 import { LitElement, css, html } from 'lit';
-import config from './config.json';
-import Phase from './Phase';
-import Deck from './Deck';
+import config from '../config.json';
+import Phase from '../Phase';
+import Deck from '../Deck';
 
 /**
  * @customElement game-window
  */
 export default class GameWindow extends LitElement {
+  static tagName = 'game-window';
+
   static BATTERY_START = 25;
 
   static properties = {
@@ -171,5 +173,3 @@ export default class GameWindow extends LitElement {
     }
   `;
 }
-
-customElements.define('game-window', GameWindow);

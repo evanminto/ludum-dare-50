@@ -1,8 +1,15 @@
-import './GameWindow.js';
-import './NavBar.js';
-import './AppIcon.js';
-import './NotificationBubble.js';
-import './ShutdownScreen.js';
-
-import './TwitterApp.js';
-import './MapApp.js';
+Promise.all([
+  import('./components/GameWindow.js'),
+  import('./components/NavBar.js'),
+  import('./components/AppIcon.js'),
+  import('./components/NotificationBubble.js'),
+  import('./components/ShutdownScreen.js'),
+  import('./components/TwitterApp.js'),
+  import('./components/MapApp.js'),
+])
+  .then(results => results.map(result => result.default))
+  .then(components =>
+    components.forEach(component =>
+      customElements.define(component.tagName, component)
+    )
+  );

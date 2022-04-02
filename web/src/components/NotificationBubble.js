@@ -4,6 +4,8 @@ import { LitElement, css, html } from 'lit';
  * @customElement notification-bubble
  */
 export default class NotificationBubble extends LitElement {
+  static tagName = 'notification-bubble';
+
   render() {
     return html`
       <slot></slot>
@@ -28,5 +30,3 @@ export default class NotificationBubble extends LitElement {
     }
   `;
 }
-
-customElements.define('notification-bubble', NotificationBubble);

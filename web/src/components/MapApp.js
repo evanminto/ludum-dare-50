@@ -1,11 +1,14 @@
 import { LitElement, css, html } from 'lit';
-import SuccessEvent from './events/SuccessEvent';
+import SuccessEvent from '../events/SuccessEvent';
+import FailureEvent from '../events/FailureEvent';
 
 /**
  * @customElement map-app
  * @fires success
  */
 export default class MapApp extends LitElement {
+  static tagName = 'map-app';
+
   posts = [
     {
       handle: 'dril',
@@ -19,13 +22,27 @@ export default class MapApp extends LitElement {
   ];
 
   render() {
-    return html`
-      Map
-    `;
+    return html` Map
+
+      <button type="button" @click=${this.handleSuccess}>Success</button>
+
+      <button type="button" @click=${this.handleFailure}>Failure</button>`;
   }
 
-  handleClickRetweet(rtToComplete) {
+  handleSuccess() {
+    this.dispatchSuccess();
+  }
+
+  handleFailure() {
+    this.dispatchFailure();
+  }
+
+  dispatchSuccess() {
     this.dispatchEvent(new SuccessEvent());
+  }
+
+  dispatchFailure() {
+    this.dispatchEvent(new FailureEvent());
   }
 
   static styles = css`
@@ -34,12 +51,5 @@ export default class MapApp extends LitElement {
       background: lightgray;
       padding: 1em;
     }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
   `;
 }
-
-customElements.define('map-app', MapApp);

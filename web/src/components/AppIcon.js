@@ -4,6 +4,8 @@ import { LitElement, css, html } from 'lit';
  * @customElement app-icon
  */
 export default class AppIcon extends LitElement {
+  static tagName = 'app-icon';
+
   static properties = {
     name: String,
   };
@@ -32,5 +34,3 @@ export default class AppIcon extends LitElement {
     }
   `;
 }
-
-customElements.define('app-icon', AppIcon);

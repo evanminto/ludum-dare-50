@@ -514,1227 +514,166 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"8lqZg":[function(require,module,exports) {
-var _gameWindowJs = require("./GameWindow.js");
-var _navBarJs = require("./NavBar.js");
-var _appIconJs = require("./AppIcon.js");
-var _notificationBubbleJs = require("./NotificationBubble.js");
-var _shutdownScreenJs = require("./ShutdownScreen.js");
-var _twitterAppJs = require("./TwitterApp.js");
-var _mapAppJs = require("./MapApp.js");
+Promise.all([
+    require("6d03281a5cc140fb"),
+    require("c107ed756068aec9"),
+    require("485cab92fa2f264c"),
+    require("20a224d986655f23"),
+    require("6c3fb8d84c4945df"),
+    require("a9dcf1e6bbcc9f68"),
+    require("6bd83270650555ca"), 
+]).then((results)=>results.map((result)=>result.default
+    )
+).then((components)=>components.forEach((component)=>customElements.define(component.tagName, component)
+    )
+);
 
-},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA","./MapApp.js":"4icXw"}],"28Y8e":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-var _configJson = require("./config.json");
-var _configJsonDefault = parcelHelpers.interopDefault(_configJson);
-var _phase = require("./Phase");
-var _phaseDefault = parcelHelpers.interopDefault(_phase);
-var _deck = require("./Deck");
-var _deckDefault = parcelHelpers.interopDefault(_deck);
-class GameWindow extends _lit.LitElement {
-    static BATTERY_START = 25;
-    static properties = {
-        battery: Number,
-        notifications: {
-            type: Array,
-            attribute: false
+},{"6d03281a5cc140fb":"6K1RH","c107ed756068aec9":"dOTL8","485cab92fa2f264c":"4uhN8","20a224d986655f23":"jcpaz","6c3fb8d84c4945df":"bVzft","a9dcf1e6bbcc9f68":"2ZBV5","6bd83270650555ca":"dUY7S"}],"6K1RH":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "GameWindow.e2cbcc4e.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('cqjaC')
+);
+
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"61B45":[function(require,module,exports) {
+"use strict";
+var cacheLoader = require('../cacheLoader');
+module.exports = cacheLoader(function(bundle) {
+    return new Promise(function(resolve, reject) {
+        // Don't insert the same script twice (e.g. if it was already in the HTML)
+        var existingScripts = document.getElementsByTagName('script');
+        if ([].concat(existingScripts).some(function isCurrentBundle(script) {
+            return script.src === bundle;
+        })) {
+            resolve();
+            return;
         }
-    };
-    phases = new _deckDefault.default([
-        new _phaseDefault.default([
-            {
-                content: _lit.html`<twitter-app></twitter-app>`
-            },
-            {
-                content: _lit.html`<map-app></map-app>`
-            }, 
-        ]), 
-    ]);
-    constructor(){
-        super();
-        this.battery = GameWindow.BATTERY_START;
-        this.notifications = [];
-        let seconds = 0;
-        setInterval(()=>{
-            this.battery -= GameWindow.BATTERY_START / _configJsonDefault.default.batteryMinutesDefault / 60;
-            seconds += 1;
-        }, 1000);
-    }
-    discardApp() {
-        this.discardedAppIndexes = [
-            ...this.discardedAppIndexes,
-            this.appIndex
-        ];
-    }
-    handleSuccess() {
-        const { appDeck  } = this.phases.current;
-        appDeck.discard();
-        appDeck.shuffle();
-        this.requestUpdate('phases');
-    }
-    handleFailure() {
-        console.log('failure');
-        const { appDeck  } = this.phases.current;
-        appDeck.shuffle();
-        this.requestUpdate('phases');
-    }
-    render() {
-        if (this.battery <= 0) return _lit.html`<shutdown-screen></shutdown-screen>`;
-        return _lit.html`
-      <nav-bar battery=${this.battery}></nav-bar>
-
-      ${this.notifications.length > 0 ? _lit.html`
-            <div class="notifications-tray">
-              ${this.notifications.map((n, index)=>_lit.html`
-                  <notification-bubble
-                    @dismiss=${()=>this.handleDismiss(index)
-            }
-                  >
-                    ${n.text}
-                  </notification-bubble>
-                `
-        )}
-            </div>
-          ` : ''}
-      ${this.phases.current && this.phases.current.appDeck.current ? _lit.html`
-            <div
-              class="app-container"
-              @success=${this.handleSuccess}
-              @failure=${this.handleFailure}
-            >
-              ${this.phases.current.appDeck.current.content}
-            </div>
-          ` : _lit.html`
-            <div class="grid">
-              <app-icon name="Twitter"></app-icon>
-              <app-icon name="Maps"></app-icon>
-              <app-icon name="Instagram"></app-icon>
-              <app-icon name="Notes"></app-icon>
-              <app-icon name="Photos"></app-icon>
-              <app-icon name="Camera"></app-icon>
-              <app-icon name="Email"></app-icon>
-              <app-icon name="Message"></app-icon>
-              <app-icon name="Browser"></app-icon>
-              <app-icon name="Wordle"></app-icon>
-              <app-icon name="NextTrain"></app-icon>
-              <app-icon name="TikTok"></app-icon>
-            </div>
-          `}
-    `;
-    }
-    handleBack() {
-        this.currentAppId = null;
-    }
-    handleDismiss(index) {
-        const newNotifs = [
-            ...this.notifications
-        ];
-        newNotifs.splice(index, 1);
-        this.notifications = newNotifs;
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    .app-container {
-      flex: 1 1 auto;
-    }
-
-    .app-container > * {
-      height: 100%;
-    }
-
-    .notifications-tray {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25em;
-      position: absolute;
-      z-index: 1;
-      left: 1em;
-      right: 1em;
-      top: 1em;
-      width: calc(100% - 2em);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
-      justify-items: center;
-      gap: 1em;
-      padding: 1em;
-    }
-
-    notification-bubble {
-      box-shadow: 1px 1px 10px black;
-    }
-  `;
-}
-exports.default = GameWindow;
-customElements.define('game-window', GameWindow);
-
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.json":"8VeYg","./Deck":"ledJZ","./Phase":"ahkx4"}],"4antt":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _reactiveElement = require("@lit/reactive-element");
-var _litHtml = require("lit-html");
-var _litElementJs = require("lit-element/lit-element.js");
-parcelHelpers.exportAll(_litElementJs, exports);
-
-},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","lit-element/lit-element.js":"9YxkX","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hypet":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "CSSResult", ()=>_cssTagJs.CSSResult
-);
-parcelHelpers.export(exports, "adoptStyles", ()=>_cssTagJs.adoptStyles
-);
-parcelHelpers.export(exports, "css", ()=>_cssTagJs.css
-);
-parcelHelpers.export(exports, "getCompatibleStyle", ()=>_cssTagJs.getCompatibleStyle
-);
-parcelHelpers.export(exports, "supportsAdoptingStyleSheets", ()=>_cssTagJs.supportsAdoptingStyleSheets
-);
-parcelHelpers.export(exports, "unsafeCSS", ()=>_cssTagJs.unsafeCSS
-);
-parcelHelpers.export(exports, "ReactiveElement", ()=>a
-);
-parcelHelpers.export(exports, "defaultConverter", ()=>o
-);
-parcelHelpers.export(exports, "notEqual", ()=>n
-);
-var _cssTagJs = require("./css-tag.js");
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ var s;
-const e = window.trustedTypes, r = e ? e.emptyScript : "", h = window.reactiveElementPolyfillSupport, o = {
-    toAttribute (t, i) {
-        switch(i){
-            case Boolean:
-                t = t ? r : null;
-                break;
-            case Object:
-            case Array:
-                t = null == t ? t : JSON.stringify(t);
-        }
-        return t;
-    },
-    fromAttribute (t, i) {
-        let s1 = t;
-        switch(i){
-            case Boolean:
-                s1 = null !== t;
-                break;
-            case Number:
-                s1 = null === t ? null : Number(t);
-                break;
-            case Object:
-            case Array:
-                try {
-                    s1 = JSON.parse(t);
-                } catch (t1) {
-                    s1 = null;
-                }
-        }
-        return s1;
-    }
-}, n = (t, i)=>i !== t && (i == i || t == t)
-, l = {
-    attribute: !0,
-    type: String,
-    converter: o,
-    reflect: !1,
-    hasChanged: n
-};
-class a extends HTMLElement {
-    constructor(){
-        super(), this._$Et = new Map, this.isUpdatePending = !1, this.hasUpdated = !1, this._$Ei = null, this.o();
-    }
-    static addInitializer(t) {
-        var i;
-        null !== (i = this.l) && void 0 !== i || (this.l = []), this.l.push(t);
-    }
-    static get observedAttributes() {
-        this.finalize();
-        const t = [];
-        return this.elementProperties.forEach((i, s2)=>{
-            const e1 = this._$Eh(s2, i);
-            void 0 !== e1 && (this._$Eu.set(e1, s2), t.push(e1));
-        }), t;
-    }
-    static createProperty(t, i = l) {
-        if (i.state && (i.attribute = !1), this.finalize(), this.elementProperties.set(t, i), !i.noAccessor && !this.prototype.hasOwnProperty(t)) {
-            const s3 = "symbol" == typeof t ? Symbol() : "__" + t, e2 = this.getPropertyDescriptor(t, s3, i);
-            void 0 !== e2 && Object.defineProperty(this.prototype, t, e2);
-        }
-    }
-    static getPropertyDescriptor(t, i, s4) {
-        return {
-            get () {
-                return this[i];
-            },
-            set (e3) {
-                const r1 = this[t];
-                this[i] = e3, this.requestUpdate(t, r1, s4);
-            },
-            configurable: !0,
-            enumerable: !0
+        var preloadLink = document.createElement('link');
+        preloadLink.href = bundle;
+        preloadLink.rel = 'preload';
+        preloadLink.as = 'script';
+        document.head.appendChild(preloadLink);
+        var script1 = document.createElement('script');
+        script1.async = true;
+        script1.type = 'text/javascript';
+        script1.charset = 'utf-8';
+        script1.src = bundle;
+        script1.onerror = function(e) {
+            var error = new TypeError("Failed to fetch dynamically imported module: ".concat(bundle, ". Error: ").concat(e.message));
+            script1.onerror = script1.onload = null;
+            script1.remove();
+            reject(error);
         };
-    }
-    static getPropertyOptions(t) {
-        return this.elementProperties.get(t) || l;
-    }
-    static finalize() {
-        if (this.hasOwnProperty("finalized")) return !1;
-        this.finalized = !0;
-        const t = Object.getPrototypeOf(this);
-        if (t.finalize(), this.elementProperties = new Map(t.elementProperties), this._$Eu = new Map, this.hasOwnProperty("properties")) {
-            const t = this.properties, i = [
-                ...Object.getOwnPropertyNames(t),
-                ...Object.getOwnPropertySymbols(t)
-            ];
-            for (const s5 of i)this.createProperty(s5, t[s5]);
-        }
-        return this.elementStyles = this.finalizeStyles(this.styles), !0;
-    }
-    static finalizeStyles(i) {
-        const s6 = [];
-        if (Array.isArray(i)) {
-            const e4 = new Set(i.flat(1 / 0).reverse());
-            for (const i1 of e4)s6.unshift(_cssTagJs.getCompatibleStyle(i1));
-        } else void 0 !== i && s6.push(_cssTagJs.getCompatibleStyle(i));
-        return s6;
-    }
-    static _$Eh(t, i) {
-        const s7 = i.attribute;
-        return !1 === s7 ? void 0 : "string" == typeof s7 ? s7 : "string" == typeof t ? t.toLowerCase() : void 0;
-    }
-    o() {
-        var t2;
-        this._$Ep = new Promise((t)=>this.enableUpdating = t
-        ), this._$AL = new Map, this._$Em(), this.requestUpdate(), null === (t2 = this.constructor.l) || void 0 === t2 || t2.forEach((t)=>t(this)
-        );
-    }
-    addController(t) {
-        var i, s8;
-        (null !== (i = this._$Eg) && void 0 !== i ? i : this._$Eg = []).push(t), void 0 !== this.renderRoot && this.isConnected && (null === (s8 = t.hostConnected) || void 0 === s8 || s8.call(t));
-    }
-    removeController(t) {
-        var i;
-        null === (i = this._$Eg) || void 0 === i || i.splice(this._$Eg.indexOf(t) >>> 0, 1);
-    }
-    _$Em() {
-        this.constructor.elementProperties.forEach((t, i)=>{
-            this.hasOwnProperty(i) && (this._$Et.set(i, this[i]), delete this[i]);
-        });
-    }
-    createRenderRoot() {
-        var t;
-        const s9 = null !== (t = this.shadowRoot) && void 0 !== t ? t : this.attachShadow(this.constructor.shadowRootOptions);
-        return _cssTagJs.adoptStyles(s9, this.constructor.elementStyles), s9;
-    }
-    connectedCallback() {
-        var t3;
-        void 0 === this.renderRoot && (this.renderRoot = this.createRenderRoot()), this.enableUpdating(!0), null === (t3 = this._$Eg) || void 0 === t3 || t3.forEach((t)=>{
-            var i;
-            return null === (i = t.hostConnected) || void 0 === i ? void 0 : i.call(t);
-        });
-    }
-    enableUpdating(t) {}
-    disconnectedCallback() {
-        var t4;
-        null === (t4 = this._$Eg) || void 0 === t4 || t4.forEach((t)=>{
-            var i;
-            return null === (i = t.hostDisconnected) || void 0 === i ? void 0 : i.call(t);
-        });
-    }
-    attributeChangedCallback(t, i, s10) {
-        this._$AK(t, s10);
-    }
-    _$ES(t, i, s11 = l) {
-        var e5, r2;
-        const h1 = this.constructor._$Eh(t, s11);
-        if (void 0 !== h1 && !0 === s11.reflect) {
-            const n1 = (null !== (r2 = null === (e5 = s11.converter) || void 0 === e5 ? void 0 : e5.toAttribute) && void 0 !== r2 ? r2 : o.toAttribute)(i, s11.type);
-            this._$Ei = t, null == n1 ? this.removeAttribute(h1) : this.setAttribute(h1, n1), this._$Ei = null;
-        }
-    }
-    _$AK(t, i) {
-        var s12, e6, r3;
-        const h2 = this.constructor, n2 = h2._$Eu.get(t);
-        if (void 0 !== n2 && this._$Ei !== n2) {
-            const t = h2.getPropertyOptions(n2), l1 = t.converter, a1 = null !== (r3 = null !== (e6 = null === (s12 = l1) || void 0 === s12 ? void 0 : s12.fromAttribute) && void 0 !== e6 ? e6 : "function" == typeof l1 ? l1 : null) && void 0 !== r3 ? r3 : o.fromAttribute;
-            this._$Ei = n2, this[n2] = a1(i, t.type), this._$Ei = null;
-        }
-    }
-    requestUpdate(t, i, s13) {
-        let e7 = !0;
-        void 0 !== t && (((s13 = s13 || this.constructor.getPropertyOptions(t)).hasChanged || n)(this[t], i) ? (this._$AL.has(t) || this._$AL.set(t, i), !0 === s13.reflect && this._$Ei !== t && (void 0 === this._$EC && (this._$EC = new Map), this._$EC.set(t, s13))) : e7 = !1), !this.isUpdatePending && e7 && (this._$Ep = this._$E_());
-    }
-    async _$E_() {
-        this.isUpdatePending = !0;
-        try {
-            await this._$Ep;
-        } catch (t5) {
-            Promise.reject(t5);
-        }
-        const t = this.scheduleUpdate();
-        return null != t && await t, !this.isUpdatePending;
-    }
-    scheduleUpdate() {
-        return this.performUpdate();
-    }
-    performUpdate() {
-        var t6;
-        if (!this.isUpdatePending) return;
-        this.hasUpdated, this._$Et && (this._$Et.forEach((t, i)=>this[i] = t
-        ), this._$Et = void 0);
-        let i2 = !1;
-        const s14 = this._$AL;
-        try {
-            i2 = this.shouldUpdate(s14), i2 ? (this.willUpdate(s14), null === (t6 = this._$Eg) || void 0 === t6 || t6.forEach((t)=>{
-                var i;
-                return null === (i = t.hostUpdate) || void 0 === i ? void 0 : i.call(t);
-            }), this.update(s14)) : this._$EU();
-        } catch (t) {
-            throw i2 = !1, this._$EU(), t;
-        }
-        i2 && this._$AE(s14);
-    }
-    willUpdate(t) {}
-    _$AE(t7) {
-        var i3;
-        null === (i3 = this._$Eg) || void 0 === i3 || i3.forEach((t)=>{
-            var i;
-            return null === (i = t.hostUpdated) || void 0 === i ? void 0 : i.call(t);
-        }), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(t7)), this.updated(t7);
-    }
-    _$EU() {
-        this._$AL = new Map, this.isUpdatePending = !1;
-    }
-    get updateComplete() {
-        return this.getUpdateComplete();
-    }
-    getUpdateComplete() {
-        return this._$Ep;
-    }
-    shouldUpdate(t) {
-        return !0;
-    }
-    update(t8) {
-        void 0 !== this._$EC && (this._$EC.forEach((t, i)=>this._$ES(i, this[i], t)
-        ), this._$EC = void 0), this._$EU();
-    }
-    updated(t) {}
-    firstUpdated(t) {}
-}
-a.finalized = !0, a.elementProperties = new Map, a.elementStyles = [], a.shadowRootOptions = {
-    mode: "open"
-}, null == h || h({
-    ReactiveElement: a
-}), (null !== (s = globalThis.reactiveElementVersions) && void 0 !== s ? s : globalThis.reactiveElementVersions = []).push("1.3.1");
-
-},{"./css-tag.js":"gkZsf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkZsf":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "CSSResult", ()=>s
-);
-parcelHelpers.export(exports, "adoptStyles", ()=>i
-);
-parcelHelpers.export(exports, "css", ()=>r
-);
-parcelHelpers.export(exports, "getCompatibleStyle", ()=>S
-);
-parcelHelpers.export(exports, "supportsAdoptingStyleSheets", ()=>t
-);
-parcelHelpers.export(exports, "unsafeCSS", ()=>o
-);
-/**
- * @license
- * Copyright 2019 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ const t = window.ShadowRoot && (void 0 === window.ShadyCSS || window.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, e = Symbol(), n = new Map;
-class s {
-    constructor(t1, n1){
-        if (this._$cssResult$ = !0, n1 !== e) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
-        this.cssText = t1;
-    }
-    get styleSheet() {
-        let e1 = n.get(this.cssText);
-        return t && void 0 === e1 && (n.set(this.cssText, e1 = new CSSStyleSheet), e1.replaceSync(this.cssText)), e1;
-    }
-    toString() {
-        return this.cssText;
-    }
-}
-const o = (t2)=>new s("string" == typeof t2 ? t2 : t2 + "", e)
-, r = (t3, ...n2)=>{
-    const o1 = 1 === t3.length ? t3[0] : n2.reduce((e2, n3, s1)=>e2 + ((t4)=>{
-            if (!0 === t4._$cssResult$) return t4.cssText;
-            if ("number" == typeof t4) return t4;
-            throw Error("Value passed to 'css' function must be a 'css' function result: " + t4 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-        })(n3) + t3[s1 + 1]
-    , t3[0]);
-    return new s(o1, e);
-}, i = (e3, n4)=>{
-    t ? e3.adoptedStyleSheets = n4.map((t5)=>t5 instanceof CSSStyleSheet ? t5 : t5.styleSheet
-    ) : n4.forEach((t6)=>{
-        const n5 = document.createElement("style"), s2 = window.litNonce;
-        void 0 !== s2 && n5.setAttribute("nonce", s2), n5.textContent = t6.cssText, e3.appendChild(n5);
+        script1.onload = function() {
+            script1.onerror = script1.onload = null;
+            resolve();
+        };
+        document.getElementsByTagName('head')[0].appendChild(script1);
     });
-}, S = t ? (t7)=>t7
- : (t8)=>t8 instanceof CSSStyleSheet ? ((t9)=>{
-        let e4 = "";
-        for (const n6 of t9.cssRules)e4 += n6.cssText;
-        return o(e4);
-    })(t8) : t8
-;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"1cmQt":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "_$LH", ()=>R
-);
-parcelHelpers.export(exports, "html", ()=>$
-);
-parcelHelpers.export(exports, "noChange", ()=>b
-);
-parcelHelpers.export(exports, "nothing", ()=>w
-);
-parcelHelpers.export(exports, "render", ()=>x
-);
-parcelHelpers.export(exports, "svg", ()=>y
-);
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ var t;
-const i = globalThis.trustedTypes, s = i ? i.createPolicy("lit-html", {
-    createHTML: (t1)=>t1
-}) : void 0, e = `lit$${(Math.random() + "").slice(9)}$`, o = "?" + e, n = `<${o}>`, l = document, h = (t2 = "")=>l.createComment(t2)
-, r = (t3)=>null === t3 || "object" != typeof t3 && "function" != typeof t3
-, d = Array.isArray, u = (t4)=>{
-    var i1;
-    return d(t4) || "function" == typeof (null === (i1 = t4) || void 0 === i1 ? void 0 : i1[Symbol.iterator]);
-}, c = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, v = /-->/g, a = />/g, f = />|[ 	\n\r](?:([^\s"'>=/]+)([ 	\n\r]*=[ 	\n\r]*(?:[^ 	\n\r"'`<>=]|("|')|))|$)/g, _ = /'/g, m = /"/g, g = /^(?:script|style|textarea|title)$/i, p = (t5)=>(i2, ...s1)=>({
-            _$litType$: t5,
-            strings: i2,
-            values: s1
-        })
-, $ = p(1), y = p(2), b = Symbol.for("lit-noChange"), w = Symbol.for("lit-nothing"), T = new WeakMap, x = (t7, i3, s2)=>{
-    var e1, o1;
-    const n1 = null !== (e1 = null == s2 ? void 0 : s2.renderBefore) && void 0 !== e1 ? e1 : i3;
-    let l1 = n1._$litPart$;
-    if (void 0 === l1) {
-        const t6 = null !== (o1 = null == s2 ? void 0 : s2.renderBefore) && void 0 !== o1 ? o1 : null;
-        n1._$litPart$ = l1 = new N(i3.insertBefore(h(), t6), t6, void 0, null != s2 ? s2 : {});
-    }
-    return l1._$AI(t7), l1;
-}, A = l.createTreeWalker(l, 129, null, !1), C = (t8, i5)=>{
-    const o2 = t8.length - 1, l2 = [];
-    let h1, r1 = 2 === i5 ? "<svg>" : "", d1 = c;
-    for(let i4 = 0; i4 < o2; i4++){
-        const s3 = t8[i4];
-        let o3, u1, p1 = -1, $1 = 0;
-        for(; $1 < s3.length && (d1.lastIndex = $1, u1 = d1.exec(s3), null !== u1);)$1 = d1.lastIndex, d1 === c ? "!--" === u1[1] ? d1 = v : void 0 !== u1[1] ? d1 = a : void 0 !== u1[2] ? (g.test(u1[2]) && (h1 = RegExp("</" + u1[2], "g")), d1 = f) : void 0 !== u1[3] && (d1 = f) : d1 === f ? ">" === u1[0] ? (d1 = null != h1 ? h1 : c, p1 = -1) : void 0 === u1[1] ? p1 = -2 : (p1 = d1.lastIndex - u1[2].length, o3 = u1[1], d1 = void 0 === u1[3] ? f : '"' === u1[3] ? m : _) : d1 === m || d1 === _ ? d1 = f : d1 === v || d1 === a ? d1 = c : (d1 = f, h1 = void 0);
-        const y1 = d1 === f && t8[i4 + 1].startsWith("/>") ? " " : "";
-        r1 += d1 === c ? s3 + n : p1 >= 0 ? (l2.push(o3), s3.slice(0, p1) + "$lit$" + s3.slice(p1) + e + y1) : s3 + e + (-2 === p1 ? (l2.push(void 0), i4) : y1);
-    }
-    const u2 = r1 + (t8[o2] || "<?>") + (2 === i5 ? "</svg>" : "");
-    if (!Array.isArray(t8) || !t8.hasOwnProperty("raw")) throw Error("invalid template strings array");
-    return [
-        void 0 !== s ? s.createHTML(u2) : u2,
-        l2
-    ];
-};
-class E {
-    constructor({ strings: t9 , _$litType$: s4  }, n2){
-        let l3;
-        this.parts = [];
-        let r2 = 0, d2 = 0;
-        const u3 = t9.length - 1, c1 = this.parts, [v1, a1] = C(t9, s4);
-        if (this.el = E.createElement(v1, n2), A.currentNode = this.el.content, 2 === s4) {
-            const t10 = this.el.content, i6 = t10.firstChild;
-            i6.remove(), t10.append(...i6.childNodes);
-        }
-        for(; null !== (l3 = A.nextNode()) && c1.length < u3;){
-            if (1 === l3.nodeType) {
-                if (l3.hasAttributes()) {
-                    const t11 = [];
-                    for (const i8 of l3.getAttributeNames())if (i8.endsWith("$lit$") || i8.startsWith(e)) {
-                        const s5 = a1[d2++];
-                        if (t11.push(i8), void 0 !== s5) {
-                            const t12 = l3.getAttribute(s5.toLowerCase() + "$lit$").split(e), i9 = /([.?@])?(.*)/.exec(s5);
-                            c1.push({
-                                type: 1,
-                                index: r2,
-                                name: i9[2],
-                                strings: t12,
-                                ctor: "." === i9[1] ? M : "?" === i9[1] ? H : "@" === i9[1] ? I : S
-                            });
-                        } else c1.push({
-                            type: 6,
-                            index: r2
-                        });
-                    }
-                    for (const i7 of t11)l3.removeAttribute(i7);
-                }
-                if (g.test(l3.tagName)) {
-                    const t13 = l3.textContent.split(e), s6 = t13.length - 1;
-                    if (s6 > 0) {
-                        l3.textContent = i ? i.emptyScript : "";
-                        for(let i10 = 0; i10 < s6; i10++)l3.append(t13[i10], h()), A.nextNode(), c1.push({
-                            type: 2,
-                            index: ++r2
-                        });
-                        l3.append(t13[s6], h());
-                    }
-                }
-            } else if (8 === l3.nodeType) {
-                if (l3.data === o) c1.push({
-                    type: 2,
-                    index: r2
-                });
-                else {
-                    let t14 = -1;
-                    for(; -1 !== (t14 = l3.data.indexOf(e, t14 + 1));)c1.push({
-                        type: 7,
-                        index: r2
-                    }), t14 += e.length - 1;
-                }
-            }
-            r2++;
-        }
-    }
-    static createElement(t15, i) {
-        const s7 = l.createElement("template");
-        return s7.innerHTML = t15, s7;
-    }
-}
-function P(t16, i15, s8 = t16, e2) {
-    var o4, n3, l4, h2;
-    if (i15 === b) return i15;
-    let d3 = void 0 !== e2 ? null === (o4 = s8._$Cl) || void 0 === o4 ? void 0 : o4[e2] : s8._$Cu;
-    const u4 = r(i15) ? void 0 : i15._$litDirective$;
-    return (null == d3 ? void 0 : d3.constructor) !== u4 && (null === (n3 = null == d3 ? void 0 : d3._$AO) || void 0 === n3 || n3.call(d3, !1), void 0 === u4 ? d3 = void 0 : (d3 = new u4(t16), d3._$AT(t16, s8, e2)), void 0 !== e2 ? (null !== (l4 = (h2 = s8)._$Cl) && void 0 !== l4 ? l4 : h2._$Cl = [])[e2] = d3 : s8._$Cu = d3), void 0 !== d3 && (i15 = P(t16, d3._$AS(t16, i15.values), d3, e2)), i15;
-}
-class V {
-    constructor(t17, i16){
-        this.v = [], this._$AN = void 0, this._$AD = t17, this._$AM = i16;
-    }
-    get parentNode() {
-        return this._$AM.parentNode;
-    }
-    get _$AU() {
-        return this._$AM._$AU;
-    }
-    p(t18) {
-        var i17;
-        const { el: { content: s9  } , parts: e3  } = this._$AD, o5 = (null !== (i17 = null == t18 ? void 0 : t18.creationScope) && void 0 !== i17 ? i17 : l).importNode(s9, !0);
-        A.currentNode = o5;
-        let n4 = A.nextNode(), h3 = 0, r3 = 0, d4 = e3[0];
-        for(; void 0 !== d4;){
-            if (h3 === d4.index) {
-                let i18;
-                2 === d4.type ? i18 = new N(n4, n4.nextSibling, this, t18) : 1 === d4.type ? i18 = new d4.ctor(n4, d4.name, d4.strings, this, t18) : 6 === d4.type && (i18 = new L(n4, this, t18)), this.v.push(i18), d4 = e3[++r3];
-            }
-            h3 !== (null == d4 ? void 0 : d4.index) && (n4 = A.nextNode(), h3++);
-        }
-        return o5;
-    }
-    m(t19) {
-        let i19 = 0;
-        for (const s10 of this.v)void 0 !== s10 && (void 0 !== s10.strings ? (s10._$AI(t19, s10, i19), i19 += s10.strings.length - 2) : s10._$AI(t19[i19])), i19++;
-    }
-}
-class N {
-    constructor(t20, i20, s11, e4){
-        var o6;
-        this.type = 2, this._$AH = w, this._$AN = void 0, this._$AA = t20, this._$AB = i20, this._$AM = s11, this.options = e4, this._$Cg = null === (o6 = null == e4 ? void 0 : e4.isConnected) || void 0 === o6 || o6;
-    }
-    get _$AU() {
-        var t21, i21;
-        return null !== (i21 = null === (t21 = this._$AM) || void 0 === t21 ? void 0 : t21._$AU) && void 0 !== i21 ? i21 : this._$Cg;
-    }
-    get parentNode() {
-        let t22 = this._$AA.parentNode;
-        const i22 = this._$AM;
-        return void 0 !== i22 && 11 === t22.nodeType && (t22 = i22.parentNode), t22;
-    }
-    get startNode() {
-        return this._$AA;
-    }
-    get endNode() {
-        return this._$AB;
-    }
-    _$AI(t23, i23 = this) {
-        t23 = P(this, t23, i23), r(t23) ? t23 === w || null == t23 || "" === t23 ? (this._$AH !== w && this._$AR(), this._$AH = w) : t23 !== this._$AH && t23 !== b && this.$(t23) : void 0 !== t23._$litType$ ? this.T(t23) : void 0 !== t23.nodeType ? this.k(t23) : u(t23) ? this.S(t23) : this.$(t23);
-    }
-    A(t24, i24 = this._$AB) {
-        return this._$AA.parentNode.insertBefore(t24, i24);
-    }
-    k(t25) {
-        this._$AH !== t25 && (this._$AR(), this._$AH = this.A(t25));
-    }
-    $(t26) {
-        this._$AH !== w && r(this._$AH) ? this._$AA.nextSibling.data = t26 : this.k(l.createTextNode(t26)), this._$AH = t26;
-    }
-    T(t27) {
-        var i25;
-        const { values: s12 , _$litType$: e5  } = t27, o7 = "number" == typeof e5 ? this._$AC(t27) : (void 0 === e5.el && (e5.el = E.createElement(e5.h, this.options)), e5);
-        if ((null === (i25 = this._$AH) || void 0 === i25 ? void 0 : i25._$AD) === o7) this._$AH.m(s12);
-        else {
-            const t28 = new V(o7, this), i26 = t28.p(this.options);
-            t28.m(s12), this.k(i26), this._$AH = t28;
-        }
-    }
-    _$AC(t29) {
-        let i27 = T.get(t29.strings);
-        return void 0 === i27 && T.set(t29.strings, i27 = new E(t29)), i27;
-    }
-    S(t30) {
-        d(this._$AH) || (this._$AH = [], this._$AR());
-        const i28 = this._$AH;
-        let s13, e6 = 0;
-        for (const o8 of t30)e6 === i28.length ? i28.push(s13 = new N(this.A(h()), this.A(h()), this, this.options)) : s13 = i28[e6], s13._$AI(o8), e6++;
-        e6 < i28.length && (this._$AR(s13 && s13._$AB.nextSibling, e6), i28.length = e6);
-    }
-    _$AR(t31 = this._$AA.nextSibling, i29) {
-        var s14;
-        for(null === (s14 = this._$AP) || void 0 === s14 || s14.call(this, !1, !0, i29); t31 && t31 !== this._$AB;){
-            const i30 = t31.nextSibling;
-            t31.remove(), t31 = i30;
-        }
-    }
-    setConnected(t32) {
-        var i31;
-        void 0 === this._$AM && (this._$Cg = t32, null === (i31 = this._$AP) || void 0 === i31 || i31.call(this, t32));
-    }
-}
-class S {
-    constructor(t33, i32, s15, e7, o9){
-        this.type = 1, this._$AH = w, this._$AN = void 0, this.element = t33, this.name = i32, this._$AM = e7, this.options = o9, s15.length > 2 || "" !== s15[0] || "" !== s15[1] ? (this._$AH = Array(s15.length - 1).fill(new String), this.strings = s15) : this._$AH = w;
-    }
-    get tagName() {
-        return this.element.tagName;
-    }
-    get _$AU() {
-        return this._$AM._$AU;
-    }
-    _$AI(t34, i33 = this, s16, e9) {
-        const o10 = this.strings;
-        let n5 = !1;
-        if (void 0 === o10) t34 = P(this, t34, i33, 0), n5 = !r(t34) || t34 !== this._$AH && t34 !== b, n5 && (this._$AH = t34);
-        else {
-            const e8 = t34;
-            let l5, h4;
-            for(t34 = o10[0], l5 = 0; l5 < o10.length - 1; l5++)h4 = P(this, e8[s16 + l5], i33, l5), h4 === b && (h4 = this._$AH[l5]), n5 || (n5 = !r(h4) || h4 !== this._$AH[l5]), h4 === w ? t34 = w : t34 !== w && (t34 += (null != h4 ? h4 : "") + o10[l5 + 1]), this._$AH[l5] = h4;
-        }
-        n5 && !e9 && this.C(t34);
-    }
-    C(t35) {
-        t35 === w ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, null != t35 ? t35 : "");
-    }
-}
-class M extends S {
-    constructor(){
-        super(...arguments), this.type = 3;
-    }
-    C(t36) {
-        this.element[this.name] = t36 === w ? void 0 : t36;
-    }
-}
-const k = i ? i.emptyScript : "";
-class H extends S {
-    constructor(){
-        super(...arguments), this.type = 4;
-    }
-    C(t37) {
-        t37 && t37 !== w ? this.element.setAttribute(this.name, k) : this.element.removeAttribute(this.name);
-    }
-}
-class I extends S {
-    constructor(t38, i34, s17, e10, o11){
-        super(t38, i34, s17, e10, o11), this.type = 5;
-    }
-    _$AI(t39, i35 = this) {
-        var s18;
-        if ((t39 = null !== (s18 = P(this, t39, i35, 0)) && void 0 !== s18 ? s18 : w) === b) return;
-        const e11 = this._$AH, o12 = t39 === w && e11 !== w || t39.capture !== e11.capture || t39.once !== e11.once || t39.passive !== e11.passive, n6 = t39 !== w && (e11 === w || o12);
-        o12 && this.element.removeEventListener(this.name, this, e11), n6 && this.element.addEventListener(this.name, this, t39), this._$AH = t39;
-    }
-    handleEvent(t40) {
-        var i36, s19;
-        "function" == typeof this._$AH ? this._$AH.call(null !== (s19 = null === (i36 = this.options) || void 0 === i36 ? void 0 : i36.host) && void 0 !== s19 ? s19 : this.element, t40) : this._$AH.handleEvent(t40);
-    }
-}
-class L {
-    constructor(t41, i37, s20){
-        this.element = t41, this.type = 6, this._$AN = void 0, this._$AM = i37, this.options = s20;
-    }
-    get _$AU() {
-        return this._$AM._$AU;
-    }
-    _$AI(t42) {
-        P(this, t42);
-    }
-}
-const R = {
-    P: "$lit$",
-    L: e,
-    V: o,
-    I: 1,
-    N: C,
-    R: V,
-    D: u,
-    j: P,
-    H: N,
-    O: S,
-    F: H,
-    B: I,
-    W: M,
-    Z: L
-}, z = window.litHtmlPolyfillSupport;
-null == z || z(E, N), (null !== (t = globalThis.litHtmlVersions) && void 0 !== t ? t : globalThis.litHtmlVersions = []).push("2.2.1");
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9YxkX":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "LitElement", ()=>s
-);
-parcelHelpers.export(exports, "UpdatingElement", ()=>r
-);
-parcelHelpers.export(exports, "_$LE", ()=>h
-);
-var _reactiveElement = require("@lit/reactive-element");
-var _litHtml = require("lit-html");
-parcelHelpers.exportAll(_reactiveElement, exports);
-parcelHelpers.exportAll(_litHtml, exports);
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */ var l, o;
-const r = _reactiveElement.ReactiveElement;
-class s extends _reactiveElement.ReactiveElement {
-    constructor(){
-        super(...arguments), this.renderOptions = {
-            host: this
-        }, this._$Dt = void 0;
-    }
-    createRenderRoot() {
-        var t, e;
-        const i = super.createRenderRoot();
-        return null !== (t = (e = this.renderOptions).renderBefore) && void 0 !== t || (e.renderBefore = i.firstChild), i;
-    }
-    update(t) {
-        const i = this.render();
-        this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t), this._$Dt = _litHtml.render(i, this.renderRoot, this.renderOptions);
-    }
-    connectedCallback() {
-        var t;
-        super.connectedCallback(), null === (t = this._$Dt) || void 0 === t || t.setConnected(!0);
-    }
-    disconnectedCallback() {
-        var t;
-        super.disconnectedCallback(), null === (t = this._$Dt) || void 0 === t || t.setConnected(!1);
-    }
-    render() {
-        return _litHtml.noChange;
-    }
-}
-s.finalized = !0, s._$litElement$ = !0, null === (l = globalThis.litElementHydrateSupport) || void 0 === l || l.call(globalThis, {
-    LitElement: s
 });
-const n = globalThis.litElementPolyfillSupport;
-null == n || n({
-    LitElement: s
-});
-const h = {
-    _$AK: (t, e, i)=>{
-        t._$AK(e, i);
-    },
-    _$AL: (t)=>t._$AL
+
+},{"../cacheLoader":"j49pS"}],"j49pS":[function(require,module,exports) {
+"use strict";
+var cachedBundles = {};
+var cachedPreloads = {};
+var cachedPrefetches = {};
+function getCache(type) {
+    switch(type){
+        case 'preload':
+            return cachedPreloads;
+        case 'prefetch':
+            return cachedPrefetches;
+        default:
+            return cachedBundles;
+    }
+}
+module.exports = function(loader, type) {
+    return function(bundle) {
+        var cache = getCache(type);
+        if (cache[bundle]) return cache[bundle];
+        return cache[bundle] = loader.apply(null, arguments).catch(function(e) {
+            delete cache[bundle];
+            throw e;
+        });
+    };
 };
-(null !== (o = globalThis.litElementVersions) && void 0 !== o ? o : globalThis.litElementVersions = []).push("3.2.0");
 
-},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8VeYg":[function(require,module,exports) {
-module.exports = JSON.parse("{\"batteryMinutesDefault\":2}");
-
-},{}],"ledJZ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _shuffle = require("./utils/shuffle");
-var _shuffleDefault = parcelHelpers.interopDefault(_shuffle);
-class Deck {
-    #cards = [];
-    #index = 0;
-    /**
-   * @param {T[]} cards
-   */ constructor(cards){
-        this.#cards = cards;
+},{}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
     }
-    shuffle() {
-        _shuffleDefault.default(this.#cards);
-        this.#index = 0;
-    }
-    /**
-   * @returns {T}
-   */ discard() {
-        return this.#cards.splice(this.#index, 1)[0];
-    }
-    goToNext() {
-        this.#index += 1;
-    }
-    get isEmpty() {
-        return this.#cards.length === 0;
-    }
-    /**
-   * @returns {T}
-   */ get current() {
-        return this.#cards[this.#index];
-    }
+    return value;
 }
-exports.default = Deck;
-
-},{"./utils/shuffle":"hz8kI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hz8kI":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-function shuffle(array) {
-    for(var i = array.length - 1; i > 0; i--){
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
     }
+    return '/';
 }
-exports.default = shuffle;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ahkx4":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _deck = require("./Deck");
-var _deckDefault = parcelHelpers.interopDefault(_deck);
-class Phase {
-    appDeck;
-    /**
-   *
-   * @param {{ content : import('lit/html').TemplateResult }[]} apps
-   */ constructor(apps){
-        this.appDeck = new _deckDefault.default(apps);
-    }
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
 }
-exports.default = Phase;
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
 
-},{"./Deck":"ledJZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bwo2n":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-class NavBar extends _lit.LitElement {
-    static properties = {
-        battery: Number
-    };
-    render() {
-        return _lit.html`
-      <span>
-        ${this.battery > 0 ? _lit.html`${Math.ceil(this.battery)}%` : _lit.html`DEAD`}
-      </span>
-    `;
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      width: 100%;
-      height: 2em;
-      background: white;
-    }
-  `;
-}
-exports.default = NavBar;
-customElements.define('nav-bar', NavBar);
+},{}],"dOTL8":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "NavBar.06a2f92d.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('k61en')
+);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"60HJr":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-class AppIcon extends _lit.LitElement {
-    static properties = {
-        name: String
-    };
-    render() {
-        return _lit.html`
-      <div class="icon"></div>
-      <p>${this.name}</p>
-    `;
-    }
-    static styles = _lit.css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: white;
-    }
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"4uhN8":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "AppIcon.e8f46f99.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('cvdQR')
+);
 
-    .icon {
-      display: block;
-      width: 5em;
-      height: 5em;
-      background: white;
-      border-radius: 1.5em;
-    }
-  `;
-}
-exports.default = AppIcon;
-customElements.define('app-icon', AppIcon);
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"jcpaz":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "NotificationBubble.d0b8f36a.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('7M5Yj')
+);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bYJiH":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-class NotificationBubble extends _lit.LitElement {
-    render() {
-        return _lit.html`
-      <slot></slot>
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"bVzft":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "ShutdownScreen.30d64fae.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('gJTBK')
+);
 
-      <button type="button" @click=${this.handleClickDismiss}>Dismiss</button>
-    `;
-    }
-    handleClickDismiss() {
-        this.dispatchEvent(new CustomEvent('dismiss'));
-    }
-    static styles = _lit.css`
-    :host {
-      box-sizing: border-box;
-      display: block;
-      width: 100%;
-      height: 4em;
-      background: white;
-      border-radius: 1.5em;
-      padding: 1em;
-    }
-  `;
-}
-exports.default = NotificationBubble;
-customElements.define('notification-bubble', NotificationBubble);
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"2ZBV5":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "TwitterApp.0c58a109.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('7B7ii')
+);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"FISHd":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-var _successEvent = require("./events/SuccessEvent");
-var _successEventDefault = parcelHelpers.interopDefault(_successEvent);
-var _failureEvent = require("./events/FailureEvent");
-var _failureEventDefault = parcelHelpers.interopDefault(_failureEvent);
-class TwitterApp extends _lit.LitElement {
-    posts = [
-        {
-            handle: 'dril',
-            content: 'Lorem ipsum',
-            rtToComplete: true
-        },
-        {
-            handle: 'fart',
-            content: 'Dolor sit amet'
-        }, 
-    ];
-    render() {
-        return _lit.html`
-      <ul>
-        ${this.posts.map((post)=>_lit.html`
-          <li>
-            <b>${post.handle}</b> ${post.content}
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}],"dUY7S":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('bLxZJ') + "MapApp.8f144a9b.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('ba4l8')
+);
 
-            <button
-              type="button"
-              @click=${()=>this.handleClickRetweet(post.rtToComplete)
-            }
-            >
-              RT
-            </button>
-
-
-            <button
-              type="button"
-            >
-              Like
-            </button>
-          </li>
-        `
-        )}
-      </ul>
-
-      <button
-        type="button"
-        @click=${this.handleSuccess}
-      >
-        Success
-      </button>
-
-      <button
-        type="button"
-        @click=${this.handleFailure}
-      >
-        Failure
-      </button>
-    `;
-    }
-    handleSuccess() {
-        this.dispatchEvent(new _successEventDefault.default());
-    }
-    handleFailure() {
-        this.dispatchEvent(new _failureEventDefault.default());
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      background: lightgray;
-      padding: 1em;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-  `;
-}
-exports.default = TwitterApp;
-customElements.define('twitter-app', TwitterApp);
-
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./events/SuccessEvent":"a0AUT","./events/FailureEvent":"d9Ung"}],"a0AUT":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-class SuccessEvent extends Event {
-    constructor(){
-        super('success', {
-            bubbles: true
-        });
-    }
-}
-exports.default = SuccessEvent;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d9Ung":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-class FailureEvent extends Event {
-    constructor(){
-        super('failure', {
-            bubbles: true
-        });
-    }
-}
-exports.default = FailureEvent;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzXRA":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-class ShutdownScreen extends _lit.LitElement {
-    render() {
-        return _lit.html`
-      <p>Shutting down...</p>
-    `;
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      background: black;
-      color: white;
-      text-align: center;
-      padding: 1em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  `;
-}
-exports.default = ShutdownScreen;
-customElements.define('shutdown-screen', ShutdownScreen);
-
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4icXw":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-var _successEvent = require("./events/SuccessEvent");
-var _successEventDefault = parcelHelpers.interopDefault(_successEvent);
-class MapApp extends _lit.LitElement {
-    posts = [
-        {
-            handle: 'dril',
-            content: 'Lorem ipsum',
-            rtToComplete: true
-        },
-        {
-            handle: 'fart',
-            content: 'Dolor sit amet'
-        }, 
-    ];
-    render() {
-        return _lit.html`
-      Map
-    `;
-    }
-    handleClickRetweet(rtToComplete) {
-        this.dispatchEvent(new _successEventDefault.default());
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      background: lightgray;
-      padding: 1em;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-  `;
-}
-exports.default = MapApp;
-customElements.define('map-app', MapApp);
-
-},{"lit":"4antt","./events/SuccessEvent":"a0AUT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire2f78")
+},{"./helpers/browser/js-loader":"61B45","./helpers/bundle-url":"lgJ39"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire2f78")
 
 //# sourceMappingURL=index.975ef6c8.js.map

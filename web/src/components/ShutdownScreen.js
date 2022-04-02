@@ -4,10 +4,10 @@ import { LitElement, css, html } from 'lit';
  * @customElement shutdown-screen
  */
 export default class ShutdownScreen extends LitElement {
+  static tagName = 'shutdown-screen';
+
   render() {
-    return html`
-      <p>Shutting down...</p>
-    `;
+    return html` <p>Shutting down...</p> `;
   }
   static styles = css`
     :host {
@@ -22,5 +22,3 @@ export default class ShutdownScreen extends LitElement {
     }
   `;
 }
-
-customElements.define('shutdown-screen', ShutdownScreen);

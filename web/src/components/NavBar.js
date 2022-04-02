@@ -4,6 +4,8 @@ import { LitElement, css, html } from 'lit';
  * @customElement nav-bar
  */
 export default class NavBar extends LitElement {
+  static tagName = 'nav-bar';
+
   static properties = {
     battery: Number,
   };
@@ -25,5 +27,3 @@ export default class NavBar extends LitElement {
     }
   `;
 }
-
-customElements.define('nav-bar', NavBar);
