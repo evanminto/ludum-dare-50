@@ -5,11 +5,10 @@ export default class Phase {
 
   /**
    *
-   * @param {{ content : import('lit/html').TemplateResult }[]} apps
+   * @param {import('./App').default[]} apps
    */
   constructor(apps) {
     this.appDeck = new Deck(apps);
-    console.log('shuffle');
     this.appDeck.shuffle();
   }
 }

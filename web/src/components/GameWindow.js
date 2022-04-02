@@ -2,6 +2,8 @@ import { LitElement, css, html } from 'lit';
 import config from '../config.json';
 import Phase from '../Phase';
 import Deck from '../Deck';
+import App from '../App';
+import Notification from '../Notification';
 
 /**
  * @customElement game-window
@@ -14,33 +16,43 @@ export default class GameWindow extends LitElement {
   static properties = {
     battery: Number,
     win: Boolean,
-    notifications: {
-      type: Array,
+    notification: {
+      type: Notification,
       attribute: false,
     },
     phases: {
       type: Deck,
       attribute: false,
     },
+    notificationAnimationComplete: Boolean,
   };
 
   constructor() {
     super();
 
     this.battery = GameWindow.BATTERY_START;
-    this.notifications = [];
+
+    /** @type {Notification} */
+    this.notification = null;
 
     this.phases = new Deck([
       new Phase([
-        {
+        new App({
+          notification: new Notification({ content: 'How far away are you?' }),
           content: html`<twitter-app></twitter-app>`,
-        },
-        {
+        }),
+        new App({
+          notification: new Notification({
+            content: "The bar is called Goldie's",
+          }),
           content: html`<map-app></map-app>`,
-        },
-        {
+        }),
+        new App({
+          notification: new Notification({
+            content: 'Hey, I know you’re going home but quick question',
+          }),
           content: html`<messages-app></messages-app>`,
-        },
+        }),
       ]),
     ]);
 
@@ -66,6 +78,7 @@ export default class GameWindow extends LitElement {
     }
 
     this.requestUpdate('phases');
+    this.notificationAnimationComplete = false;
   }
 
   handleFailure() {
@@ -99,22 +112,31 @@ export default class GameWindow extends LitElement {
     `;
   }
 
-  renderNotifications() {
+  renderNotification() {
+    if (this.notificationAnimationComplete) {
+      return '';
+    }
+
+    const app = this.phases.current.appDeck.current;
+
     return html`
-      <div class="notifications-tray">
-        ${this.notifications.map(
-          (n, index) => html`
-            <notification-bubble @dismiss=${() => this.handleDismiss(index)}>
-              ${n.text}
-            </notification-bubble>
-          `
-        )}
+      <div
+        class="notifications-tray"
+        @animationend=${this.handleNotificationAnimationEnd}
+      >
+        <notification-bubble> ${app.notification.content} </notification-bubble>
       </div>
     `;
   }
 
+  handleNotificationAnimationEnd() {
+    this.notificationAnimationComplete = true;
+  }
+
   renderCurrentApp() {
     return html`
+      ${this.renderNotification()}
+
       <div
         class="app-container"
         @success=${this.handleSuccess}
@@ -139,7 +161,6 @@ export default class GameWindow extends LitElement {
     return html`
       <nav-bar battery=${this.battery}></nav-bar>
 
-      ${this.notifications.length > 0 ? this.renderNotifications() : ''}
       ${this.phases.current && this.phases.current.appDeck.current
         ? this.renderCurrentApp()
         : this.renderHomeScreen()}
@@ -147,6 +168,38 @@ export default class GameWindow extends LitElement {
   }
 
   static styles = css`
+    @keyframes notif-disappear {
+      0% {
+        opacity: 1;
+      }
+
+      99% {
+        opacity: 0;
+        visibility: visible;
+      }
+
+      100% {
+        visibility: hidden;
+      }
+    }
+
+    @keyframes app-appear {
+      0% {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      1% {
+        opacity: 0;
+        visibility: visible;
+      }
+
+      100% {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
     :host {
       display: block;
       width: 100vw;
@@ -167,6 +220,11 @@ export default class GameWindow extends LitElement {
 
     .app-container > * {
       height: 100%;
+
+      opacity: 0;
+      visibility: hidden;
+      animation: app-appear 200ms ease-in-out 1s;
+      animation-fill-mode: forwards;
     }
 
     .notifications-tray {
@@ -179,6 +237,9 @@ export default class GameWindow extends LitElement {
       right: 1em;
       top: 1em;
       width: calc(100% - 2em);
+
+      animation: notif-disappear 300ms ease-in-out 2s;
+      animation-fill-mode: forwards;
     }
 
     .grid {
