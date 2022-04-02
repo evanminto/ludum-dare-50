@@ -524,6 +524,8 @@ var _appScreenJs = require("./AppScreen.js");
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
+var _scriptJson = require("./script.json");
+var _scriptJsonDefault = parcelHelpers.interopDefault(_scriptJson);
 class GameWindow extends _lit.LitElement {
     static properties = {
         currentAppId: String,
@@ -557,23 +559,38 @@ class GameWindow extends _lit.LitElement {
     constructor(){
         super();
         this.notifications = [];
-        setTimeout(()=>{
-            this.notifications = [
-                ...this.notifications,
-                {
-                    text: 'Hello world!'
-                }
-            ];
-        }, 30000);
+        let seconds = 0;
+        setInterval(()=>{
+            const event1 = _scriptJsonDefault.default.events.find((event)=>event.time === seconds
+            );
+            if (event1) {
+                if (event1.type === 'notification') this.notifications = [
+                    ...this.notifications,
+                    {
+                        text: event1.content
+                    }
+                ];
+            }
+            seconds += 1;
+        }, 1000);
     }
     render() {
         return _lit.html`
       <nav-bar></nav-bar>
 
-      ${this.notifications.map((n)=>_lit.html`
-        <notification-bubble>${n.text}</notification-bubble>
-      `
+      ${this.notifications.length > 0 ? _lit.html`
+          <div class="notifications-tray">
+            ${this.notifications.map((n, index)=>_lit.html`
+              <notification-bubble
+                @dismiss=${()=>this.handleDismiss(index)
+            }
+              >
+                ${n.text}
+              </notification-bubble>
+            `
         )}
+          </div>
+        ` : ''}
 
       ${this.currentAppId ? _lit.html`
           <app-screen @back=${this.handleBack}>${this.currentApp.content}</app-screen>
@@ -590,6 +607,13 @@ class GameWindow extends _lit.LitElement {
     }
     handleBack() {
         this.currentAppId = null;
+    }
+    handleDismiss(index) {
+        const newNotifs = [
+            ...this.notifications
+        ];
+        newNotifs.splice(index, 1);
+        this.notifications = newNotifs;
     }
     get currentApp() {
         return this.apps.find(({ id  })=>id === this.currentAppId
@@ -610,6 +634,17 @@ class GameWindow extends _lit.LitElement {
       flex: 1 1 auto;
     }
 
+    .notifications-tray {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25em;
+      position: absolute;
+      left: 1em;
+      right: 1em;
+      top: 1em;
+      width: calc(100% - 2em);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
@@ -619,19 +654,14 @@ class GameWindow extends _lit.LitElement {
     }
 
     notification-bubble {
-      position: absolute;
-      left: 1em;
-      right: 1em;
-      top: 1em;
       box-shadow: 1px 1px 10px black;
-      width: calc(100% - 2em);
     }
   `;
 }
 exports.default = GameWindow;
 customElements.define('game-window', GameWindow);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4antt":[function(require,module,exports) {
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./script.json":"kX0VY"}],"4antt":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _reactiveElement = require("@lit/reactive-element");
@@ -1348,7 +1378,10 @@ const h = {
 };
 (null !== (o = globalThis.litElementVersions) && void 0 !== o ? o : globalThis.litElementVersions = []).push("3.2.0");
 
-},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bwo2n":[function(require,module,exports) {
+},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kX0VY":[function(require,module,exports) {
+module.exports = JSON.parse("{\"events\":[{\"time\":5,\"type\":\"notification\",\"content\":\"Hello World!\"},{\"time\":15,\"type\":\"notification\",\"content\":\"Another one?\"}]}");
+
+},{}],"bwo2n":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -1407,7 +1440,12 @@ class NotificationBubble extends _lit.LitElement {
     render() {
         return _lit.html`
       <slot></slot>
+
+      <button type="button" @click=${this.handleClickDismiss}>Dismiss</button>
     `;
+    }
+    handleClickDismiss() {
+        this.dispatchEvent(new CustomEvent('dismiss'));
     }
     static styles = _lit.css`
     :host {

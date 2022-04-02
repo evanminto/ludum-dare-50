@@ -1,0 +1,14 @@
+{
+  "events": [
+    {
+      "time": 5,
+      "type": "notification",
+      "content": "Hello World!"
+    },
+    {
+      "time": 15,
+      "type": "notification",
+      "content": "Another one?"
+    }
+  ]
+}

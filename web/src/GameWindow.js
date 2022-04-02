@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import script from './script.json';
 
 /**
  * @customElement game-window
@@ -40,20 +41,40 @@ export default class GameWindow extends LitElement {
 
     this.notifications = [];
 
-    setTimeout(() => {
-      this.notifications = [...this.notifications, {
-        text: 'Hello world!',
-      }];
-    }, 30000);
+    let seconds = 0;
+
+    setInterval(() => {
+      const event = script.events.find(event => event.time === seconds);
+
+      if (event) {
+        if (event.type === 'notification') {
+          this.notifications = [...this.notifications, {
+            text: event.content,
+          }];
+        }
+      }
+
+      seconds += 1;
+    }, 1000);
   }
 
   render() {
     return html`
       <nav-bar></nav-bar>
 
-      ${this.notifications.map(n => html`
-        <notification-bubble>${n.text}</notification-bubble>
-      `)}
+      ${this.notifications.length > 0
+        ? html`
+          <div class="notifications-tray">
+            ${this.notifications.map((n, index) => html`
+              <notification-bubble
+                @dismiss=${() => this.handleDismiss(index)}
+              >
+                ${n.text}
+              </notification-bubble>
+            `)}
+          </div>
+        `
+        : ''}
 
       ${this.currentAppId
         ? html`
@@ -71,6 +92,12 @@ export default class GameWindow extends LitElement {
 
   handleBack() {
     this.currentAppId = null;
+  }
+
+  handleDismiss(index) {
+    const newNotifs = [...this.notifications];
+    newNotifs.splice(index, 1);
+    this.notifications = newNotifs;
   }
 
   get currentApp() {
@@ -92,6 +119,17 @@ export default class GameWindow extends LitElement {
       flex: 1 1 auto;
     }
 
+    .notifications-tray {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25em;
+      position: absolute;
+      left: 1em;
+      right: 1em;
+      top: 1em;
+      width: calc(100% - 2em);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
@@ -101,12 +139,7 @@ export default class GameWindow extends LitElement {
     }
 
     notification-bubble {
-      position: absolute;
-      left: 1em;
-      right: 1em;
-      top: 1em;
       box-shadow: 1px 1px 10px black;
-      width: calc(100% - 2em);
     }
   `;
 }

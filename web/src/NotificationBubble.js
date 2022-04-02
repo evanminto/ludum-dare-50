@@ -7,7 +7,13 @@ export default class NotificationBubble extends LitElement {
   render() {
     return html`
       <slot></slot>
+
+      <button type="button" @click=${this.handleClickDismiss}>Dismiss</button>
     `;
+  }
+
+  handleClickDismiss() {
+    this.dispatchEvent(new CustomEvent('dismiss'));
   }
 
   static styles = css`
