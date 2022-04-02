@@ -518,12 +518,11 @@ var _gameWindowJs = require("./GameWindow.js");
 var _navBarJs = require("./NavBar.js");
 var _appIconJs = require("./AppIcon.js");
 var _notificationBubbleJs = require("./NotificationBubble.js");
-var _appScreenJs = require("./AppScreen.js");
+var _shutdownScreenJs = require("./ShutdownScreen.js");
 var _twitterAppJs = require("./TwitterApp.js");
 var _mapAppJs = require("./MapApp.js");
-var _shutdownScreenJs = require("./ShutdownScreen.js");
 
-},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./AppScreen.js":"5JtMU","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA","./MapApp.js":"4icXw"}],"28Y8e":[function(require,module,exports) {
+},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA","./MapApp.js":"4icXw"}],"28Y8e":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -591,20 +590,23 @@ class GameWindow extends _lit.LitElement {
         ` : ''}
 
       ${this.phaseIndex !== undefined && this.appIndex !== undefined ? _lit.html`
-          <app-screen
-            instructions=${this.currentApp.instructions}
-            @back=${this.handleBack}
-            @success=${this.handleSuccess}
-          >
-            ${this.phases[this.phaseIndex].apps[this.appIndex]}
-          </app-screen>
+          <div class="app-container" @success=${this.handleSuccess}>
+            ${this.currentApp}
+          </div>
         ` : _lit.html`
           <div class="grid">
-            ${this.apps.map((app)=>_lit.html`
-              <app-icon name=${app.name} @click=${()=>this.currentAppId = app.id
-            }></app-icon>
-            `
-        )}
+            <app-icon name="Twitter"></app-icon>
+            <app-icon name="Maps"></app-icon>
+            <app-icon name="Instagram"></app-icon>
+            <app-icon name="Notes"></app-icon>
+            <app-icon name="Photos"></app-icon>
+            <app-icon name="Camera"></app-icon>
+            <app-icon name="Email"></app-icon>
+            <app-icon name="Message"></app-icon>
+            <app-icon name="Browser"></app-icon>
+            <app-icon name="Wordle"></app-icon>
+            <app-icon name="NextTrain"></app-icon>
+            <app-icon name="TikTok"></app-icon>
           </div>
         `}
     `;
@@ -633,8 +635,16 @@ class GameWindow extends _lit.LitElement {
       flex-direction: column;
     }
 
-    app-screen {
+    * {
+      box-sizing: border-box;
+    }
+
+    .app-container {
       flex: 1 1 auto;
+    }
+
+    .app-container > * {
+      height: 100%;
     }
 
     .notifications-tray {
@@ -1478,50 +1488,6 @@ class NotificationBubble extends _lit.LitElement {
 }
 exports.default = NotificationBubble;
 customElements.define('notification-bubble', NotificationBubble);
-
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5JtMU":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _lit = require("lit");
-class AppScreen extends _lit.LitElement {
-    static properties = {
-        instructions: String
-    };
-    render() {
-        return _lit.html`
-      ${this.instructions ? _lit.html`<p class="instructions">${this.instructions}</p>` : ''}
-
-      <button type="button" @click=${this.handleClickBack}>Back</button>
-
-      <div>
-        <slot></slot>
-      </div>
-    `;
-    }
-    handleClickBack() {
-        this.dispatchEvent(new CustomEvent('back'));
-    }
-    static styles = _lit.css`
-    :host {
-      display: block;
-      background: lightgray;
-      padding: 1em;
-      position: relative;
-    }
-
-    .instructions {
-      position: absolute;
-      top: 3em;
-      left: 50%;
-      translate: -50%;
-      background: black;
-      color: white;
-      padding: 0.25em;
-    }
-  `;
-}
-exports.default = AppScreen;
-customElements.define('app-screen', AppScreen);
 
 },{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"FISHd":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

@@ -77,19 +77,24 @@ export default class GameWindow extends LitElement {
 
       ${this.phaseIndex !== undefined && this.appIndex !== undefined
         ? html`
-          <app-screen
-            instructions=${this.currentApp.instructions}
-            @back=${this.handleBack}
-            @success=${this.handleSuccess}
-          >
-            ${this.phases[this.phaseIndex].apps[this.appIndex]}
-          </app-screen>
+          <div class="app-container" @success=${this.handleSuccess}>
+            ${this.currentApp}
+          </div>
         `
         : html`
           <div class="grid">
-            ${this.apps.map(app => html`
-              <app-icon name=${app.name} @click=${() => this.currentAppId = app.id}></app-icon>
-            `)}
+            <app-icon name="Twitter"></app-icon>
+            <app-icon name="Maps"></app-icon>
+            <app-icon name="Instagram"></app-icon>
+            <app-icon name="Notes"></app-icon>
+            <app-icon name="Photos"></app-icon>
+            <app-icon name="Camera"></app-icon>
+            <app-icon name="Email"></app-icon>
+            <app-icon name="Message"></app-icon>
+            <app-icon name="Browser"></app-icon>
+            <app-icon name="Wordle"></app-icon>
+            <app-icon name="NextTrain"></app-icon>
+            <app-icon name="TikTok"></app-icon>
           </div>
         `}
     `;
@@ -120,8 +125,16 @@ export default class GameWindow extends LitElement {
       flex-direction: column;
     }
 
-    app-screen {
+    * {
+      box-sizing: border-box;
+    }
+
+    .app-container {
       flex: 1 1 auto;
+    }
+
+    .app-container > * {
+      height: 100%;
     }
 
     .notifications-tray {
