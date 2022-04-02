@@ -1,5 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import script from './script.json';
+import config from './config.json';
 
 /**
  * @customElement game-window
@@ -7,6 +8,7 @@ import script from './script.json';
 export default class GameWindow extends LitElement {
   static properties = {
     currentAppId: String,
+    battery: Number,
     notifications: {
       type: Array,
       attribute: false,
@@ -39,11 +41,14 @@ export default class GameWindow extends LitElement {
   constructor() {
     super();
 
+    this.battery = 25;
     this.notifications = [];
 
     let seconds = 0;
 
     setInterval(() => {
+      this.battery -= config.batteryRatePerSecond;
+
       const event = script.events.find(event => event.time === seconds);
 
       if (event) {
@@ -60,7 +65,7 @@ export default class GameWindow extends LitElement {
 
   render() {
     return html`
-      <nav-bar></nav-bar>
+      <nav-bar battery=${this.battery}></nav-bar>
 
       ${this.notifications.length > 0
         ? html`

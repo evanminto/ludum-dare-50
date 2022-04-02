@@ -526,9 +526,12 @@ parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
 var _scriptJson = require("./script.json");
 var _scriptJsonDefault = parcelHelpers.interopDefault(_scriptJson);
+var _configJson = require("./config.json");
+var _configJsonDefault = parcelHelpers.interopDefault(_configJson);
 class GameWindow extends _lit.LitElement {
     static properties = {
         currentAppId: String,
+        battery: Number,
         notifications: {
             type: Array,
             attribute: false
@@ -558,9 +561,11 @@ class GameWindow extends _lit.LitElement {
     ];
     constructor(){
         super();
+        this.battery = 25;
         this.notifications = [];
         let seconds = 0;
         setInterval(()=>{
+            this.battery -= _configJsonDefault.default.batteryRatePerSecond;
             const event1 = _scriptJsonDefault.default.events.find((event)=>event.time === seconds
             );
             if (event1) {
@@ -576,7 +581,7 @@ class GameWindow extends _lit.LitElement {
     }
     render() {
         return _lit.html`
-      <nav-bar></nav-bar>
+      <nav-bar battery=${this.battery}></nav-bar>
 
       ${this.notifications.length > 0 ? _lit.html`
           <div class="notifications-tray">
@@ -661,7 +666,7 @@ class GameWindow extends _lit.LitElement {
 exports.default = GameWindow;
 customElements.define('game-window', GameWindow);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./script.json":"kX0VY"}],"4antt":[function(require,module,exports) {
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./script.json":"kX0VY","./config.json":"8VeYg"}],"4antt":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _reactiveElement = require("@lit/reactive-element");
@@ -1381,11 +1386,24 @@ const h = {
 },{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kX0VY":[function(require,module,exports) {
 module.exports = JSON.parse("{\"events\":[{\"time\":5,\"type\":\"notification\",\"content\":\"Hello World!\"},{\"time\":15,\"type\":\"notification\",\"content\":\"Another one?\"}]}");
 
+},{}],"8VeYg":[function(require,module,exports) {
+module.exports = JSON.parse("{\"batteryRatePerSecond\":0.5}");
+
 },{}],"bwo2n":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
 class NavBar extends _lit.LitElement {
+    static properties = {
+        battery: Number
+    };
+    render() {
+        return _lit.html`
+      <span>
+        ${this.battery > 0 ? _lit.html`${Math.ceil(this.battery)}%` : _lit.html`DEAD`}
+      </span>
+    `;
+    }
     static styles = _lit.css`
     :host {
       display: block;
