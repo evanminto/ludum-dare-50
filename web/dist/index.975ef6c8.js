@@ -548,7 +548,7 @@ class GameWindow extends _lit.LitElement {
             },
             {
                 content: _lit.html`<map-app></map-app>`
-            }
+            }, 
         ]), 
     ]);
     constructor(){
@@ -585,43 +585,42 @@ class GameWindow extends _lit.LitElement {
       <nav-bar battery=${this.battery}></nav-bar>
 
       ${this.notifications.length > 0 ? _lit.html`
-          <div class="notifications-tray">
-            ${this.notifications.map((n, index)=>_lit.html`
-              <notification-bubble
-                @dismiss=${()=>this.handleDismiss(index)
+            <div class="notifications-tray">
+              ${this.notifications.map((n, index)=>_lit.html`
+                  <notification-bubble
+                    @dismiss=${()=>this.handleDismiss(index)
             }
-              >
-                ${n.text}
-              </notification-bubble>
-            `
+                  >
+                    ${n.text}
+                  </notification-bubble>
+                `
         )}
-          </div>
-        ` : ''}
-
+            </div>
+          ` : ''}
       ${this.phases.current && this.phases.current.appDeck.current ? _lit.html`
-          <div
-            class="app-container"
-            @success=${this.handleSuccess}
-            @failure=${this.handleFailure}
-          >
-            ${this.phases.current.appDeck.current.content}
-          </div>
-        ` : _lit.html`
-          <div class="grid">
-            <app-icon name="Twitter"></app-icon>
-            <app-icon name="Maps"></app-icon>
-            <app-icon name="Instagram"></app-icon>
-            <app-icon name="Notes"></app-icon>
-            <app-icon name="Photos"></app-icon>
-            <app-icon name="Camera"></app-icon>
-            <app-icon name="Email"></app-icon>
-            <app-icon name="Message"></app-icon>
-            <app-icon name="Browser"></app-icon>
-            <app-icon name="Wordle"></app-icon>
-            <app-icon name="NextTrain"></app-icon>
-            <app-icon name="TikTok"></app-icon>
-          </div>
-        `}
+            <div
+              class="app-container"
+              @success=${this.handleSuccess}
+              @failure=${this.handleFailure}
+            >
+              ${this.phases.current.appDeck.current.content}
+            </div>
+          ` : _lit.html`
+            <div class="grid">
+              <app-icon name="Twitter"></app-icon>
+              <app-icon name="Maps"></app-icon>
+              <app-icon name="Instagram"></app-icon>
+              <app-icon name="Notes"></app-icon>
+              <app-icon name="Photos"></app-icon>
+              <app-icon name="Camera"></app-icon>
+              <app-icon name="Email"></app-icon>
+              <app-icon name="Message"></app-icon>
+              <app-icon name="Browser"></app-icon>
+              <app-icon name="Wordle"></app-icon>
+              <app-icon name="NextTrain"></app-icon>
+              <app-icon name="TikTok"></app-icon>
+            </div>
+          `}
     `;
     }
     handleBack() {

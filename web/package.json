@@ -3,13 +3,19 @@
   "version": "0.0.1",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^2.4.1"
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "parcel": "^2.4.1",
+    "prettier": "^2.6.2"
   },
   "scripts": {
-    "build": "yarn run parcel build src/index.html",
-    "start": "yarn run parcel serve src/index.html"
+    "build": "parcel build src/index.html",
+    "start": "parcel serve src/index.html",
+    "eslint": "eslint src"
   },
   "dependencies": {
     "lit": "^2.2.1"
-  }
+  },
+  "browserslist": "> 0.5%, last 3 versions, not dead"
 }
