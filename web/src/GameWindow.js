@@ -15,37 +15,41 @@ export default class GameWindow extends LitElement {
       type: Array,
       attribute: false,
     },
-  };
-
-  apps = [
-    {
-      name: 'Twitter',
-      id: 'twitter',
-      content: html`<twitter-app></twitter-app>`,
-      instructions: 'Like dril\'s post!',
-    },
-    {
-      name: 'Instagram',
-      id: 'instagram',
-      content: html`Instagram`,
-    },
-    {
-      name: 'Email',
-      id: 'email',
-      content: html`Email`,
-    },
-    {
-      name: 'Notes',
-      id: 'notes',
-      content: html`Notes`,
+    apps: {
+      type: Array,
+      attribute: false,
     }
-  ];
+  };
 
   constructor() {
     super();
 
     this.battery = GameWindow.BATTERY_START;
     this.notifications = [];
+
+    this.apps = [
+      {
+        name: 'Twitter',
+        id: 'twitter',
+        content: html`<twitter-app app-id="twitter" @complete=${this.handleComplete}></twitter-app>`,
+        instructions: 'Like dril\'s post!',
+      },
+      {
+        name: 'Instagram',
+        id: 'instagram',
+        content: html`Instagram`,
+      },
+      {
+        name: 'Email',
+        id: 'email',
+        content: html`Email`,
+      },
+      {
+        name: 'Notes',
+        id: 'notes',
+        content: html`Notes`,
+      }
+    ];
 
     let seconds = 0;
 
@@ -64,6 +68,16 @@ export default class GameWindow extends LitElement {
 
       seconds += 1;
     }, 1000);
+  }
+
+  handleComplete(event) {
+    this.currentAppId = null;
+    const id = event.target.getAttribute('app-id');
+    const index = this.apps.findIndex(app => app.id === id);
+
+    const newApps = [...this.apps];
+    newApps.splice(index, 1);
+    this.apps = newApps;
   }
 
   render() {

@@ -8,6 +8,7 @@ export default class TwitterApp extends LitElement {
     {
       handle: 'dril',
       content: 'Lorem ipsum',
+      rtToComplete: true,
     },
     {
       handle: 'fart',
@@ -21,10 +22,28 @@ export default class TwitterApp extends LitElement {
         ${this.posts.map(post => html`
           <li>
             <b>${post.handle}</b> ${post.content}
+
+            <button
+              type="button"
+              @click=${() => this.handleClickRetweet(post.rtToComplete)}
+            >
+              RT
+            </button>
+
+
+            <button
+              type="button"
+            >
+              Like
+            </button>
           </li>
         `)}
       </ul>
     `;
+  }
+
+  handleClickRetweet(rtToComplete) {
+    this.dispatchEvent(new CustomEvent('complete'));
   }
 
   static styles = css`

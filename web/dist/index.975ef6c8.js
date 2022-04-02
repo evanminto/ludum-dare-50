@@ -538,35 +538,39 @@ class GameWindow extends _lit.LitElement {
         notifications: {
             type: Array,
             attribute: false
+        },
+        apps: {
+            type: Array,
+            attribute: false
         }
     };
-    apps = [
-        {
-            name: 'Twitter',
-            id: 'twitter',
-            content: _lit.html`<twitter-app></twitter-app>`,
-            instructions: 'Like dril\'s post!'
-        },
-        {
-            name: 'Instagram',
-            id: 'instagram',
-            content: _lit.html`Instagram`
-        },
-        {
-            name: 'Email',
-            id: 'email',
-            content: _lit.html`Email`
-        },
-        {
-            name: 'Notes',
-            id: 'notes',
-            content: _lit.html`Notes`
-        }
-    ];
     constructor(){
         super();
         this.battery = GameWindow.BATTERY_START;
         this.notifications = [];
+        this.apps = [
+            {
+                name: 'Twitter',
+                id: 'twitter',
+                content: _lit.html`<twitter-app app-id="twitter" @complete=${this.handleComplete}></twitter-app>`,
+                instructions: 'Like dril\'s post!'
+            },
+            {
+                name: 'Instagram',
+                id: 'instagram',
+                content: _lit.html`Instagram`
+            },
+            {
+                name: 'Email',
+                id: 'email',
+                content: _lit.html`Email`
+            },
+            {
+                name: 'Notes',
+                id: 'notes',
+                content: _lit.html`Notes`
+            }
+        ];
         let seconds = 0;
         setInterval(()=>{
             this.battery -= GameWindow.BATTERY_START / _configJsonDefault.default.batteryMinutesDefault / 60;
@@ -582,6 +586,17 @@ class GameWindow extends _lit.LitElement {
             }
             seconds += 1;
         }, 1000);
+    }
+    handleComplete(event) {
+        this.currentAppId = null;
+        const id = event.target.getAttribute('app-id');
+        const index = this.apps.findIndex((app)=>app.id === id
+        );
+        const newApps = [
+            ...this.apps
+        ];
+        newApps.splice(index, 1);
+        this.apps = newApps;
     }
     render() {
         if (this.battery <= 0) return _lit.html`<shutdown-screen></shutdown-screen>`;
@@ -1543,7 +1558,8 @@ class TwitterApp extends _lit.LitElement {
     posts = [
         {
             handle: 'dril',
-            content: 'Lorem ipsum'
+            content: 'Lorem ipsum',
+            rtToComplete: true
         },
         {
             handle: 'fart',
@@ -1556,11 +1572,29 @@ class TwitterApp extends _lit.LitElement {
         ${this.posts.map((post)=>_lit.html`
           <li>
             <b>${post.handle}</b> ${post.content}
+
+            <button
+              type="button"
+              @click=${()=>this.handleClickRetweet(post.rtToComplete)
+            }
+            >
+              RT
+            </button>
+
+
+            <button
+              type="button"
+            >
+              Like
+            </button>
           </li>
         `
         )}
       </ul>
     `;
+    }
+    handleClickRetweet(rtToComplete) {
+        this.dispatchEvent(new CustomEvent('complete'));
     }
     static styles = _lit.css`
     :host {
