@@ -9,5 +9,7 @@ export default class Phase {
    */
   constructor(apps) {
     this.appDeck = new Deck(apps);
+    console.log('shuffle');
+    this.appDeck.shuffle();
   }
 }

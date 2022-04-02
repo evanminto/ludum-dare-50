@@ -6,6 +6,7 @@ Promise.all([
   import('./components/ShutdownScreen.js'),
   import('./components/TwitterApp.js'),
   import('./components/MapApp.js'),
+  import('./components/MessagesApp.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>

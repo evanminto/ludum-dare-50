@@ -28,8 +28,8 @@ export default class Deck {
     this.#index += 1;
   }
 
-  get isEmpty() {
-    return this.#cards.length === 0;
+  get count() {
+    return this.#cards.length;
   }
 
   /**

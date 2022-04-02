@@ -17,24 +17,31 @@ export default class GameWindow extends LitElement {
       type: Array,
       attribute: false,
     },
+    phases: {
+      type: Deck,
+      attribute: false,
+    },
   };
-
-  phases = new Deck([
-    new Phase([
-      {
-        content: html`<twitter-app></twitter-app>`,
-      },
-      {
-        content: html`<map-app></map-app>`,
-      },
-    ]),
-  ]);
 
   constructor() {
     super();
 
     this.battery = GameWindow.BATTERY_START;
     this.notifications = [];
+
+    this.phases = new Deck([
+      new Phase([
+        {
+          content: html`<twitter-app></twitter-app>`,
+        },
+        {
+          content: html`<map-app></map-app>`,
+        },
+        {
+          content: html`<messages-app></messages-app>`,
+        },
+      ]),
+    ]);
 
     let seconds = 0;
 
@@ -57,9 +64,14 @@ export default class GameWindow extends LitElement {
   }
 
   handleFailure() {
-    console.log('failure');
     const { appDeck } = this.phases.current;
-    appDeck.shuffle();
+    const currentApp = appDeck.current;
+
+    // Avoid shuffling back to the same app
+    while (appDeck.count > 1 && appDeck.current === currentApp) {
+      appDeck.shuffle();
+    }
+
     this.requestUpdate('phases');
   }
 
