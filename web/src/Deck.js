@@ -24,10 +24,6 @@ export default class Deck {
     return this.#cards.splice(this.#index, 1)[0];
   }
 
-  goToNext() {
-    this.#index += 1;
-  }
-
   get count() {
     return this.#cards.length;
   }

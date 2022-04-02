@@ -13,6 +13,7 @@ export default class GameWindow extends LitElement {
 
   static properties = {
     battery: Number,
+    win: Boolean,
     notifications: {
       type: Array,
       attribute: false,
@@ -60,6 +61,15 @@ export default class GameWindow extends LitElement {
     const { appDeck } = this.phases.current;
     appDeck.discard();
     appDeck.shuffle();
+
+    if (appDeck.count === 0) {
+      this.phases.discard();
+
+      if (this.phases.count === 0) {
+        this.win = true;
+      }
+    }
+
     this.requestUpdate('phases');
   }
 
@@ -76,7 +86,13 @@ export default class GameWindow extends LitElement {
   }
 
   render() {
-    if (this.battery <= 0) {
+    const { battery, win } = this;
+
+    if (win) {
+      return html`<win-screen></win-screen>`;
+    }
+
+    if (battery <= 0) {
       return html`<shutdown-screen></shutdown-screen>`;
     }
 

@@ -3,6 +3,7 @@ Promise.all([
   import('./components/NavBar.js'),
   import('./components/AppIcon.js'),
   import('./components/NotificationBubble.js'),
+  import('./components/WinScreen.js'),
   import('./components/ShutdownScreen.js'),
   import('./components/TwitterApp.js'),
   import('./components/MapApp.js'),
