@@ -544,7 +544,8 @@ class GameWindow extends _lit.LitElement {
         {
             name: 'Twitter',
             id: 'twitter',
-            content: _lit.html`<twitter-app></twitter-app>`
+            content: _lit.html`<twitter-app></twitter-app>`,
+            instructions: 'Like dril\'s post!'
         },
         {
             name: 'Instagram',
@@ -602,7 +603,12 @@ class GameWindow extends _lit.LitElement {
         ` : ''}
 
       ${this.currentAppId ? _lit.html`
-          <app-screen @back=${this.handleBack}>${this.currentApp.content}</app-screen>
+          <app-screen
+            instructions=${this.currentApp.instructions}
+            @back=${this.handleBack}
+          >
+            ${this.currentApp.content}
+          </app-screen>
         ` : _lit.html`
           <div class="grid">
             ${this.apps.map((app)=>_lit.html`
@@ -648,6 +654,7 @@ class GameWindow extends _lit.LitElement {
       flex-direction: column;
       gap: 0.25em;
       position: absolute;
+      z-index: 1;
       left: 1em;
       right: 1em;
       top: 1em;
@@ -1489,8 +1496,13 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
 class AppScreen extends _lit.LitElement {
+    static properties = {
+        instructions: String
+    };
     render() {
         return _lit.html`
+      ${this.instructions ? _lit.html`<p class="instructions">${this.instructions}</p>` : ''}
+
       <button type="button" @click=${this.handleClickBack}>Back</button>
 
       <div>
@@ -1506,6 +1518,17 @@ class AppScreen extends _lit.LitElement {
       display: block;
       background: lightgray;
       padding: 1em;
+      position: relative;
+    }
+
+    .instructions {
+      position: absolute;
+      top: 3em;
+      left: 50%;
+      translate: -50%;
+      background: black;
+      color: white;
+      padding: 0.25em;
     }
   `;
 }

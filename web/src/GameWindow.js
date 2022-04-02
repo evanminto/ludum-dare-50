@@ -22,6 +22,7 @@ export default class GameWindow extends LitElement {
       name: 'Twitter',
       id: 'twitter',
       content: html`<twitter-app></twitter-app>`,
+      instructions: 'Like dril\'s post!',
     },
     {
       name: 'Instagram',
@@ -89,7 +90,12 @@ export default class GameWindow extends LitElement {
 
       ${this.currentAppId
         ? html`
-          <app-screen @back=${this.handleBack}>${this.currentApp.content}</app-screen>
+          <app-screen
+            instructions=${this.currentApp.instructions}
+            @back=${this.handleBack}
+          >
+            ${this.currentApp.content}
+          </app-screen>
         `
         : html`
           <div class="grid">
@@ -135,6 +141,7 @@ export default class GameWindow extends LitElement {
       flex-direction: column;
       gap: 0.25em;
       position: absolute;
+      z-index: 1;
       left: 1em;
       right: 1em;
       top: 1em;
