@@ -1,12 +1,12 @@
 {
   "name": "ludum-dare-50",
   "version": "0.0.1",
-  "main": "src/index.js",
   "license": "MIT",
   "devDependencies": {
     "parcel": "^2.4.1"
   },
   "scripts": {
+    "build": "yarn run parcel build src/index.html",
     "start": "yarn run parcel serve src/index.html"
   },
   "dependencies": {
