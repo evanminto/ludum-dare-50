@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
-import script from './script.json';
 import config from './config.json';
+import Phase from './Phase';
+import Deck from './Deck';
 
 /**
  * @customElement game-window
@@ -14,32 +15,24 @@ export default class GameWindow extends LitElement {
       type: Array,
       attribute: false,
     },
-    phaseIndex: {
-      type: Number,
-      attribute: false,
-    },
-    appIndex: {
-      type: Number,
-      attribute: false,
-    },
   };
 
-  phases = [
-    {
-      apps: [
-        html`<twitter-app></twitter-app>`,
-        html`<map-app></map-app>`,
-      ],
-    },
-  ]
+  phases = new Deck([
+    new Phase([
+      {
+        content: html`<twitter-app></twitter-app>`,
+      },
+      {
+        content: html`<map-app></map-app>`,
+      }
+    ]),
+  ]);
 
   constructor() {
     super();
 
     this.battery = GameWindow.BATTERY_START;
     this.notifications = [];
-    this.appIndex = 0;
-    this.phaseIndex = 0;
 
     let seconds = 0;
 
@@ -49,8 +42,22 @@ export default class GameWindow extends LitElement {
     }, 1000);
   }
 
+  discardApp() {
+    this.discardedAppIndexes = [...this.discardedAppIndexes, this.appIndex];
+  }
+
   handleSuccess() {
-    this.appIndex += 1;
+    const { appDeck } = this.phases.current;
+    appDeck.discard();
+    appDeck.shuffle();
+    this.requestUpdate('phases');
+  }
+
+  handleFailure() {
+    console.log('failure');
+    const { appDeck } = this.phases.current;
+    appDeck.shuffle();
+    this.requestUpdate('phases');
   }
 
   render() {
@@ -75,10 +82,14 @@ export default class GameWindow extends LitElement {
         `
         : ''}
 
-      ${this.phaseIndex !== undefined && this.appIndex !== undefined
+      ${this.phases.current && this.phases.current.appDeck.current
         ? html`
-          <div class="app-container" @success=${this.handleSuccess}>
-            ${this.currentApp}
+          <div
+            class="app-container"
+            @success=${this.handleSuccess}
+            @failure=${this.handleFailure}
+          >
+            ${this.phases.current.appDeck.current.content}
           </div>
         `
         : html`
@@ -98,10 +109,6 @@ export default class GameWindow extends LitElement {
           </div>
         `}
     `;
-  }
-
-  get currentApp() {
-    return this.phases[this.phaseIndex].apps[this.appIndex];
   }
 
   handleBack() {

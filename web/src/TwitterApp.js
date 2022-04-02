@@ -1,5 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from './events/SuccessEvent';
+import FailureEvent from './events/FailureEvent';
 
 /**
  * @customElement twitter-app
@@ -41,11 +42,29 @@ export default class TwitterApp extends LitElement {
           </li>
         `)}
       </ul>
+
+      <button
+        type="button"
+        @click=${this.handleSuccess}
+      >
+        Success
+      </button>
+
+      <button
+        type="button"
+        @click=${this.handleFailure}
+      >
+        Failure
+      </button>
     `;
   }
 
-  handleClickRetweet(rtToComplete) {
+  handleSuccess() {
     this.dispatchEvent(new SuccessEvent());
+  }
+
+  handleFailure() {
+    this.dispatchEvent(new FailureEvent());
   }
 
   static styles = css`

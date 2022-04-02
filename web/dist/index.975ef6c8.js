@@ -526,10 +526,12 @@ var _mapAppJs = require("./MapApp.js");
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
-var _scriptJson = require("./script.json");
-var _scriptJsonDefault = parcelHelpers.interopDefault(_scriptJson);
 var _configJson = require("./config.json");
 var _configJsonDefault = parcelHelpers.interopDefault(_configJson);
+var _phase = require("./Phase");
+var _phaseDefault = parcelHelpers.interopDefault(_phase);
+var _deck = require("./Deck");
+var _deckDefault = parcelHelpers.interopDefault(_deck);
 class GameWindow extends _lit.LitElement {
     static BATTERY_START = 25;
     static properties = {
@@ -537,38 +539,45 @@ class GameWindow extends _lit.LitElement {
         notifications: {
             type: Array,
             attribute: false
-        },
-        phaseIndex: {
-            type: Number,
-            attribute: false
-        },
-        appIndex: {
-            type: Number,
-            attribute: false
         }
     };
-    phases = [
-        {
-            apps: [
-                _lit.html`<twitter-app></twitter-app>`,
-                _lit.html`<map-app></map-app>`, 
-            ]
-        }, 
-    ];
+    phases = new _deckDefault.default([
+        new _phaseDefault.default([
+            {
+                content: _lit.html`<twitter-app></twitter-app>`
+            },
+            {
+                content: _lit.html`<map-app></map-app>`
+            }
+        ]), 
+    ]);
     constructor(){
         super();
         this.battery = GameWindow.BATTERY_START;
         this.notifications = [];
-        this.appIndex = 0;
-        this.phaseIndex = 0;
         let seconds = 0;
         setInterval(()=>{
             this.battery -= GameWindow.BATTERY_START / _configJsonDefault.default.batteryMinutesDefault / 60;
             seconds += 1;
         }, 1000);
     }
+    discardApp() {
+        this.discardedAppIndexes = [
+            ...this.discardedAppIndexes,
+            this.appIndex
+        ];
+    }
     handleSuccess() {
-        this.appIndex += 1;
+        const { appDeck  } = this.phases.current;
+        appDeck.discard();
+        appDeck.shuffle();
+        this.requestUpdate('phases');
+    }
+    handleFailure() {
+        console.log('failure');
+        const { appDeck  } = this.phases.current;
+        appDeck.shuffle();
+        this.requestUpdate('phases');
     }
     render() {
         if (this.battery <= 0) return _lit.html`<shutdown-screen></shutdown-screen>`;
@@ -589,9 +598,13 @@ class GameWindow extends _lit.LitElement {
           </div>
         ` : ''}
 
-      ${this.phaseIndex !== undefined && this.appIndex !== undefined ? _lit.html`
-          <div class="app-container" @success=${this.handleSuccess}>
-            ${this.currentApp}
+      ${this.phases.current && this.phases.current.appDeck.current ? _lit.html`
+          <div
+            class="app-container"
+            @success=${this.handleSuccess}
+            @failure=${this.handleFailure}
+          >
+            ${this.phases.current.appDeck.current.content}
           </div>
         ` : _lit.html`
           <div class="grid">
@@ -610,9 +623,6 @@ class GameWindow extends _lit.LitElement {
           </div>
         `}
     `;
-    }
-    get currentApp() {
-        return this.phases[this.phaseIndex].apps[this.appIndex];
     }
     handleBack() {
         this.currentAppId = null;
@@ -675,7 +685,7 @@ class GameWindow extends _lit.LitElement {
 exports.default = GameWindow;
 customElements.define('game-window', GameWindow);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./script.json":"kX0VY","./config.json":"8VeYg"}],"4antt":[function(require,module,exports) {
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.json":"8VeYg","./Deck":"ledJZ","./Phase":"ahkx4"}],"4antt":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _reactiveElement = require("@lit/reactive-element");
@@ -1392,13 +1402,75 @@ const h = {
 };
 (null !== (o = globalThis.litElementVersions) && void 0 !== o ? o : globalThis.litElementVersions = []).push("3.2.0");
 
-},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kX0VY":[function(require,module,exports) {
-module.exports = JSON.parse("{\"events\":[{\"time\":5,\"type\":\"notification\",\"content\":\"Hello World!\"},{\"time\":15,\"type\":\"notification\",\"content\":\"Another one?\"}]}");
-
-},{}],"8VeYg":[function(require,module,exports) {
+},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8VeYg":[function(require,module,exports) {
 module.exports = JSON.parse("{\"batteryMinutesDefault\":2}");
 
-},{}],"bwo2n":[function(require,module,exports) {
+},{}],"ledJZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _shuffle = require("./utils/shuffle");
+var _shuffleDefault = parcelHelpers.interopDefault(_shuffle);
+class Deck {
+    #cards = [];
+    #index = 0;
+    /**
+   * @param {T[]} cards
+   */ constructor(cards){
+        this.#cards = cards;
+    }
+    shuffle() {
+        _shuffleDefault.default(this.#cards);
+        this.#index = 0;
+    }
+    /**
+   * @returns {T}
+   */ discard() {
+        return this.#cards.splice(this.#index, 1)[0];
+    }
+    goToNext() {
+        this.#index += 1;
+    }
+    get isEmpty() {
+        return this.#cards.length === 0;
+    }
+    /**
+   * @returns {T}
+   */ get current() {
+        return this.#cards[this.#index];
+    }
+}
+exports.default = Deck;
+
+},{"./utils/shuffle":"hz8kI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hz8kI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function shuffle(array) {
+    for(var i = array.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+exports.default = shuffle;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ahkx4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _deck = require("./Deck");
+var _deckDefault = parcelHelpers.interopDefault(_deck);
+class Phase {
+    appDeck;
+    /**
+   *
+   * @param {{ content : import('lit/html').TemplateResult }[]} apps
+   */ constructor(apps){
+        this.appDeck = new _deckDefault.default(apps);
+    }
+}
+exports.default = Phase;
+
+},{"./Deck":"ledJZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bwo2n":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -1495,6 +1567,8 @@ parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
 var _successEvent = require("./events/SuccessEvent");
 var _successEventDefault = parcelHelpers.interopDefault(_successEvent);
+var _failureEvent = require("./events/FailureEvent");
+var _failureEventDefault = parcelHelpers.interopDefault(_failureEvent);
 class TwitterApp extends _lit.LitElement {
     posts = [
         {
@@ -1532,10 +1606,27 @@ class TwitterApp extends _lit.LitElement {
         `
         )}
       </ul>
+
+      <button
+        type="button"
+        @click=${this.handleSuccess}
+      >
+        Success
+      </button>
+
+      <button
+        type="button"
+        @click=${this.handleFailure}
+      >
+        Failure
+      </button>
     `;
     }
-    handleClickRetweet(rtToComplete) {
+    handleSuccess() {
         this.dispatchEvent(new _successEventDefault.default());
+    }
+    handleFailure() {
+        this.dispatchEvent(new _failureEventDefault.default());
     }
     static styles = _lit.css`
     :host {
@@ -1553,7 +1644,7 @@ class TwitterApp extends _lit.LitElement {
 exports.default = TwitterApp;
 customElements.define('twitter-app', TwitterApp);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./events/SuccessEvent":"a0AUT"}],"a0AUT":[function(require,module,exports) {
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./events/SuccessEvent":"a0AUT","./events/FailureEvent":"d9Ung"}],"a0AUT":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class SuccessEvent extends Event {
@@ -1564,6 +1655,18 @@ class SuccessEvent extends Event {
     }
 }
 exports.default = SuccessEvent;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d9Ung":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class FailureEvent extends Event {
+    constructor(){
+        super('failure', {
+            bubbles: true
+        });
+    }
+}
+exports.default = FailureEvent;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzXRA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
