@@ -519,8 +519,10 @@ var _navBarJs = require("./NavBar.js");
 var _appIconJs = require("./AppIcon.js");
 var _notificationBubbleJs = require("./NotificationBubble.js");
 var _appScreenJs = require("./AppScreen.js");
+var _twitterAppJs = require("./TwitterApp.js");
+var _shutdownScreenJs = require("./ShutdownScreen.js");
 
-},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./AppScreen.js":"5JtMU"}],"28Y8e":[function(require,module,exports) {
+},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./AppScreen.js":"5JtMU","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA"}],"28Y8e":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -529,6 +531,7 @@ var _scriptJsonDefault = parcelHelpers.interopDefault(_scriptJson);
 var _configJson = require("./config.json");
 var _configJsonDefault = parcelHelpers.interopDefault(_configJson);
 class GameWindow extends _lit.LitElement {
+    static BATTERY_START = 25;
     static properties = {
         currentAppId: String,
         battery: Number,
@@ -541,7 +544,7 @@ class GameWindow extends _lit.LitElement {
         {
             name: 'Twitter',
             id: 'twitter',
-            content: _lit.html`Twitter`
+            content: _lit.html`<twitter-app></twitter-app>`
         },
         {
             name: 'Instagram',
@@ -561,11 +564,11 @@ class GameWindow extends _lit.LitElement {
     ];
     constructor(){
         super();
-        this.battery = 25;
+        this.battery = GameWindow.BATTERY_START;
         this.notifications = [];
         let seconds = 0;
         setInterval(()=>{
-            this.battery -= _configJsonDefault.default.batteryRatePerSecond;
+            this.battery -= GameWindow.BATTERY_START / _configJsonDefault.default.batteryMinutesDefault / 60;
             const event1 = _scriptJsonDefault.default.events.find((event)=>event.time === seconds
             );
             if (event1) {
@@ -580,6 +583,7 @@ class GameWindow extends _lit.LitElement {
         }, 1000);
     }
     render() {
+        if (this.battery <= 0) return _lit.html`<shutdown-screen></shutdown-screen>`;
         return _lit.html`
       <nav-bar battery=${this.battery}></nav-bar>
 
@@ -1387,7 +1391,7 @@ const h = {
 module.exports = JSON.parse("{\"events\":[{\"time\":5,\"type\":\"notification\",\"content\":\"Hello World!\"},{\"time\":15,\"type\":\"notification\",\"content\":\"Another one?\"}]}");
 
 },{}],"8VeYg":[function(require,module,exports) {
-module.exports = JSON.parse("{\"batteryRatePerSecond\":0.5}");
+module.exports = JSON.parse("{\"batteryMinutesDefault\":2}");
 
 },{}],"bwo2n":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1507,6 +1511,75 @@ class AppScreen extends _lit.LitElement {
 }
 exports.default = AppScreen;
 customElements.define('app-screen', AppScreen);
+
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"FISHd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _lit = require("lit");
+class TwitterApp extends _lit.LitElement {
+    posts = [
+        {
+            handle: 'dril',
+            content: 'Lorem ipsum'
+        },
+        {
+            handle: 'fart',
+            content: 'Dolor sit amet'
+        }, 
+    ];
+    render() {
+        return _lit.html`
+      <ul>
+        ${this.posts.map((post)=>_lit.html`
+          <li>
+            <b>${post.handle}</b> ${post.content}
+          </li>
+        `
+        )}
+      </ul>
+    `;
+    }
+    static styles = _lit.css`
+    :host {
+      display: block;
+      background: lightgray;
+      padding: 1em;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  `;
+}
+exports.default = TwitterApp;
+customElements.define('twitter-app', TwitterApp);
+
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzXRA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _lit = require("lit");
+class ShutdownScreen extends _lit.LitElement {
+    render() {
+        return _lit.html`
+      <p>Shutting down...</p>
+    `;
+    }
+    static styles = _lit.css`
+    :host {
+      display: block;
+      background: black;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  `;
+}
+exports.default = ShutdownScreen;
+customElements.define('shutdown-screen', ShutdownScreen);
 
 },{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire2f78")
 

@@ -6,6 +6,8 @@ import config from './config.json';
  * @customElement game-window
  */
 export default class GameWindow extends LitElement {
+  static BATTERY_START = 25;
+
   static properties = {
     currentAppId: String,
     battery: Number,
@@ -19,7 +21,7 @@ export default class GameWindow extends LitElement {
     {
       name: 'Twitter',
       id: 'twitter',
-      content: html`Twitter`,
+      content: html`<twitter-app></twitter-app>`,
     },
     {
       name: 'Instagram',
@@ -41,13 +43,13 @@ export default class GameWindow extends LitElement {
   constructor() {
     super();
 
-    this.battery = 25;
+    this.battery = GameWindow.BATTERY_START;
     this.notifications = [];
 
     let seconds = 0;
 
     setInterval(() => {
-      this.battery -= config.batteryRatePerSecond;
+      this.battery -= GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
 
       const event = script.events.find(event => event.time === seconds);
 
@@ -64,6 +66,10 @@ export default class GameWindow extends LitElement {
   }
 
   render() {
+    if (this.battery <= 0) {
+      return html`<shutdown-screen></shutdown-screen>`;
+    }
+
     return html`
       <nav-bar battery=${this.battery}></nav-bar>
 
