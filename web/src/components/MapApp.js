@@ -19,6 +19,7 @@ export default class MapApp extends LitElement {
       handle: 'fart',
       content: 'Dolor sit amet',
     },
+    {},
   ];
 
   render() {
