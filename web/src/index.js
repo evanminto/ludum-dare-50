@@ -4,4 +4,5 @@ import './AppIcon.js';
 import './NotificationBubble.js';
 import './AppScreen.js';
 import './TwitterApp.js';
+import './MapApp.js';
 import './ShutdownScreen.js';

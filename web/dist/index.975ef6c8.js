@@ -520,9 +520,10 @@ var _appIconJs = require("./AppIcon.js");
 var _notificationBubbleJs = require("./NotificationBubble.js");
 var _appScreenJs = require("./AppScreen.js");
 var _twitterAppJs = require("./TwitterApp.js");
+var _mapAppJs = require("./MapApp.js");
 var _shutdownScreenJs = require("./ShutdownScreen.js");
 
-},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./AppScreen.js":"5JtMU","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA"}],"28Y8e":[function(require,module,exports) {
+},{"./GameWindow.js":"28Y8e","./NavBar.js":"bwo2n","./AppIcon.js":"60HJr","./NotificationBubble.js":"bYJiH","./AppScreen.js":"5JtMU","./TwitterApp.js":"FISHd","./ShutdownScreen.js":"bzXRA","./MapApp.js":"4icXw"}],"28Y8e":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -533,70 +534,42 @@ var _configJsonDefault = parcelHelpers.interopDefault(_configJson);
 class GameWindow extends _lit.LitElement {
     static BATTERY_START = 25;
     static properties = {
-        currentAppId: String,
         battery: Number,
         notifications: {
             type: Array,
             attribute: false
         },
-        apps: {
-            type: Array,
+        phaseIndex: {
+            type: Number,
+            attribute: false
+        },
+        appIndex: {
+            type: Number,
             attribute: false
         }
     };
+    phases = [
+        {
+            apps: [
+                _lit.html`<twitter-app></twitter-app>`,
+                _lit.html`<map-app></map-app>`, 
+            ]
+        }, 
+    ];
     constructor(){
         super();
         this.battery = GameWindow.BATTERY_START;
         this.notifications = [];
-        this.apps = [
-            {
-                name: 'Twitter',
-                id: 'twitter',
-                content: _lit.html`<twitter-app app-id="twitter" @complete=${this.handleComplete}></twitter-app>`,
-                instructions: 'Like dril\'s post!'
-            },
-            {
-                name: 'Instagram',
-                id: 'instagram',
-                content: _lit.html`Instagram`
-            },
-            {
-                name: 'Email',
-                id: 'email',
-                content: _lit.html`Email`
-            },
-            {
-                name: 'Notes',
-                id: 'notes',
-                content: _lit.html`Notes`
-            }
-        ];
+        this.appIndex = 0;
+        this.phaseIndex = 0;
         let seconds = 0;
         setInterval(()=>{
             this.battery -= GameWindow.BATTERY_START / _configJsonDefault.default.batteryMinutesDefault / 60;
-            const event1 = _scriptJsonDefault.default.events.find((event)=>event.time === seconds
-            );
-            if (event1) {
-                if (event1.type === 'notification') this.notifications = [
-                    ...this.notifications,
-                    {
-                        text: event1.content
-                    }
-                ];
-            }
             seconds += 1;
         }, 1000);
     }
-    handleComplete(event) {
-        this.currentAppId = null;
-        const id = event.target.getAttribute('app-id');
-        const index = this.apps.findIndex((app)=>app.id === id
-        );
-        const newApps = [
-            ...this.apps
-        ];
-        newApps.splice(index, 1);
-        this.apps = newApps;
+    handleSuccess() {
+        this.appIndex += 1;
     }
     render() {
         if (this.battery <= 0) return _lit.html`<shutdown-screen></shutdown-screen>`;
@@ -617,12 +590,13 @@ class GameWindow extends _lit.LitElement {
           </div>
         ` : ''}
 
-      ${this.currentAppId ? _lit.html`
+      ${this.phaseIndex !== undefined && this.appIndex !== undefined ? _lit.html`
           <app-screen
             instructions=${this.currentApp.instructions}
             @back=${this.handleBack}
+            @success=${this.handleSuccess}
           >
-            ${this.currentApp.content}
+            ${this.phases[this.phaseIndex].apps[this.appIndex]}
           </app-screen>
         ` : _lit.html`
           <div class="grid">
@@ -635,6 +609,9 @@ class GameWindow extends _lit.LitElement {
         `}
     `;
     }
+    get currentApp() {
+        return this.phases[this.phaseIndex].apps[this.appIndex];
+    }
     handleBack() {
         this.currentAppId = null;
     }
@@ -644,10 +621,6 @@ class GameWindow extends _lit.LitElement {
         ];
         newNotifs.splice(index, 1);
         this.notifications = newNotifs;
-    }
-    get currentApp() {
-        return this.apps.find(({ id  })=>id === this.currentAppId
-        );
     }
     static styles = _lit.css`
     :host {
@@ -1554,6 +1527,8 @@ customElements.define('app-screen', AppScreen);
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
+var _successEvent = require("./events/SuccessEvent");
+var _successEventDefault = parcelHelpers.interopDefault(_successEvent);
 class TwitterApp extends _lit.LitElement {
     posts = [
         {
@@ -1594,7 +1569,7 @@ class TwitterApp extends _lit.LitElement {
     `;
     }
     handleClickRetweet(rtToComplete) {
-        this.dispatchEvent(new CustomEvent('complete'));
+        this.dispatchEvent(new _successEventDefault.default());
     }
     static styles = _lit.css`
     :host {
@@ -1612,7 +1587,19 @@ class TwitterApp extends _lit.LitElement {
 exports.default = TwitterApp;
 customElements.define('twitter-app', TwitterApp);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzXRA":[function(require,module,exports) {
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./events/SuccessEvent":"a0AUT"}],"a0AUT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class SuccessEvent extends Event {
+    constructor(){
+        super('success', {
+            bubbles: true
+        });
+    }
+}
+exports.default = SuccessEvent;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzXRA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lit = require("lit");
@@ -1638,6 +1625,48 @@ class ShutdownScreen extends _lit.LitElement {
 exports.default = ShutdownScreen;
 customElements.define('shutdown-screen', ShutdownScreen);
 
-},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire2f78")
+},{"lit":"4antt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4icXw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _lit = require("lit");
+var _successEvent = require("./events/SuccessEvent");
+var _successEventDefault = parcelHelpers.interopDefault(_successEvent);
+class MapApp extends _lit.LitElement {
+    posts = [
+        {
+            handle: 'dril',
+            content: 'Lorem ipsum',
+            rtToComplete: true
+        },
+        {
+            handle: 'fart',
+            content: 'Dolor sit amet'
+        }, 
+    ];
+    render() {
+        return _lit.html`
+      Map
+    `;
+    }
+    handleClickRetweet(rtToComplete) {
+        this.dispatchEvent(new _successEventDefault.default());
+    }
+    static styles = _lit.css`
+    :host {
+      display: block;
+      background: lightgray;
+      padding: 1em;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  `;
+}
+exports.default = MapApp;
+customElements.define('map-app', MapApp);
+
+},{"lit":"4antt","./events/SuccessEvent":"a0AUT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire2f78")
 
 //# sourceMappingURL=index.975ef6c8.js.map

@@ -9,75 +9,48 @@ export default class GameWindow extends LitElement {
   static BATTERY_START = 25;
 
   static properties = {
-    currentAppId: String,
     battery: Number,
     notifications: {
       type: Array,
       attribute: false,
     },
-    apps: {
-      type: Array,
+    phaseIndex: {
+      type: Number,
       attribute: false,
-    }
+    },
+    appIndex: {
+      type: Number,
+      attribute: false,
+    },
   };
+
+  phases = [
+    {
+      apps: [
+        html`<twitter-app></twitter-app>`,
+        html`<map-app></map-app>`,
+      ],
+    },
+  ]
 
   constructor() {
     super();
 
     this.battery = GameWindow.BATTERY_START;
     this.notifications = [];
-
-    this.apps = [
-      {
-        name: 'Twitter',
-        id: 'twitter',
-        content: html`<twitter-app app-id="twitter" @complete=${this.handleComplete}></twitter-app>`,
-        instructions: 'Like dril\'s post!',
-      },
-      {
-        name: 'Instagram',
-        id: 'instagram',
-        content: html`Instagram`,
-      },
-      {
-        name: 'Email',
-        id: 'email',
-        content: html`Email`,
-      },
-      {
-        name: 'Notes',
-        id: 'notes',
-        content: html`Notes`,
-      }
-    ];
+    this.appIndex = 0;
+    this.phaseIndex = 0;
 
     let seconds = 0;
 
     setInterval(() => {
       this.battery -= GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
-
-      const event = script.events.find(event => event.time === seconds);
-
-      if (event) {
-        if (event.type === 'notification') {
-          this.notifications = [...this.notifications, {
-            text: event.content,
-          }];
-        }
-      }
-
       seconds += 1;
     }, 1000);
   }
 
-  handleComplete(event) {
-    this.currentAppId = null;
-    const id = event.target.getAttribute('app-id');
-    const index = this.apps.findIndex(app => app.id === id);
-
-    const newApps = [...this.apps];
-    newApps.splice(index, 1);
-    this.apps = newApps;
+  handleSuccess() {
+    this.appIndex += 1;
   }
 
   render() {
@@ -102,13 +75,14 @@ export default class GameWindow extends LitElement {
         `
         : ''}
 
-      ${this.currentAppId
+      ${this.phaseIndex !== undefined && this.appIndex !== undefined
         ? html`
           <app-screen
             instructions=${this.currentApp.instructions}
             @back=${this.handleBack}
+            @success=${this.handleSuccess}
           >
-            ${this.currentApp.content}
+            ${this.phases[this.phaseIndex].apps[this.appIndex]}
           </app-screen>
         `
         : html`
@@ -121,6 +95,10 @@ export default class GameWindow extends LitElement {
     `;
   }
 
+  get currentApp() {
+    return this.phases[this.phaseIndex].apps[this.appIndex];
+  }
+
   handleBack() {
     this.currentAppId = null;
   }
@@ -129,10 +107,6 @@ export default class GameWindow extends LitElement {
     const newNotifs = [...this.notifications];
     newNotifs.splice(index, 1);
     this.notifications = newNotifs;
-  }
-
-  get currentApp() {
-    return this.apps.find(({ id }) => id === this.currentAppId);
   }
 
   static styles = css`

@@ -2,10 +2,10 @@ import { LitElement, css, html } from 'lit';
 import SuccessEvent from './events/SuccessEvent';
 
 /**
- * @customElement twitter-app
+ * @customElement map-app
  * @fires success
  */
-export default class TwitterApp extends LitElement {
+export default class MapApp extends LitElement {
   posts = [
     {
       handle: 'dril',
@@ -20,27 +20,7 @@ export default class TwitterApp extends LitElement {
 
   render() {
     return html`
-      <ul>
-        ${this.posts.map(post => html`
-          <li>
-            <b>${post.handle}</b> ${post.content}
-
-            <button
-              type="button"
-              @click=${() => this.handleClickRetweet(post.rtToComplete)}
-            >
-              RT
-            </button>
-
-
-            <button
-              type="button"
-            >
-              Like
-            </button>
-          </li>
-        `)}
-      </ul>
+      Map
     `;
   }
 
@@ -62,4 +42,4 @@ export default class TwitterApp extends LitElement {
   `;
 }
 
-customElements.define('twitter-app', TwitterApp);
+customElements.define('map-app', MapApp);
