@@ -44,17 +44,12 @@ export default class GameWindow extends LitElement {
       ]),
     ]);
 
-    let seconds = 0;
-
-    setInterval(() => {
-      this.battery -=
-        GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
-      seconds += 1;
-    }, 1000);
+    setInterval(() => this.decreaseBattery(), 1000);
   }
 
-  discardApp() {
-    this.discardedAppIndexes = [...this.discardedAppIndexes, this.appIndex];
+  decreaseBattery() {
+    this.battery -=
+      GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
   }
 
   handleSuccess() {
@@ -85,6 +80,51 @@ export default class GameWindow extends LitElement {
     this.requestUpdate('phases');
   }
 
+  renderHomeScreen() {
+    return html`
+      <div class="grid">
+        <app-icon name="Twitter"></app-icon>
+        <app-icon name="Maps"></app-icon>
+        <app-icon name="Instagram"></app-icon>
+        <app-icon name="Notes"></app-icon>
+        <app-icon name="Photos"></app-icon>
+        <app-icon name="Camera"></app-icon>
+        <app-icon name="Email"></app-icon>
+        <app-icon name="Message"></app-icon>
+        <app-icon name="Browser"></app-icon>
+        <app-icon name="Wordle"></app-icon>
+        <app-icon name="NextTrain"></app-icon>
+        <app-icon name="TikTok"></app-icon>
+      </div>
+    `;
+  }
+
+  renderNotifications() {
+    return html`
+      <div class="notifications-tray">
+        ${this.notifications.map(
+          (n, index) => html`
+            <notification-bubble @dismiss=${() => this.handleDismiss(index)}>
+              ${n.text}
+            </notification-bubble>
+          `
+        )}
+      </div>
+    `;
+  }
+
+  renderCurrentApp() {
+    return html`
+      <div
+        class="app-container"
+        @success=${this.handleSuccess}
+        @failure=${this.handleFailure}
+      >
+        ${this.phases.current.appDeck.current.content}
+      </div>
+    `;
+  }
+
   render() {
     const { battery, win } = this;
 
@@ -99,58 +139,11 @@ export default class GameWindow extends LitElement {
     return html`
       <nav-bar battery=${this.battery}></nav-bar>
 
-      ${this.notifications.length > 0
-        ? html`
-            <div class="notifications-tray">
-              ${this.notifications.map(
-                (n, index) => html`
-                  <notification-bubble
-                    @dismiss=${() => this.handleDismiss(index)}
-                  >
-                    ${n.text}
-                  </notification-bubble>
-                `
-              )}
-            </div>
-          `
-        : ''}
+      ${this.notifications.length > 0 ? this.renderNotifications() : ''}
       ${this.phases.current && this.phases.current.appDeck.current
-        ? html`
-            <div
-              class="app-container"
-              @success=${this.handleSuccess}
-              @failure=${this.handleFailure}
-            >
-              ${this.phases.current.appDeck.current.content}
-            </div>
-          `
-        : html`
-            <div class="grid">
-              <app-icon name="Twitter"></app-icon>
-              <app-icon name="Maps"></app-icon>
-              <app-icon name="Instagram"></app-icon>
-              <app-icon name="Notes"></app-icon>
-              <app-icon name="Photos"></app-icon>
-              <app-icon name="Camera"></app-icon>
-              <app-icon name="Email"></app-icon>
-              <app-icon name="Message"></app-icon>
-              <app-icon name="Browser"></app-icon>
-              <app-icon name="Wordle"></app-icon>
-              <app-icon name="NextTrain"></app-icon>
-              <app-icon name="TikTok"></app-icon>
-            </div>
-          `}
+        ? this.renderCurrentApp()
+        : this.renderHomeScreen()}
     `;
-  }
-
-  handleBack() {
-    this.currentAppId = null;
-  }
-
-  handleDismiss(index) {
-    const newNotifs = [...this.notifications];
-    newNotifs.splice(index, 1);
-    this.notifications = newNotifs;
   }
 
   static styles = css`
