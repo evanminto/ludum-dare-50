@@ -6,10 +6,37 @@
 
     <title>Ludum Dare 50</title>
     <script src="index.js" type="module"></script>
-    <link rel="stylesheet" href="index.css">
+    <!-- <link rel="stylesheet" href="index.css"> -->
+
+    <style>
+      @font-face {
+        font-family: 'IBM VGA';
+        src: url('./fonts/WebPlus_IBM_VGA_9x16.woff');
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100vw;
+        width: 100dvw;
+        height: 100vh;
+        height: -webkit-fill-available;
+        height: 100dvh;
+      }
+
+      game-window {
+        font-size: 1.25em;
+      }
+
+      game-window-foo {
+        display: block;
+        height: 100%;
+        background: yellow;
+      }
+    </style>
   </head>
 
   <body>
-    <game-window></game-window>
+    <game-window>Foo bar</game-window>
   </body>
 </html>

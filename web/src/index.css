@@ -3,10 +3,30 @@
   src: url('./fonts/WebPlus_IBM_VGA_9x16.woff');
 }
 
+html {
+  background: red;
+}
+
+body {
+  background: blue;
+}
+
+html,
 body {
   margin: 0;
+  /* width: 100vw; */
+  /* width: 100dvw; */
+  /* height: 100vh; */
+  /* height: -webkit-fill-available; */
+  /* height: 100dvh; */
 }
 
 game-window {
   font-size: 1.25em;
+}
+
+game-window-foo {
+  display: block;
+  /* height: 100%; */
+  background: yellow;
 }

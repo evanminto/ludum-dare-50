@@ -223,8 +223,8 @@ export default class GameWindow extends LitElement {
   static styles = css`
     :host {
       display: block;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background: black;
       position: relative;
       display: flex;
