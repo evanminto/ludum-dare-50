@@ -13,7 +13,126 @@ export default class TwitterApp extends LitElement {
     {
       handle: 'dril',
       content: 'Lorem ipsum',
-      rtToComplete: true,
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
+    },
+    {
+      handle: 'fart',
+      content: 'Dolor sit amet',
+    },
+    {
+      handle: 'dril',
+      content: 'Lorem ipsum',
     },
     {
       handle: 'fart',
@@ -29,31 +148,29 @@ export default class TwitterApp extends LitElement {
             <li>
               <b>${post.handle}</b> ${post.content}
 
-              <button
-                type="button"
-                @click=${() => this.handleClickRetweet(post.rtToComplete)}
-              >
-                RT
-              </button>
-
-              <button type="button">Like</button>
+              <div>
+                <span>RT</span>
+                <span>Like</span>
+              </div>
             </li>
           `
         )}
       </ul>
-
-      <button type="button" @click=${this.handleSuccess}>Success</button>
-
-      <button type="button" @click=${this.handleFailure}>Failure</button>
     `;
   }
 
-  handleSuccess() {
-    this.dispatchSuccess();
-  }
+  firstUpdated() {
+    const lastItem = this.renderRoot.querySelector('li:last-child');
+    // setInterval(() => {
+    //   if (window.scrollY >= window.scroll window.outerHeight) {
 
-  handleFailure() {
-    this.dispatchFailure();
+    //   }
+    // }, 250)
+    new IntersectionObserver(records => {
+      if (records.some(record => record.isIntersecting)) {
+        this.dispatchSuccess();
+      }
+    }).observe(lastItem);
   }
 
   dispatchSuccess() {

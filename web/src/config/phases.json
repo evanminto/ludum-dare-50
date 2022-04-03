@@ -2,11 +2,6 @@
   {
     "apps": [
       {
-        "notification": "How far away are you?",
-        "notificationApp": "messages",
-        "app": "twitter"
-      },
-      {
         "notification": "Sent you the invite. Check your email!",
         "notificationApp": "messages",
         "app": "email"
@@ -30,6 +25,11 @@
         "notification": "Did you like that cat photo from Melissa yet?",
         "notificationApp": "messages",
         "app": "instagram"
+      },
+      {
+        "notification": "How far away are you?",
+        "notificationApp": "messages",
+        "app": "twitter"
       }
     ]
   }

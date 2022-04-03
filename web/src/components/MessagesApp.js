@@ -49,8 +49,9 @@ export default class MessagesApp extends LitElement {
 
   static styles = css`
     :host {
-      display: block;
       background: lightgray;
+      display: flex;
+      flex-direction: column-reverse;
     }
 
     .container {
