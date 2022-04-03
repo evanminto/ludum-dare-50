@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import Deck from '../Deck';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
 
@@ -10,14 +11,26 @@ import FailureEvent from '../events/FailureEvent';
 export default class WordleApp extends LitElement {
   static tagName = 'wordle-app';
 
+  constructor() {
+    super();
+
+    this.buttons = Deck.randomize([
+      html`<basic-button @click=${() => this.dispatchSuccess()}>
+        A
+      </basic-button>`,
+      html`<basic-button @click=${() => this.dispatchFailure()}>
+        C
+      </basic-button>`,
+      html`<basic-button @click=${() => this.dispatchFailure()}>
+        E
+      </basic-button>`,
+    ]);
+  }
+
   render() {
     return html`
       <img src=${new URL('../images/curdle-UI.png', import.meta.url)} />
-      <div class="buttons">
-        <basic-button @click=${() => this.dispatchFailure()}>A</basic-button>
-        <basic-button @click=${() => this.dispatchSuccess()}>B</basic-button>
-        <basic-button @click=${() => this.dispatchFailure()}>C</basic-button>
-      </div>
+      <div class="buttons">${this.buttons}</div>
     `;
   }
 

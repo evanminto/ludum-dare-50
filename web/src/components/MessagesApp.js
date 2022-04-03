@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import Deck from '../Deck';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
 
@@ -13,7 +14,22 @@ export default class MessagesApp extends LitElement {
   messages = [
     'hey are you going to that thing after work i dont wanna go alone',
   ];
-  answer = 'Yeah I’m coming';
+
+  constructor() {
+    super();
+
+    this.buttons = Deck.randomize([
+      html`<basic-button @click=${this.dispatchFailure}>
+        Yet I’m congrats
+      </basic-button>`,
+      html`<basic-button @click=${this.dispatchSuccess}>
+        Yeah I’m coming
+      </basic-button>`,
+      html`<basic-button @click=${this.dispatchFailure}>
+        Yeah in cringing
+      </basic-button>`,
+    ]);
+  }
 
   render() {
     return html`
@@ -24,27 +40,9 @@ export default class MessagesApp extends LitElement {
           )}
         </ul>
 
-        <div class="input">
-          <basic-button @click=${this.handleClickButton}
-            >Yet I’m congrats</basic-button
-          >
-          <basic-button @click=${this.handleClickButton}
-            >Yeah I’m coming</basic-button
-          >
-          <basic-button @click=${this.handleClickButton}
-            >Yeah in cringing</basic-button
-          >
-        </div>
+        <div class="input">${this.buttons}</div>
       </div>
     `;
-  }
-
-  handleClickButton(event) {
-    if (event.target.textContent === this.answer) {
-      this.dispatchSuccess();
-    } else {
-      this.dispatchFailure();
-    }
   }
 
   dispatchSuccess() {
