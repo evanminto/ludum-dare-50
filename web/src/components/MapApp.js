@@ -2,50 +2,9 @@ import { LitElement, css, html, unsafeCSS } from 'lit';
 import { styleMap } from 'lit/directives/style-map';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import Deck from '../Deck';
 const mapImageUrl = new URL('../images/map.png', import.meta.url);
 const pinImageUrl = new URL('../images/pin.png', import.meta.url);
-
-const points = {
-  list: [],
-
-  create() {
-    return {
-      x: 5 + 40 * Math.random(),
-      y: 5 + 80 * Math.random(),
-    };
-  },
-
-  createAndAdd() {
-    let point = this.create();
-
-    // while (
-    //   this.list
-    //     .map(p => ({
-    //       x: this.xDistance(p, point),
-    //       y: this.yDistance(p, point),
-    //     }))
-    //     .some(({ x, y }) => y < 2 || x < 7)
-    // ) {
-    //   point = this.create();
-    // }
-
-    this.list.push(point);
-
-    return point;
-  },
-
-  distance(p1, p2) {
-    return Math.sqrt(((p1.x - p2.x) ^ 2) + ((p1.y - p2.y) ^ 2));
-  },
-
-  xDistance(p1, p2) {
-    return Math.abs(p1.x - p2.x);
-  },
-
-  yDistance(p1, p2) {
-    return Math.abs(p1.y - p2.y);
-  },
-};
 
 /**
  * @customElement map-app
@@ -54,25 +13,36 @@ const points = {
 export default class MapApp extends LitElement {
   static tagName = 'map-app';
 
-  pins = [
-    {
-      name: 'The Comrade',
-      ...points.createAndAdd(),
-      answer: true,
-    },
-    {
-      name: 'Burgerface',
-      ...points.createAndAdd(),
-    },
-    {
-      name: 'The Dead Pigeon',
-      ...points.createAndAdd(),
-    },
-    {
-      name: 'The Broken Bottle',
-      ...points.createAndAdd(),
-    },
-  ];
+  constructor() {
+    super();
+
+    const rows = new Deck([1, 2, 3, 4, 5]);
+    rows.shuffle();
+
+    this.pins = [
+      {
+        name: 'The Comrade',
+        row: rows.draw(),
+        col: 1 + Math.floor(Math.random() * 2),
+        answer: true,
+      },
+      {
+        name: 'Burgerface',
+        row: rows.draw(),
+        col: 1 + Math.floor(Math.random() * 2),
+      },
+      {
+        name: 'The Dead Pigeon',
+        row: rows.draw(),
+        col: 1 + Math.floor(Math.random() * 2),
+      },
+      {
+        name: 'The Broken Bottle',
+        row: rows.draw(),
+        col: 1 + Math.floor(Math.random() * 2),
+      },
+    ];
+  }
 
   render() {
     return html`
@@ -82,8 +52,8 @@ export default class MapApp extends LitElement {
             class="pin"
             data-answer=${pin.answer ? '1' : '0'}
             style=${styleMap({
-              '--x': pin.x,
-              '--y': pin.y,
+              '--row': pin.row,
+              '--col': pin.col,
             })}
             @click=${this.handleClickPin}
           >
@@ -116,13 +86,13 @@ export default class MapApp extends LitElement {
       background: url(${unsafeCSS(mapImageUrl)});
       background-size: cover;
       position: relative;
+      display: grid;
+      grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+      align-items: center;
+      padding: 1em;
     }
 
     .pin {
-      position: absolute;
-      z-index: 1;
-      left: calc(var(--x) * 1%);
-      top: calc(var(--y) * 1%);
       background: url('${unsafeCSS(pinImageUrl)}');
       background-size: 1.5em 1.5em;
       background-repeat: no-repeat;
@@ -132,6 +102,7 @@ export default class MapApp extends LitElement {
       max-width: 12em;
       box-sizing: border-box;
       filter: drop-shadow(var(--shadow));
+      grid-area: var(--row) / var(--col);
     }
 
     .pin[data-answer='1'] {
