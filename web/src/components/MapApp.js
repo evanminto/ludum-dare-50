@@ -123,6 +123,7 @@ export default class MapApp extends LitElement {
       left: calc(var(--x) * 1%);
       top: calc(var(--y) * 1%);
       background: url('${unsafeCSS(pinImageUrl)}');
+      background-size: 1.5em 1.5em;
       background-repeat: no-repeat;
       padding: 0.25em 1em 3em 2em;
       color: #fc0d1b;

@@ -34,13 +34,10 @@
 
       body {
         display: flex;
+        font-size: calc(0.5em + 0.5vw + 0.5vh);
       }
 
-      game-window {
-        font-size: 1.25em;
-      }
-
-      @media screen and (min-width: 35.5em) {
+      @media screen and (min-width: 35.5em), (orientation: landscape) {
         :root {
           --size-app-grid-track: 3rem;
           --size-app-icon: 3em;
@@ -50,6 +47,7 @@
           font-size: 1em;
           aspect-ratio: 375 / 812;
           width: calc(90vh * 375 / 812);
+          max-width: 40rem;
           height: auto;
           margin: auto;
         }
