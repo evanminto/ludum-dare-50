@@ -7,6 +7,11 @@
         "app": "twitter"
       },
       {
+        "notification": "Sent you the invite. Check your email!",
+        "notificationApp": "messages",
+        "app": "email"
+      },
+      {
         "notification": "The bar is called Goldie's",
         "notificationApp": "messages",
         "app": "maps"

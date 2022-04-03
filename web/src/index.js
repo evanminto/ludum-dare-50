@@ -8,6 +8,7 @@ Promise.all([
   import('./components/TwitterApp.js'),
   import('./components/MapApp.js'),
   import('./components/MessagesApp.js'),
+  import('./components/EmailApp.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>

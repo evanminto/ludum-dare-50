@@ -17,6 +17,8 @@ function renderApp(name) {
       return html`<map-app></map-app>`;
     case 'messages':
       return html`<messages-app></messages-app>`;
+    case 'email':
+      return html`<email-app></email-app>`;
   }
 
   return '';
