@@ -12,6 +12,26 @@ export default class Deck {
     this.#cards = cards;
   }
 
+  /**
+   * @returns {T}
+   */
+  draw() {
+    const result = this.#cards.splice(this.#index, 1);
+
+    if (result.length === 0) {
+      return null;
+    }
+
+    return result[0];
+  }
+
+  /**
+   * @param {T} card
+   */
+  putBack(card) {
+    this.#cards.push(card);
+  }
+
   shuffle() {
     shuffle(this.#cards);
     this.#index = 0;

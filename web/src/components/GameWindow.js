@@ -25,6 +25,14 @@ export default class GameWindow extends LitElement {
       attribute: false,
     },
     notificationAnimationComplete: Boolean,
+    currentPhase: {
+      type: Phase,
+      attribute: false,
+    },
+    currentApp: {
+      type: App,
+      attribute: false,
+    },
   };
 
   constructor() {
@@ -49,12 +57,18 @@ export default class GameWindow extends LitElement {
         }),
         new App({
           notification: new Notification({
-            content: 'Hey, I know you’re going home but quick question',
+            content: "Hey, I know you're going home but quick question",
           }),
           content: html`<messages-app></messages-app>`,
         }),
       ]),
     ]);
+
+    /** @type {Phase} */
+    this.currentPhase = this.phases.draw();
+
+    /** @type {App} */
+    this.currentApp = this.currentPhase.appDeck.draw();
 
     setInterval(() => this.decreaseBattery(), 1000);
   }
@@ -65,33 +79,28 @@ export default class GameWindow extends LitElement {
   }
 
   handleSuccess() {
-    const { appDeck } = this.phases.current;
-    appDeck.discard();
-    appDeck.shuffle();
+    const { currentPhase } = this;
+    const nextApp = currentPhase.appDeck.draw();
 
-    if (appDeck.count === 0) {
-      this.phases.discard();
+    if (nextApp) {
+      this.notification = nextApp.notification;
+      this.currentApp = nextApp;
+    } else {
+      this.currentPhase = this.phases.draw();
 
-      if (this.phases.count === 0) {
+      if (this.currentPhase === null) {
         this.win = true;
       }
     }
-
-    this.requestUpdate('phases');
-    this.notificationAnimationComplete = false;
   }
 
   handleFailure() {
-    const { appDeck } = this.phases.current;
-    const currentApp = appDeck.current;
-
-    // Avoid shuffling back to the same app
-    while (appDeck.count > 1 && appDeck.current === currentApp) {
-      appDeck.shuffle();
-    }
-
-    this.requestUpdate('phases');
+    const { appDeck } = this.currentPhase;
+    appDeck.putBack(this.currentApp);
+    this.currentApp = null;
   }
+
+  updated(changed) {}
 
   renderHomeScreen() {
     return html`
@@ -113,36 +122,27 @@ export default class GameWindow extends LitElement {
   }
 
   renderNotification() {
-    if (this.notificationAnimationComplete) {
-      return '';
-    }
-
-    const app = this.phases.current.appDeck.current;
+    const { notification } = this;
 
     return html`
-      <div
-        class="notifications-tray"
-        @animationend=${this.handleNotificationAnimationEnd}
-      >
-        <notification-bubble> ${app.notification.content} </notification-bubble>
+      <div class="notifications-tray">
+        <notification-bubble> ${notification.content} </notification-bubble>
       </div>
     `;
   }
 
-  handleNotificationAnimationEnd() {
-    this.notificationAnimationComplete = true;
-  }
-
   renderCurrentApp() {
+    const { currentApp } = this;
+
     return html`
-      ${this.renderNotification()}
+      ${this.notification ? this.renderNotification() : ''}
 
       <div
         class="app-container"
         @success=${this.handleSuccess}
         @failure=${this.handleFailure}
       >
-        ${this.phases.current.appDeck.current.content}
+        ${currentApp.content}
       </div>
     `;
   }
@@ -161,9 +161,7 @@ export default class GameWindow extends LitElement {
     return html`
       <nav-bar battery=${this.battery}></nav-bar>
 
-      ${this.phases.current && this.phases.current.appDeck.current
-        ? this.renderCurrentApp()
-        : this.renderHomeScreen()}
+      ${this.currentApp ? this.renderCurrentApp() : this.renderHomeScreen()}
     `;
   }
 
@@ -180,23 +178,6 @@ export default class GameWindow extends LitElement {
 
       100% {
         visibility: hidden;
-      }
-    }
-
-    @keyframes app-appear {
-      0% {
-        opacity: 0;
-        visibility: hidden;
-      }
-
-      1% {
-        opacity: 0;
-        visibility: visible;
-      }
-
-      100% {
-        opacity: 1;
-        visibility: visible;
       }
     }
 
@@ -220,11 +201,6 @@ export default class GameWindow extends LitElement {
 
     .app-container > * {
       height: 100%;
-
-      opacity: 0;
-      visibility: hidden;
-      animation: app-appear 200ms ease-in-out 1s;
-      animation-fill-mode: forwards;
     }
 
     .notifications-tray {
