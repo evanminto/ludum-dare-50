@@ -93,14 +93,20 @@ export default class GameWindow extends LitElement {
   }
 
   start() {
+    setTimeout(() => this.beginPlay(), 5000);
+  }
+
+  beginPlay() {
     /** @type {Phase} */
     this.currentPhase = this.phases.draw();
 
     /** @type {App} */
-    this.currentApp = this.currentPhase.appDeck.draw();
+    const app = this.currentPhase.appDeck.draw();
 
     /** @type {Notification} */
-    this.notification = this.currentApp.notification;
+    this.notification = app.notification;
+
+    setTimeout(() => (this.currentApp = app), 2000 + 350);
 
     this.screenShakeAnimation = this.animate(
       [
@@ -253,8 +259,6 @@ export default class GameWindow extends LitElement {
     const { currentApp } = this;
 
     return html`
-      ${this.notification ? this.renderNotification() : ''}
-
       <div
         class="app-container"
         @success=${this.handleSuccess}
@@ -282,6 +286,7 @@ export default class GameWindow extends LitElement {
         battery=${this.battery}
       ></nav-bar>
 
+      ${this.notification ? this.renderNotification() : ''}
       ${this.currentApp ? this.renderCurrentApp() : this.renderHomeScreen()}
     `;
   }
