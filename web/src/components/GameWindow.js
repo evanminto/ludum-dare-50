@@ -354,6 +354,7 @@ export default class GameWindow extends LitElement {
       gap: 1em;
       padding: 1em;
       color: var(--color-white);
+      word-break: break-word;
     }
 
     notification-bubble {

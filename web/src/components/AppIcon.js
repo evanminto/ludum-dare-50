@@ -45,6 +45,8 @@ export default class AppIcon extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
+      font-size: 0.85em;
     }
 
     .icon {
