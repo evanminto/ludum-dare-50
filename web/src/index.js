@@ -13,6 +13,7 @@ Promise.all([
   import('./components/EmailApp.js'),
   import('./components/BrowserApp.js'),
   import('./components/InstagramApp.js'),
+  import('./components/WordleApp.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>

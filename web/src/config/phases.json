@@ -30,6 +30,11 @@
         "notification": "How far away are you?",
         "notificationApp": "messages",
         "app": "twitter"
+      },
+      {
+        "notification": "How many tries did this week's Curdle take you?",
+        "notificationApp": "messages",
+        "app": "wordle"
       }
     ]
   }

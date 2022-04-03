@@ -18,7 +18,8 @@ export default class BasicButton extends LitElement {
       border-image: url('${unsafeCSS(imageUrl)}') 5 8 7 8 fill stretch;
       font: inherit;
       background: none;
-      width: 100%;
+      min-width: 100%;
+      min-height: 100%;
     }
   `;
 }
