@@ -107,8 +107,14 @@ export default class EmailApp extends LitElement {
 
   static styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
       background: lightgray;
+    }
+
+    ul {
+      flex: 1 1 auto;
+      overflow: scroll;
     }
 
     .email-list {

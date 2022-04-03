@@ -304,6 +304,7 @@ export default class GameWindow extends LitElement {
       display: flex;
       flex-direction: column;
       font-family: 'IBM VGA', monospace;
+      overflow: hidden;
     }
 
     * {
@@ -342,7 +343,10 @@ export default class GameWindow extends LitElement {
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(var(--size-app-grid-track), 1fr)
+      );
       justify-items: center;
       gap: 1em;
       padding: 1em;

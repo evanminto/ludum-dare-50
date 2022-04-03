@@ -25,7 +25,7 @@ export default class AppIcon extends LitElement {
 
   render() {
     return html`
-      <img src=${NAME_TO_IMAGE[this.name]} />
+      <img src=${NAME_TO_IMAGE[this.name]} class="icon" />
       <p>${this.name}</p>
     `;
   }
@@ -40,10 +40,8 @@ export default class AppIcon extends LitElement {
 
     .icon {
       display: block;
-      width: 5em;
-      height: 5em;
+      width: var(--size-app-icon);
+      height: var(--size-app-icon);
     }
-
-    im
   `;
 }

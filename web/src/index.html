@@ -18,6 +18,8 @@
         --color-red: #FC0D1B;
         --color-white: #FFF;
         --color-black: #000;
+        --size-app-icon: 5em;
+        --size-app-grid-track: 5rem;
       }
 
       html,
@@ -30,8 +32,27 @@
         height: 100dvh;
       }
 
+      body {
+        display: flex;
+      }
+
       game-window {
         font-size: 1.25em;
+      }
+
+      @media screen and (min-width: 35.5em) {
+        :root {
+          --size-app-grid-track: 3rem;
+          --size-app-icon: 3em;
+        }
+
+        game-window {
+          font-size: 1em;
+          aspect-ratio: 375 / 812;
+          width: calc(90vh * 375 / 812);
+          height: auto;
+          margin: auto;
+        }
       }
 
       game-window-foo {
