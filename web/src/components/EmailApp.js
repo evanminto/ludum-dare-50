@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import Deck from '../Deck';
 
 /**
  * @customElement email-app
@@ -20,19 +21,47 @@ export default class EmailApp extends LitElement {
   constructor() {
     super();
 
-    this.emails = [
+    const emailsDeck = new Deck([
       {
-        subject: 'Lorem ipsum',
-        spam: false,
-        deleted: false,
-      },
-      { subject: 'Dolor sit amet', spam: true, deleted: false },
-      {
-        subject: 'Foo bar',
+        subject: 'Overpaying for Rent? GOOD',
         spam: true,
         deleted: false,
       },
-    ];
+      { subject: 'Lonely Scammers In Your Area', spam: true, deleted: false },
+      {
+        subject: 'You’re A Degenerate Gambler. Free BlackJack',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'ShitCoin - Invest Now Please Bro Please',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'Party Invite - Hey, so we’re celebrating my birthday…',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'Comment Reply on YubNub Video - You have a reply…',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'Company Christmas Party - We’re meeting at…',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'Nile Shopping - Your order will be arriving today.',
+        spam: false,
+        deleted: false,
+      },
+    ]);
+
+    emailsDeck.shuffle();
+    this.emails = emailsDeck.toArray();
   }
 
   renderEmail({ subject, deleted }, index) {

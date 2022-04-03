@@ -15,7 +15,6 @@ export default class NotificationBubble extends LitElement {
       box-sizing: border-box;
       display: block;
       width: 100%;
-      height: 4em;
       background: white;
       border-radius: 1.5em;
       padding: 1em;

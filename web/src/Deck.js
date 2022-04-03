@@ -2,6 +2,16 @@ import shuffle from './utils/shuffle';
 
 /** @template T */
 export default class Deck {
+  /**
+   * @param {T[]} arr
+   */
+  static randomize(arr) {
+    const deck = new Deck(arr);
+    deck.shuffle();
+
+    return deck.toArray();
+  }
+
   /** @type {T[]} */
   #cards = [];
 
@@ -46,5 +56,9 @@ export default class Deck {
 
   get count() {
     return this.#cards.length;
+  }
+
+  toArray() {
+    return [...this.#cards];
   }
 }

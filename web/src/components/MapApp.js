@@ -14,22 +14,22 @@ export default class MapApp extends LitElement {
 
   pins = [
     {
-      name: 'A',
+      name: 'The Comrade',
       x: 15 + 70 * Math.random(),
       y: 15 + 70 * Math.random(),
     },
     {
-      name: 'B',
+      name: 'Burgerface',
       x: 15 + 70 * Math.random(),
       y: 15 + 70 * Math.random(),
     },
     {
-      name: 'C',
+      name: 'The Dead Pigeon',
       x: 15 + 70 * Math.random(),
       y: 15 + 70 * Math.random(),
     },
     {
-      name: 'D',
+      name: 'The Broken Bottle',
       x: 15 + 70 * Math.random(),
       y: 15 + 70 * Math.random(),
     },

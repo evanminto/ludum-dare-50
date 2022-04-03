@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import Deck from '../Deck';
 
 /**
  * @customElement instagram-app
@@ -9,29 +10,29 @@ import FailureEvent from '../events/FailureEvent';
 export default class TwitterApp extends LitElement {
   static tagName = 'instagram-app';
 
-  posts = [
+  posts = Deck.randomize([
     {
-      username: 'dril',
+      username: 'the_offspring',
       content: 'Lorem ipsum',
       imageUrl: new URL('../images/insta-baby.png', import.meta.url),
     },
     {
-      username: 'fart',
+      username: 'scratchedarm69',
       content: 'Dolor sit amet',
       imageUrl: new URL('../images/insta-cat.png', import.meta.url),
       answer: true,
     },
     {
-      username: 'dril',
+      username: 'pet_as_my_personality',
       content: 'Lorem ipsum',
       imageUrl: new URL('../images/insta-dog.png', import.meta.url),
     },
     {
-      username: 'fart',
+      username: 'the_great_outdouche',
       content: 'Dolor sit amet',
       imageUrl: new URL('../images/insta-hiker.png', import.meta.url),
     },
-  ];
+  ]);
 
   renderPost({ username, content, imageUrl, answer }) {
     return html`

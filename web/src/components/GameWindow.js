@@ -152,7 +152,7 @@ export default class GameWindow extends LitElement {
         }
 
         this.trayShowAnimation.cancel();
-        setTimeout(() => this.trayShowAnimation.play(), 1000);
+        setTimeout(() => this.trayShowAnimation.play(), 2000);
       }
     }
   }
