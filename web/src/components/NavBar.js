@@ -1,5 +1,7 @@
 import { LitElement, css, html } from 'lit';
 
+const batteryImageUrl = new URL('../images/battery.png', import.meta.url);
+
 /**
  * @customElement nav-bar
  */
@@ -8,13 +10,19 @@ export default class NavBar extends LitElement {
 
   static properties = {
     battery: Number,
+    time: String,
   };
 
   render() {
     return html`
-      <span>
-        ${this.battery > 0 ? html`${Math.ceil(this.battery)}%` : html`DEAD`}
-      </span>
+      <div class="inner">
+        <span class="time">${this.time}</span>
+
+        <span class="battery">
+          ${this.battery > 0 ? html`${Math.ceil(this.battery)}%` : html`DEAD`}
+          <img src=${batteryImageUrl} />
+        </span>
+      </div>
     `;
   }
 
@@ -22,8 +30,25 @@ export default class NavBar extends LitElement {
     :host {
       display: block;
       width: 100%;
-      height: 2em;
-      background: white;
+      background: var(--color-black);
+      color: var(--color-white);
+    }
+
+    .inner {
+      display: flex;
+      justify-content: space-between;
+      padding: 1em;
+    }
+
+    .battery {
+      display: flex;
+      gap: 0.25em;
+      align-items: center;
+      color: var(--color-red);
+    }
+
+    .battery > * {
+      flex: 0 0 auto;
     }
   `;
 }

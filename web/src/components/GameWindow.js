@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import dayjs from 'dayjs';
 import config from '../config.json';
 import phases from '../config/phases.json';
 import Phase from '../Phase';
@@ -37,6 +38,7 @@ export default class GameWindow extends LitElement {
   static BATTERY_START = 25;
 
   static properties = {
+    seconds: Number,
     battery: Number,
     win: Boolean,
     notification: {
@@ -61,6 +63,8 @@ export default class GameWindow extends LitElement {
   constructor() {
     super();
 
+    this.seconds = 0;
+    this.dayJs = dayjs('2022-01-01T16:20:00');
     this.battery = GameWindow.BATTERY_START;
 
     this.phases = new Deck(
@@ -82,7 +86,10 @@ export default class GameWindow extends LitElement {
 
     this.start();
 
-    setInterval(() => this.decreaseBattery(), 1000);
+    setInterval(() => {
+      this.increaseSeconds();
+      this.decreaseBattery();
+    }, 1000);
   }
 
   start() {
@@ -126,6 +133,11 @@ export default class GameWindow extends LitElement {
       }
     );
     this.redTintAnimation.cancel();
+  }
+
+  increaseSeconds() {
+    this.seconds += 1;
+    this.dayJs.add(1, 'second');
   }
 
   decreaseBattery() {
@@ -264,7 +276,10 @@ export default class GameWindow extends LitElement {
     }
 
     return html`
-      <nav-bar battery=${this.battery}></nav-bar>
+      <nav-bar
+        time=${this.dayJs.format('hh:mm')}
+        battery=${this.battery}
+      ></nav-bar>
 
       ${this.currentApp ? this.renderCurrentApp() : this.renderHomeScreen()}
     `;
