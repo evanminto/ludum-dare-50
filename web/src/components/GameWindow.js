@@ -156,9 +156,11 @@ export default class GameWindow extends LitElement {
       GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
   }
 
-  handleSuccess() {
+  async handleSuccess() {
+    this.playHideAppAnimation();
     const { currentPhase } = this;
     const nextApp = currentPhase.appDeck.draw();
+    this.currentApp = null;
 
     if (nextApp) {
       this.notification = nextApp.notification;
@@ -173,13 +175,21 @@ export default class GameWindow extends LitElement {
   }
 
   async handleFailure() {
-    await this.playFailureAnimation();
+    await Promise.all([
+      this.playFailureAnimation(),
+      this.playHideAppAnimation(),
+    ]);
     const { appDeck } = this.currentPhase;
     appDeck.putBack(this.currentApp);
     appDeck.shuffle();
+    this.currentApp = null;
     const nextApp = this.currentPhase.appDeck.draw();
-    this.notification = nextApp.notification;
-    setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
+    this.notification = null;
+
+    setTimeout(() => {
+      this.notification = nextApp.notification;
+      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
+    }, 250);
   }
 
   playFailureAnimation() {
@@ -197,6 +207,16 @@ export default class GameWindow extends LitElement {
         this.redTintAnimation.play();
       }),
     ]);
+  }
+
+  playHideAppAnimation() {
+    return new Promise(resolve => {
+      this.hideAppAnimation.cancel();
+      this.hideAppAnimation.addEventListener('finish', resolve, {
+        once: true,
+      });
+      this.hideAppAnimation.play();
+    });
   }
 
   updated(changed) {
@@ -226,8 +246,37 @@ export default class GameWindow extends LitElement {
         }
 
         this.trayShowAnimation.cancel();
-        setTimeout(() => this.trayShowAnimation.play(), 1200);
+        setTimeout(() => {
+          this.trayShowAnimation.addEventListener(
+            'finish',
+            () => (this.notification = null)
+          );
+          this.trayShowAnimation.play();
+        }, 1200);
       }
+    }
+
+    if (
+      changed.has('currentApp') &&
+      this.currentApp &&
+      !this.hideAppAnimation
+    ) {
+      this.hideAppAnimation = this.renderRoot
+        .querySelector('.app-container')
+        .animate(
+          [
+            {
+              transform: 'translate(0%, 0%)',
+            },
+            {
+              transform: 'translate(0%, 100%)',
+            },
+          ],
+          {
+            duration: 150,
+          }
+        );
+      this.hideAppAnimation.cancel();
     }
   }
 
