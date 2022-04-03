@@ -40,9 +40,6 @@ export default class GameWindow extends LitElement {
 
     this.battery = GameWindow.BATTERY_START;
 
-    /** @type {Notification} */
-    this.notification = null;
-
     this.phases = new Deck([
       new Phase([
         new App({
@@ -64,13 +61,20 @@ export default class GameWindow extends LitElement {
       ]),
     ]);
 
+    this.start();
+
+    setInterval(() => this.decreaseBattery(), 1000);
+  }
+
+  start() {
     /** @type {Phase} */
     this.currentPhase = this.phases.draw();
 
     /** @type {App} */
     this.currentApp = this.currentPhase.appDeck.draw();
 
-    setInterval(() => this.decreaseBattery(), 1000);
+    /** @type {Notification} */
+    this.notification = this.currentApp.notification;
   }
 
   decreaseBattery() {
@@ -97,10 +101,41 @@ export default class GameWindow extends LitElement {
   handleFailure() {
     const { appDeck } = this.currentPhase;
     appDeck.putBack(this.currentApp);
-    this.currentApp = null;
+    appDeck.shuffle();
+    this.currentApp = this.currentPhase.appDeck.draw();
   }
 
-  updated(changed) {}
+  updated(changed) {
+    if (changed.has('notification') && this.notification) {
+      const tray = this.renderRoot.querySelector('.notifications-tray');
+
+      if (tray) {
+        if (!this.trayShowAnimation) {
+          this.trayShowAnimation = tray.animate(
+            [
+              {
+                opacity: 1,
+                visibility: 'visible',
+              },
+              {
+                opacity: 0,
+                visibility: 'hidden',
+              },
+            ],
+            {
+              duration: 1000,
+              fill: 'forwards',
+            }
+          );
+
+          this.trayShowAnimation.pause();
+        }
+
+        this.trayShowAnimation.cancel();
+        setTimeout(() => this.trayShowAnimation.play(), 1000);
+      }
+    }
+  }
 
   renderHomeScreen() {
     return html`
@@ -166,21 +201,6 @@ export default class GameWindow extends LitElement {
   }
 
   static styles = css`
-    @keyframes notif-disappear {
-      0% {
-        opacity: 1;
-      }
-
-      99% {
-        opacity: 0;
-        visibility: visible;
-      }
-
-      100% {
-        visibility: hidden;
-      }
-    }
-
     :host {
       display: block;
       width: 100vw;
@@ -209,13 +229,13 @@ export default class GameWindow extends LitElement {
       gap: 0.25em;
       position: absolute;
       z-index: 1;
-      left: 1em;
-      right: 1em;
-      top: 1em;
-      width: calc(100% - 2em);
-
-      animation: notif-disappear 300ms ease-in-out 2s;
-      animation-fill-mode: forwards;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: darkgray;
+      padding: 1em;
     }
 
     .grid {

@@ -3,7 +3,6 @@ import shuffle from './utils/shuffle';
 /** @template T */
 export default class Deck {
   #cards = [];
-  #index = 0;
 
   /**
    * @param {T[]} cards
@@ -16,7 +15,7 @@ export default class Deck {
    * @returns {T}
    */
   draw() {
-    const result = this.#cards.splice(this.#index, 1);
+    const result = this.#cards.splice(0, 1);
 
     if (result.length === 0) {
       return null;
@@ -34,24 +33,9 @@ export default class Deck {
 
   shuffle() {
     shuffle(this.#cards);
-    this.#index = 0;
-  }
-
-  /**
-   * @returns {T}
-   */
-  discard() {
-    return this.#cards.splice(this.#index, 1)[0];
   }
 
   get count() {
     return this.#cards.length;
-  }
-
-  /**
-   * @returns {T}
-   */
-  get current() {
-    return this.#cards[this.#index];
   }
 }
