@@ -64,6 +64,10 @@ export default class MapApp extends LitElement {
     }
   }
 
+  dispatchSuccess() {
+    this.dispatchEvent(new SuccessEvent());
+  }
+
   dispatchFailure() {
     this.dispatchEvent(new FailureEvent());
   }
