@@ -137,7 +137,7 @@ export default class GameWindow extends LitElement {
 
   increaseSeconds() {
     this.seconds += 1;
-    this.dayJs.add(1, 'second');
+    this.dayJs = this.dayJs.add(1, 'second');
   }
 
   decreaseBattery() {
