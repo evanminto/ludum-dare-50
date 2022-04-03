@@ -11,14 +11,21 @@ const points = {
   create() {
     return {
       x: 5 + 40 * Math.random(),
-      y: 5 + 70 * Math.random(),
+      y: 5 + 80 * Math.random(),
     };
   },
 
   createAndAdd() {
     let point = this.create();
 
-    while (this.list.map(p => this.distance(p, point)).some(d => d < 5)) {
+    while (
+      this.list
+        .map(p => ({
+          x: this.xDistance(p, point),
+          y: this.yDistance(p, point),
+        }))
+        .some(({ x, y }) => y < 5 || x < 10)
+    ) {
       point = this.create();
     }
 
@@ -29,6 +36,14 @@ const points = {
 
   distance(p1, p2) {
     return Math.sqrt(((p1.x - p2.x) ^ 2) + ((p1.y - p2.y) ^ 2));
+  },
+
+  xDistance(p1, p2) {
+    return Math.abs(p1.x - p2.x);
+  },
+
+  yDistance(p1, p2) {
+    return Math.abs(p1.y - p2.y);
   },
 };
 
