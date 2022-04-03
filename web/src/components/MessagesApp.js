@@ -15,16 +15,18 @@ export default class MessagesApp extends LitElement {
 
   render() {
     return html`
-      <ul class="messages-list">
-        ${this.messages.map(
-          message => html`<li class="message">${message}</li>`
-        )}
-      </ul>
+      <div class="container">
+        <ul class="messages-list">
+          ${this.messages.map(
+            message => html`<li class="message">${message}</li>`
+          )}
+        </ul>
 
-      <div class="input">
-        <basic-button @click=${this.handleClickButton}>A</basic-button>
-        <basic-button @click=${this.handleClickButton}>B</basic-button>
-        <basic-button @click=${this.handleClickButton}>C</basic-button>
+        <div class="input">
+          <basic-button @click=${this.handleClickButton}>A</basic-button>
+          <basic-button @click=${this.handleClickButton}>B</basic-button>
+          <basic-button @click=${this.handleClickButton}>C</basic-button>
+        </div>
       </div>
     `;
   }
@@ -49,11 +51,43 @@ export default class MessagesApp extends LitElement {
     :host {
       display: block;
       background: lightgray;
-      padding: 1em;
     }
 
-    button {
-      font: inherit;
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .input {
+      background: white;
+      padding: 1em;
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .input > * {
+      flex: 1 1 0;
+      max-width: none;
+    }
+
+    .messages-list {
+      padding: 0;
+      list-style: none;
+      margin-top: 0;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 0.25em;
+      padding: 1em;
+      margin-top: auto;
+    }
+
+    .message {
+      background: black;
+      color: white;
+      padding: 0.5em;
+      max-width: max-content;
     }
   `;
 }
