@@ -4,12 +4,12 @@
       {
         "notification": "How far away are you?",
         "notificationApp": "messages",
-        "app": "maps"
+        "app": "twitter"
       },
       {
         "notification": "Sent you the invite. Check your email!",
         "notificationApp": "messages",
-        "app": "maps"
+        "app": "email"
       },
       {
         "notification": "The bar is called Goldie's",
@@ -19,12 +19,12 @@
       {
         "notification": "Hey, I know you're going home but quick question",
         "notificationApp": "messages",
-        "app": "maps"
+        "app": "messages"
       },
       {
         "notification": "Check out this article",
         "notificationApp": "messages",
-        "app": "maps"
+        "app": "browser"
       }
     ]
   }
