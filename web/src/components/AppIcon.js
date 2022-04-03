@@ -11,6 +11,7 @@ const NAME_TO_IMAGE = {
   Email: new URL('../images/email.png', import.meta.url),
   Browser: new URL('../images/browser.png', import.meta.url),
   'To-Do': new URL('../images/to-do.png', import.meta.url),
+  YubNub: new URL('../images/yubnub.png', import.meta.url),
 };
 
 /**

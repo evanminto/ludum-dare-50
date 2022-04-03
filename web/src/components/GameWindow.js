@@ -241,9 +241,7 @@ export default class GameWindow extends LitElement {
         <app-icon name="Curdle"></app-icon>
         <app-icon name="To-Do"></app-icon>
         <app-icon name="Browser"></app-icon>
-        <app-icon name="Photos"></app-icon>
-        <app-icon name="Camera"></app-icon>
-        <app-icon name="NextTrain"></app-icon>
+        <app-icon name="YubNub"></app-icon>
       </div>
     `;
   }
