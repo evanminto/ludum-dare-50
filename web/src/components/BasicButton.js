@@ -20,6 +20,7 @@ export default class BasicButton extends LitElement {
       background: none;
       min-width: 100%;
       min-height: 100%;
+      padding: 0.5em;
     }
   `;
 }

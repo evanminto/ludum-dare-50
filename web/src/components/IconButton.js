@@ -27,10 +27,11 @@ export default class IconButton extends LitElement {
   static styles = css`
     button {
       background: none;
-      width: 3em;
-      height: 3em;
+      width: 2.5em;
+      height: 2.5em;
       padding: 0;
       border: 0;
+      font: inherit;
     }
 
     img {

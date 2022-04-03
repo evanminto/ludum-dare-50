@@ -353,7 +353,7 @@ export default class GameWindow extends LitElement {
     }
 
     notification-bubble {
-      box-shadow: 1px 1px 10px black;
+      box-shadow: var(--shadow);
     }
   `;
 }

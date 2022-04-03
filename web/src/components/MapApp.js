@@ -131,6 +131,11 @@ export default class MapApp extends LitElement {
       width: 100%;
       max-width: 12em;
       box-sizing: border-box;
+      filter: drop-shadow(var(--shadow));
+    }
+
+    .pin[data-answer='1'] {
+      z-index: 2;
     }
 
     img {

@@ -41,8 +41,9 @@ export default class BrowserApp extends LitElement {
   render() {
     return html`
       <div class="banner app-banner" ?hidden=${this.appBannerDismissed}>
-        Download the app
-        <button type="button" @click=${this.handleClickApp}>x</button>
+        <p>Download the app</p>
+
+        <basic-button @click=${this.handleClickApp}>x</basic-button>
       </div>
 
       <div class="article">
@@ -62,15 +63,28 @@ export default class BrowserApp extends LitElement {
       </div>
 
       <div class="newsletter-popup" ?hidden=${this.newsletterPopupDismissed}>
-        Sign up for the newsletter
-        <button type="button" @click=${this.handleClickNewsletter}>
-          Not right now because I'm a horrible person
-        </button>
+        <p>Sign Up for Our Newsletter!</p>
+
+        <div class="button-options">
+          <basic-button @click=${this.handleClickNewsletter}>
+            Yes, please spam me
+          </basic-button>
+
+          <basic-button @click=${this.handleClickNewsletter}>
+            No, I hate emails
+          </basic-button>
+        </div>
       </div>
 
       <div class="banner cookie-banner" ?hidden=${this.cookieBannerDismissed}>
-        We track everything
-        <button type="button" @click=${this.handleClickCookie}>Allow</button>
+        <p>Let us track everything you do please.</p>
+
+        <div class="button-options">
+          <basic-button @click=${this.handleClickCookie}>Allow</basic-button>
+          <basic-button @click=${this.handleClickCookie}>
+            Don’t Allow
+          </basic-button>
+        </div>
       </div>
     `;
   }
@@ -140,12 +154,15 @@ export default class BrowserApp extends LitElement {
       padding: 2em 1em;
       display: flex;
       justify-content: space-between;
-      box-sizing: border-box;
+      gap: 1em;
+      box-shadow: var(--shadow);
     }
 
     .cookie-banner {
       bottom: 0;
       top: auto;
+      flex-direction: column;
+      box-shadow: var(--shadow);
     }
 
     .newsletter-popup {
@@ -156,6 +173,18 @@ export default class BrowserApp extends LitElement {
       background: white;
       padding: 5em 1em;
       width: calc(100% - 2em);
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .button-options {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .button-options > * {
+      flex: 1 1 calc((40rem - 100%) * 9999);
     }
 
     [hidden] {

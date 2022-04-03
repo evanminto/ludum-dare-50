@@ -55,6 +55,7 @@ export default class WordleApp extends LitElement {
     .buttons {
       display: flex;
       gap: 0.5em;
+      padding: 1em;
     }
 
     .buttons > * {
