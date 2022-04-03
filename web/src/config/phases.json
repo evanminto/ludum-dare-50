@@ -7,27 +7,27 @@
         "app": "email"
       },
       {
-        "notification": "Let's meet at The Comrade",
+        "notification": "Meet your friends at The Comrade!",
         "notificationApp": "Maps",
         "app": "maps"
       },
       {
-        "notification": "You have a new text message",
+        "notification": "You have a new text message. Respond!",
         "notificationApp": "HarassApp",
         "app": "messages"
       },
       {
-        "notification": "Read the latest article on Basic Bias Channel",
+        "notification": "Remove the popups and read the article!",
         "notificationApp": "Browser",
         "app": "browser"
       },
       {
-        "notification": "Please like my cat post, it's struggling",
+        "notification": "My cat post is struggling. Please like it!",
         "notificationApp": "Instigator",
         "app": "instagram"
       },
       {
-        "notification": "Block the haters!",
+        "notification": "New haters found. Block them all!",
         "notificationApp": "Shitbird",
         "app": "twitter"
       },

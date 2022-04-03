@@ -111,7 +111,7 @@ export default class GameWindow extends LitElement {
     /** @type {Notification} */
     this.notification = app.notification;
 
-    setTimeout(() => (this.currentApp = app), 1200 + 350);
+    setTimeout(() => (this.currentApp = app), 1500 + 350);
 
     this.screenShakeAnimation = this.animate(
       [
@@ -164,7 +164,7 @@ export default class GameWindow extends LitElement {
 
     if (nextApp) {
       this.notification = nextApp.notification;
-      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
+      setTimeout(() => (this.currentApp = nextApp), 1500 + 350);
     } else {
       this.currentPhase = this.phases.draw();
 
@@ -188,7 +188,7 @@ export default class GameWindow extends LitElement {
 
     setTimeout(() => {
       this.notification = nextApp.notification;
-      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
+      setTimeout(() => (this.currentApp = nextApp), 1500 + 350);
     }, 250);
   }
 
@@ -252,7 +252,7 @@ export default class GameWindow extends LitElement {
             () => (this.notification = null)
           );
           this.trayShowAnimation.play();
-        }, 1200);
+        }, 1500);
       }
     }
 

@@ -53,13 +53,14 @@ export default class BrowserApp extends LitElement {
           Today, an opinion you held for a long time (not because of us of
           course), has been confirmed by every world leader. You were totally
           right and your uncle was wrong, and he’s going to get on his knees and
-          shit and cry. All the bad people are done for and they don’t stand a
-          chance because you totally wrote about this online long before anyone
-          was discussing it and you didn’t even get a re-post. You’re like the
-          Gandhi of your time seriously.
+          shit and cry.
         </p>
-
-        <p>Foo bar</p>
+        <p>
+          All the bad people are done for and they don’t stand a chance because
+          you totally wrote about this online long before anyone was discussing
+          it and you didn’t even get a re-post. You’re like the Gandhi of your
+          time seriously.
+        </p>
       </div>
 
       <div class="newsletter-popup" ?hidden=${this.newsletterPopupDismissed}>
