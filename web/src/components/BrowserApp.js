@@ -134,7 +134,7 @@ export default class BrowserApp extends LitElement {
       position: absolute;
       left: 50%;
       top: 50%;
-      translate: -50% -50%;
+      transform: translate(-50%, -50%);
       background: white;
       padding: 5em 1em;
       width: calc(100% - 2em);
