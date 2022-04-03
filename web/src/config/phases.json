@@ -2,7 +2,7 @@
   {
     "apps": [
       {
-        "notification": "Sent you the invite. Check your email!",
+        "notification": "i sent you that christmas party invite. delete the spam!",
         "notificationApp": "messages",
         "app": "email"
       },
@@ -17,8 +17,8 @@
         "app": "messages"
       },
       {
-        "notification": "Check out this article",
-        "notificationApp": "messages",
+        "notification": "Read the Latest Article on Basic Bias Channel",
+        "notificationApp": "browser",
         "app": "browser"
       },
       {

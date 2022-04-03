@@ -10,8 +10,10 @@ import FailureEvent from '../events/FailureEvent';
 export default class MessagesApp extends LitElement {
   static tagName = 'messages-app';
 
-  messages = ['Lorem ipsum', 'Dolor sit amet', 'Foo bar'];
-  answer = 'B';
+  messages = [
+    'hey are you going to that thing after work i dont wanna go alone',
+  ];
+  answer = 'Yeah I’m coming';
 
   render() {
     return html`
@@ -23,9 +25,15 @@ export default class MessagesApp extends LitElement {
         </ul>
 
         <div class="input">
-          <basic-button @click=${this.handleClickButton}>A</basic-button>
-          <basic-button @click=${this.handleClickButton}>B</basic-button>
-          <basic-button @click=${this.handleClickButton}>C</basic-button>
+          <basic-button @click=${this.handleClickButton}
+            >Yet I’m congrats</basic-button
+          >
+          <basic-button @click=${this.handleClickButton}
+            >Yeah I’m coming</basic-button
+          >
+          <basic-button @click=${this.handleClickButton}
+            >Yeah in cringing</basic-button
+          >
         </div>
       </div>
     `;
@@ -64,11 +72,12 @@ export default class MessagesApp extends LitElement {
       background: white;
       padding: 1em;
       display: flex;
+      flex-direction: column;
       gap: 0.5em;
     }
 
     .input > * {
-      flex: 1 1 0;
+      flex: 1 1 auto;
       max-width: none;
     }
 

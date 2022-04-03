@@ -13,23 +13,23 @@ export default class TwitterApp extends LitElement {
   posts = Deck.randomize([
     {
       username: 'the_offspring',
-      content: 'Lorem ipsum',
+      content: 'hope you like these because 3,000 more are coming',
       imageUrl: new URL('../images/insta-baby.png', import.meta.url),
     },
     {
       username: 'scratchedarm69',
-      content: 'Dolor sit amet',
+      content: 'it thirsts for Blood',
       imageUrl: new URL('../images/insta-cat.png', import.meta.url),
       answer: true,
     },
     {
       username: 'pet_as_my_personality',
-      content: 'Lorem ipsum',
+      content: 'like this post or i swear to god',
       imageUrl: new URL('../images/insta-dog.png', import.meta.url),
     },
     {
       username: 'the_great_outdouche',
-      content: 'Dolor sit amet',
+      content: 'god i look good',
       imageUrl: new URL('../images/insta-hiker.png', import.meta.url),
     },
   ]);
