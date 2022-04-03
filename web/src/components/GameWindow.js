@@ -19,6 +19,8 @@ function renderApp(name) {
       return html`<messages-app></messages-app>`;
     case 'email':
       return html`<email-app></email-app>`;
+    case 'browser':
+      return html`<browser-app></browser-app>`;
   }
 
   return '';

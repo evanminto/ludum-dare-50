@@ -20,6 +20,11 @@
         "notification": "Hey, I know you're going home but quick question",
         "notificationApp": "messages",
         "app": "messages"
+      },
+      {
+        "notification": "Check out this article",
+        "notificationApp": "messages",
+        "app": "browser"
       }
     ]
   }
