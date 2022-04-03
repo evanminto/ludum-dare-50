@@ -1,0 +1,21 @@
+[
+  {
+    "apps": [
+      {
+        "notification": "How far away are you?",
+        "notificationApp": "messages",
+        "app": "twitter"
+      },
+      {
+        "notification": "The bar is called Goldie's",
+        "notificationApp": "messages",
+        "app": "maps"
+      },
+      {
+        "notification": "Hey, I know you're going home but quick question",
+        "notificationApp": "messages",
+        "app": "messages"
+      }
+    ]
+  }
+]

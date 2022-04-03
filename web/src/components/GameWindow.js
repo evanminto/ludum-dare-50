@@ -1,9 +1,26 @@
 import { LitElement, css, html } from 'lit';
 import config from '../config.json';
+import phases from '../config/phases.json';
 import Phase from '../Phase';
 import Deck from '../Deck';
 import App from '../App';
 import Notification from '../Notification';
+
+/**
+ * @param {String} name
+ */
+function renderApp(name) {
+  switch (name) {
+    case 'twitter':
+      return html`<twitter-app></twitter-app>`;
+    case 'maps':
+      return html`<map-app></map-app>`;
+    case 'messages':
+      return html`<messages-app></messages-app>`;
+  }
+
+  return '';
+}
 
 /**
  * @customElement game-window
@@ -40,26 +57,22 @@ export default class GameWindow extends LitElement {
 
     this.battery = GameWindow.BATTERY_START;
 
-    this.phases = new Deck([
-      new Phase([
-        new App({
-          notification: new Notification({ content: 'How far away are you?' }),
-          content: html`<twitter-app></twitter-app>`,
-        }),
-        new App({
-          notification: new Notification({
-            content: "The bar is called Goldie's",
-          }),
-          content: html`<map-app></map-app>`,
-        }),
-        new App({
-          notification: new Notification({
-            content: "Hey, I know you're going home but quick question",
-          }),
-          content: html`<messages-app></messages-app>`,
-        }),
-      ]),
-    ]);
+    this.phases = new Deck(
+      phases.map(
+        ({ apps }) =>
+          new Phase(
+            apps.map(
+              ({ notification, notificationApp, app }) =>
+                new App({
+                  notification: new Notification({
+                    content: notification,
+                  }),
+                  content: renderApp(app),
+                })
+            )
+          )
+      )
+    );
 
     this.start();
 
