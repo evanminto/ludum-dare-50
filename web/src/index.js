@@ -8,6 +8,7 @@ Promise.all([
   import('./components/BasicButton.js'),
   import('./components/IconButton.js'),
   import('./components/TwitterApp.js'),
+  import('./components/TiktokApp.js'),
   import('./components/MapApp.js'),
   import('./components/MessagesApp.js'),
   import('./components/EmailApp.js'),

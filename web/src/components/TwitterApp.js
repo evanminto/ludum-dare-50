@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import Deck from '../Deck';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
 
@@ -9,149 +10,83 @@ import FailureEvent from '../events/FailureEvent';
 export default class TwitterApp extends LitElement {
   static tagName = 'twitter-app';
 
-  posts = [
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
+  static properties = {
+    users: {
+      type: Array,
+      attribute: false,
     },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-    {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-    },
-    {
-      handle: 'fart',
-      content: 'Dolor sit amet',
-    },
-  ];
+  };
+
+  constructor() {
+    super();
+
+    this.users = Deck.randomize([
+      {
+        avatar: new URL('../images/pfp-0.png', import.meta.url),
+        username: 'firstname_lastname42069',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-1.png', import.meta.url),
+        username: 'jacksmith2020',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-2.png', import.meta.url),
+        username: 'HDMI_simp',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-3.png', import.meta.url),
+        username: 'theGratest',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-4.png', import.meta.url),
+        username: 'shitLord1999',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-5.png', import.meta.url),
+        username: 'me_n_my_truck',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-6.png', import.meta.url),
+        username: 'keyboard_warcrimes',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-7.png', import.meta.url),
+        username: 'print_spleen',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-8.png', import.meta.url),
+        username: 'drum_dumpster',
+        blocked: false,
+      },
+      {
+        avatar: new URL('../images/pfp-9.png', import.meta.url),
+        username: 'rudeOil',
+        blocked: false,
+      },
+    ]);
+  }
 
   render() {
     return html`
       <ul>
-        ${this.posts.map(
-          post => html`
-            <li class="post">
-              <b>${post.handle}</b> ${post.content}
-
-              <div>
-                <span>RT</span>
-                <span>Like</span>
+        ${this.users.map(
+          (user, index) => html`
+            <li class="user ${user.blocked ? 'user--blocked' : ''}">
+              <div class="user-data">
+                <img src=${user.avatar} />
+                <span>${user.username}</span>
               </div>
+              <basic-button data-index=${index} @click=${this.handleClickBlock}>
+                Block
+              </basic-button>
             </li>
           `
         )}
@@ -159,18 +94,17 @@ export default class TwitterApp extends LitElement {
     `;
   }
 
-  firstUpdated() {
-    const lastItem = this.renderRoot.querySelector('li:last-child');
-    // setInterval(() => {
-    //   if (window.scrollY >= window.scroll window.outerHeight) {
+  handleClickBlock(event) {
+    const { index } = event.target.dataset;
+    const oldUsers = [...this.users];
 
-    //   }
-    // }, 250)
-    new IntersectionObserver(records => {
-      if (records.some(record => record.isIntersecting)) {
-        this.dispatchSuccess();
-      }
-    }).observe(lastItem);
+    this.users[index].blocked = true;
+
+    this.requestUpdate('users', oldUsers);
+
+    if (!this.users.some(user => !user.blocked)) {
+      this.dispatchSuccess();
+    }
   }
 
   dispatchSuccess() {
@@ -207,8 +141,23 @@ export default class TwitterApp extends LitElement {
       font: inherit;
     }
 
-    .post {
+    .user {
+      display: flex;
+      align-items: center;
       padding: 0.5em;
+      justify-content: space-between;
+      gap: 1em;
+    }
+
+    .user-data {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      word-break: break-word;
+    }
+
+    .user--blocked {
+      opacity: 0.5;
     }
   `;
 }

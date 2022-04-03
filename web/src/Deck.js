@@ -43,7 +43,7 @@ export default class Deck {
   }
 
   shuffle() {
-    if (this.count <= 0) {
+    if (this.count <= 1) {
       return;
     }
 

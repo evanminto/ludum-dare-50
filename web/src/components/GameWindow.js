@@ -26,6 +26,8 @@ function renderApp(name) {
       return html`<instagram-app></instagram-app>`;
     case 'wordle':
       return html`<wordle-app></wordle-app>`;
+    case 'tiktok':
+      return html`<tiktok-app></tiktok-app>`;
   }
 
   return '';
