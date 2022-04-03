@@ -80,6 +80,7 @@ export default class GameWindow extends LitElement {
                 new App({
                   notification: new Notification({
                     content: notification,
+                    app: notificationApp,
                   }),
                   content: renderApp(app),
                 })
@@ -253,7 +254,9 @@ export default class GameWindow extends LitElement {
 
     return html`
       <div class="notifications-tray">
-        <notification-bubble> ${notification.content} </notification-bubble>
+        <notification-bubble app=${notification.app}>
+          ${notification.content}
+        </notification-bubble>
       </div>
     `;
   }
@@ -350,6 +353,7 @@ export default class GameWindow extends LitElement {
       justify-items: center;
       gap: 1em;
       padding: 1em;
+      color: var(--color-white);
     }
 
     notification-bubble {

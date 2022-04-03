@@ -6,18 +6,41 @@ import { LitElement, css, html } from 'lit';
 export default class NotificationBubble extends LitElement {
   static tagName = 'notification-bubble';
 
+  static properties = {
+    app: String,
+  };
+
   render() {
-    return html` <slot></slot> `;
+    return html`
+      <div class="inner">
+        <app-icon name=${this.app} hide-name></app-icon>
+        <div><slot></slot></div>
+      </div>
+    `;
   }
 
   static styles = css`
     :host {
       box-sizing: border-box;
-      display: block;
       width: 100%;
       background: white;
-      border-radius: 1.5em;
       padding: 1em;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .inner {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .inner > * {
+      flex: 1 1 auto;
+    }
+
+    .inner > app-icon {
+      flex: 0 0 auto;
     }
   `;
 }

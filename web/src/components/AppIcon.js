@@ -22,12 +22,21 @@ export default class AppIcon extends LitElement {
 
   static properties = {
     name: String,
+    hideName: {
+      type: Boolean,
+      attribute: 'hide-name',
+    },
   };
+
+  constructor() {
+    super();
+    this.hideName = false;
+  }
 
   render() {
     return html`
       <img src=${NAME_TO_IMAGE[this.name]} class="icon" />
-      <p>${this.name}</p>
+      ${this.name && !this.hideName ? html`<p>${this.name}</p>` : ''}
     `;
   }
 
@@ -36,7 +45,6 @@ export default class AppIcon extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: var(--color-white);
     }
 
     .icon {
