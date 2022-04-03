@@ -65,7 +65,7 @@ export default class EmailApp extends LitElement {
   }
 
   renderEmail({ subject, deleted }, index) {
-    return html`<li class="email">
+    return html`<li class="email ${deleted ? 'email--deleted' : ''}">
       ${subject}
       <icon-button
         icon="trash"
@@ -126,6 +126,10 @@ export default class EmailApp extends LitElement {
       display: flex;
       justify-content: space-between;
       padding: 0.5em 1em;
+    }
+
+    .email--deleted {
+      opacity: 0.25;
     }
 
     button {
