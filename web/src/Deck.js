@@ -29,7 +29,7 @@ export default class Deck {
    * @param {T} card
    */
   putBack(card) {
-    this.#cards.push(card);
+    this.#cards = [card, ...this.#cards];
   }
 
   shuffle() {
