@@ -151,7 +151,7 @@ export default class GameWindow extends LitElement {
 
     if (nextApp) {
       this.notification = nextApp.notification;
-      this.currentApp = nextApp;
+      setTimeout(() => (this.currentApp = nextApp), 2000 + 350);
     } else {
       this.currentPhase = this.phases.draw();
 
@@ -166,8 +166,9 @@ export default class GameWindow extends LitElement {
     const { appDeck } = this.currentPhase;
     appDeck.putBack(this.currentApp);
     appDeck.shuffle();
-    this.currentApp = this.currentPhase.appDeck.draw();
-    this.notification = this.currentApp.notification;
+    const nextApp = this.currentPhase.appDeck.draw();
+    this.notification = nextApp.notification;
+    setTimeout(() => (this.currentApp = nextApp), 2000 + 350);
   }
 
   playFailureAnimation() {
@@ -321,7 +322,7 @@ export default class GameWindow extends LitElement {
       top: 0;
       width: 100%;
       height: 100%;
-      background: darkgray;
+      background: hsla(0, 0%, 0%, 0.5);
       padding: 1em;
     }
 
