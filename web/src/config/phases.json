@@ -25,6 +25,11 @@
         "notification": "Check out this article",
         "notificationApp": "messages",
         "app": "browser"
+      },
+      {
+        "notification": "Did you like that cat photo from Melissa yet?",
+        "notificationApp": "messages",
+        "app": "instagram"
       }
     ]
   }

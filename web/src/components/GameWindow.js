@@ -21,6 +21,8 @@ function renderApp(name) {
       return html`<email-app></email-app>`;
     case 'browser':
       return html`<browser-app></browser-app>`;
+    case 'instagram':
+      return html`<instagram-app></instagram-app>`;
   }
 
   return '';

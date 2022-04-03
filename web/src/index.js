@@ -5,12 +5,13 @@ Promise.all([
   import('./components/NotificationBubble.js'),
   import('./components/WinScreen.js'),
   import('./components/ShutdownScreen.js'),
+  import('./components/BasicButton.js'),
   import('./components/TwitterApp.js'),
   import('./components/MapApp.js'),
   import('./components/MessagesApp.js'),
   import('./components/EmailApp.js'),
   import('./components/BrowserApp.js'),
-  import('./components/BasicButton.js'),
+  import('./components/InstagramApp.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>
