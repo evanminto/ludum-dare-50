@@ -111,7 +111,7 @@ export default class GameWindow extends LitElement {
     /** @type {Notification} */
     this.notification = app.notification;
 
-    setTimeout(() => (this.currentApp = app), 2000 + 350);
+    setTimeout(() => (this.currentApp = app), 1200 + 350);
 
     this.screenShakeAnimation = this.animate(
       [
@@ -162,7 +162,7 @@ export default class GameWindow extends LitElement {
 
     if (nextApp) {
       this.notification = nextApp.notification;
-      setTimeout(() => (this.currentApp = nextApp), 2000 + 350);
+      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
     } else {
       this.currentPhase = this.phases.draw();
 
@@ -179,7 +179,7 @@ export default class GameWindow extends LitElement {
     appDeck.shuffle();
     const nextApp = this.currentPhase.appDeck.draw();
     this.notification = nextApp.notification;
-    setTimeout(() => (this.currentApp = nextApp), 2000 + 350);
+    setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
   }
 
   playFailureAnimation() {
@@ -226,7 +226,7 @@ export default class GameWindow extends LitElement {
         }
 
         this.trayShowAnimation.cancel();
-        setTimeout(() => this.trayShowAnimation.play(), 2000);
+        setTimeout(() => this.trayShowAnimation.play(), 1200);
       }
     }
   }
