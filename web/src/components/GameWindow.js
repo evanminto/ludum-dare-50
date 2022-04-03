@@ -116,6 +116,7 @@ export default class GameWindow extends LitElement {
     appDeck.putBack(this.currentApp);
     appDeck.shuffle();
     this.currentApp = this.currentPhase.appDeck.draw();
+    this.notification = this.currentApp.notification;
   }
 
   updated(changed) {
