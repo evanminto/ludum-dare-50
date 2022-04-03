@@ -10,22 +10,31 @@ import FailureEvent from '../events/FailureEvent';
 export default class MessagesApp extends LitElement {
   static tagName = 'messages-app';
 
+  messages = ['Lorem ipsum', 'Dolor sit amet', 'Foo bar'];
+  answer = 'B';
+
   render() {
     return html`
-      Messages
+      <ul class="messages-list">
+        ${this.messages.map(
+          message => html`<li class="message">${message}</li>`
+        )}
+      </ul>
 
-      <button type="button" @click=${this.handleSuccess}>Success</button>
-
-      <button type="button" @click=${this.handleFailure}>Failure</button>
+      <div class="input">
+        <button type="button" @click=${this.handleClickButton}>A</button>
+        <button type="button" @click=${this.handleClickButton}>B</button>
+        <button type="button" @click=${this.handleClickButton}>C</button>
+      </div>
     `;
   }
 
-  handleSuccess() {
-    this.dispatchSuccess();
-  }
-
-  handleFailure() {
-    this.dispatchFailure();
+  handleClickButton(event) {
+    if (event.target.textContent === this.answer) {
+      this.dispatchSuccess();
+    } else {
+      this.dispatchFailure();
+    }
   }
 
   dispatchSuccess() {
