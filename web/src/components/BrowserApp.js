@@ -103,5 +103,9 @@ export default class BrowserApp extends LitElement {
       background: lightgray;
       padding: 1em;
     }
+
+    button {
+      font: inherit;
+    }
   `;
 }

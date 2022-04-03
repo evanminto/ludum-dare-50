@@ -100,5 +100,9 @@ export default class EmailApp extends LitElement {
       justify-content: space-between;
       padding: 0.5em 1em;
     }
+
+    button {
+      font: inherit;
+    }
   `;
 }

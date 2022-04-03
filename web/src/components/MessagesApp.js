@@ -51,5 +51,9 @@ export default class MessagesApp extends LitElement {
       background: lightgray;
       padding: 1em;
     }
+
+    button {
+      font: inherit;
+    }
   `;
 }

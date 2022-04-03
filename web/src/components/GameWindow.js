@@ -227,7 +227,7 @@ export default class GameWindow extends LitElement {
       position: relative;
       display: flex;
       flex-direction: column;
-      font-family: monospace;
+      font-family: 'IBM VGA', monospace;
     }
 
     * {

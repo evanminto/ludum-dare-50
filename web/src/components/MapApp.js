@@ -52,5 +52,9 @@ export default class MapApp extends LitElement {
       background: lightgray;
       padding: 1em;
     }
+
+    button {
+      font: inherit;
+    }
   `;
 }

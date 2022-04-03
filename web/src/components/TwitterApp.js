@@ -75,5 +75,9 @@ export default class TwitterApp extends LitElement {
       list-style: none;
       padding: 0;
     }
+
+    button {
+      font: inherit;
+    }
   `;
 }
