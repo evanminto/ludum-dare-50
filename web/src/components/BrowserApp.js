@@ -40,7 +40,7 @@ export default class BrowserApp extends LitElement {
 
   render() {
     return html`
-      <div class="app-banner" ?hidden=${this.appBannerDismissed}>
+      <div class="banner app-banner" ?hidden=${this.appBannerDismissed}>
         Download the app
         <button type="button" @click=${this.handleClickApp}>x</button>
       </div>
@@ -57,7 +57,7 @@ export default class BrowserApp extends LitElement {
         </button>
       </div>
 
-      <div class="cookie-banner" ?hidden=${this.cookieBannerDismissed}>
+      <div class="banner cookie-banner" ?hidden=${this.cookieBannerDismissed}>
         We track everything
         <button type="button" @click=${this.handleClickCookie}>Allow</button>
       </div>
@@ -102,10 +102,46 @@ export default class BrowserApp extends LitElement {
       display: block;
       background: lightgray;
       padding: 1em;
+      position: relative;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     button {
       font: inherit;
+    }
+
+    .banner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      padding: 2em 1em;
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+
+    .cookie-banner {
+      bottom: 0;
+      top: auto;
+    }
+
+    .newsletter-popup {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      background: white;
+      padding: 5em 1em;
+      width: calc(100% - 2em);
+    }
+
+    [hidden] {
+      display: none !important;
     }
   `;
 }
