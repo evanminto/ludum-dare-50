@@ -22,9 +22,9 @@ export default class MessagesApp extends LitElement {
       </ul>
 
       <div class="input">
-        <button type="button" @click=${this.handleClickButton}>A</button>
-        <button type="button" @click=${this.handleClickButton}>B</button>
-        <button type="button" @click=${this.handleClickButton}>C</button>
+        <basic-button @click=${this.handleClickButton}>A</basic-button>
+        <basic-button @click=${this.handleClickButton}>B</basic-button>
+        <basic-button @click=${this.handleClickButton}>C</basic-button>
       </div>
     `;
   }

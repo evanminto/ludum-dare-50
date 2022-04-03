@@ -10,6 +10,7 @@ Promise.all([
   import('./components/MessagesApp.js'),
   import('./components/EmailApp.js'),
   import('./components/BrowserApp.js'),
+  import('./components/BasicButton.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>
