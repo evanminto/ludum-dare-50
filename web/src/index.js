@@ -6,6 +6,7 @@ Promise.all([
   import('./components/WinScreen.js'),
   import('./components/ShutdownScreen.js'),
   import('./components/BasicButton.js'),
+  import('./components/IconButton.js'),
   import('./components/TwitterApp.js'),
   import('./components/MapApp.js'),
   import('./components/MessagesApp.js'),

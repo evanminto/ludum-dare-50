@@ -67,14 +67,12 @@ export default class EmailApp extends LitElement {
   renderEmail({ subject, deleted }, index) {
     return html`<li class="email">
       ${subject}
-      <button
-        type="button"
+      <icon-button
+        icon="trash"
         ?disabled=${deleted}
         data-index=${index}
         @click=${this.handleClickDeleteSpam}
-      >
-        Delete
-      </button>
+      ></icon-button>
     </li>`;
   }
 

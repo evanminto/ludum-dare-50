@@ -40,13 +40,13 @@ export default class TwitterApp extends LitElement {
         <img src=${imageUrl} />
 
         <div class="post-text">
-          <button
-            type="button"
-            data-answer=${answer ? '1' : '0'}
-            @click=${this.handleClickLike}
-          >
-            Like
-          </button>
+          <div>
+            <icon-button
+              icon="heart"
+              data-answer=${answer ? '1' : '0'}
+              @click=${this.handleClickLike}
+            ></icon-button>
+          </div>
 
           <b>${username}</b> ${content}
         </div>
@@ -97,6 +97,7 @@ export default class TwitterApp extends LitElement {
     img {
       display: block;
       width: 100%;
+      image-rendering: pixelated;
     }
 
     .post-text {

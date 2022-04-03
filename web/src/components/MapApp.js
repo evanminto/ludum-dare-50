@@ -15,27 +15,27 @@ export default class MapApp extends LitElement {
   pins = [
     {
       name: 'The Comrade',
-      x: 15 + 70 * Math.random(),
-      y: 15 + 70 * Math.random(),
+      x: 5 + 60 * Math.random(),
+      y: 5 + 70 * Math.random(),
     },
     {
       name: 'Burgerface',
-      x: 15 + 70 * Math.random(),
-      y: 15 + 70 * Math.random(),
+      x: 5 + 60 * Math.random(),
+      y: 5 + 70 * Math.random(),
     },
     {
       name: 'The Dead Pigeon',
-      x: 15 + 70 * Math.random(),
-      y: 15 + 70 * Math.random(),
+      x: 5 + 60 * Math.random(),
+      y: 5 + 70 * Math.random(),
     },
     {
       name: 'The Broken Bottle',
-      x: 15 + 70 * Math.random(),
-      y: 15 + 70 * Math.random(),
+      x: 5 + 60 * Math.random(),
+      y: 5 + 70 * Math.random(),
     },
   ];
 
-  answer = 'B';
+  answer = 'The Comrade';
 
   render() {
     return html`
@@ -86,8 +86,15 @@ export default class MapApp extends LitElement {
       top: calc(var(--y) * 1%);
       background: url('${unsafeCSS(pinImageUrl)}');
       background-repeat: no-repeat;
-      padding: 0.25em 1em 3em 2.5em;
+      padding: 0.25em 1em 3em 2em;
       color: #fc0d1b;
+      width: 100%;
+      max-width: 12em;
+      box-sizing: border-box;
+    }
+
+    img {
+      image-rendering: pixelated;
     }
   `;
 }
