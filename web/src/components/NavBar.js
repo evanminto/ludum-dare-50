@@ -18,7 +18,7 @@ export default class NavBar extends LitElement {
       <div class="inner">
         <span class="time">${this.time}</span>
 
-        <span class="battery">
+        <span class="battery ${this.battery < 5 ? 'battery--low' : ''}">
           ${this.battery > 0 ? html`${Math.ceil(this.battery)}%` : html`DEAD`}
           <img src=${batteryImageUrl} />
         </span>
@@ -27,6 +27,20 @@ export default class NavBar extends LitElement {
   }
 
   static styles = css`
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
     :host {
       display: block;
       width: 100%;
@@ -45,6 +59,11 @@ export default class NavBar extends LitElement {
       gap: 0.25em;
       align-items: center;
       color: var(--color-red);
+    }
+
+    .battery--low {
+      animation: pulse 400ms both;
+      animation-iteration-count: infinite;
     }
 
     .battery > * {
