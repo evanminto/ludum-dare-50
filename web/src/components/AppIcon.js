@@ -9,6 +9,8 @@ const NAME_TO_IMAGE = {
   HarassApp: new URL('../images/HarassApp.png', import.meta.url),
   Maps: new URL('../images/maps.png', import.meta.url),
   Email: new URL('../images/email.png', import.meta.url),
+  Browser: new URL('../images/browser.png', import.meta.url),
+  'To-Do': new URL('../images/to-do.png', import.meta.url),
 };
 
 /**
