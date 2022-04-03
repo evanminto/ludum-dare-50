@@ -229,18 +229,19 @@ export default class GameWindow extends LitElement {
   renderHomeScreen() {
     return html`
       <div class="grid">
-        <app-icon name="Twitter"></app-icon>
+        <app-icon name="Shitbird"></app-icon>
         <app-icon name="Maps"></app-icon>
-        <app-icon name="Instagram"></app-icon>
+        <app-icon name="Instigator"></app-icon>
+        <app-icon name="DysTop"></app-icon>
+        <app-icon name="UnHinged"></app-icon>
+        <app-icon name="Email"></app-icon>
+        <app-icon name="HarassApp"></app-icon>
+        <app-icon name="Curdle"></app-icon>
         <app-icon name="Notes"></app-icon>
         <app-icon name="Photos"></app-icon>
         <app-icon name="Camera"></app-icon>
-        <app-icon name="Email"></app-icon>
-        <app-icon name="Message"></app-icon>
         <app-icon name="Browser"></app-icon>
-        <app-icon name="Wordle"></app-icon>
         <app-icon name="NextTrain"></app-icon>
-        <app-icon name="TikTok"></app-icon>
       </div>
     `;
   }

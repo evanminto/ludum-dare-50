@@ -1,5 +1,16 @@
 import { LitElement, css, html } from 'lit';
 
+const NAME_TO_IMAGE = {
+  Curdle: new URL('../images/Curdle.png', import.meta.url),
+  Shitbird: new URL('../images/shitbird.png', import.meta.url),
+  Instigator: new URL('../images/instigator.png', import.meta.url),
+  UnHinged: new URL('../images/UnHinged.png', import.meta.url),
+  DysTop: new URL('../images/DysTop.png', import.meta.url),
+  HarassApp: new URL('../images/HarassApp.png', import.meta.url),
+  Maps: new URL('../images/maps.png', import.meta.url),
+  Email: new URL('../images/email.png', import.meta.url),
+};
+
 /**
  * @customElement app-icon
  */
@@ -12,7 +23,7 @@ export default class AppIcon extends LitElement {
 
   render() {
     return html`
-      <div class="icon"></div>
+      <img src=${NAME_TO_IMAGE[this.name]} />
       <p>${this.name}</p>
     `;
   }
@@ -22,15 +33,15 @@ export default class AppIcon extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: white;
+      color: var(--color-white);
     }
 
     .icon {
       display: block;
       width: 5em;
       height: 5em;
-      background: white;
-      border-radius: 1.5em;
     }
+
+    im
   `;
 }
