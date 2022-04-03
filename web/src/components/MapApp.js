@@ -18,16 +18,16 @@ const points = {
   createAndAdd() {
     let point = this.create();
 
-    while (
-      this.list
-        .map(p => ({
-          x: this.xDistance(p, point),
-          y: this.yDistance(p, point),
-        }))
-        .some(({ x, y }) => y < 5 || x < 10)
-    ) {
-      point = this.create();
-    }
+    // while (
+    //   this.list
+    //     .map(p => ({
+    //       x: this.xDistance(p, point),
+    //       y: this.yDistance(p, point),
+    //     }))
+    //     .some(({ x, y }) => y < 2 || x < 7)
+    // ) {
+    //   point = this.create();
+    // }
 
     this.list.push(point);
 
@@ -58,6 +58,7 @@ export default class MapApp extends LitElement {
     {
       name: 'The Comrade',
       ...points.createAndAdd(),
+      answer: true,
     },
     {
       name: 'Burgerface',
@@ -73,14 +74,13 @@ export default class MapApp extends LitElement {
     },
   ];
 
-  answer = 'The Comrade';
-
   render() {
     return html`
       ${this.pins.map(
         pin => html`
           <div
             class="pin"
+            data-answer=${pin.answer ? '1' : '0'}
             style=${styleMap({
               '--x': pin.x,
               '--y': pin.y,
@@ -95,7 +95,7 @@ export default class MapApp extends LitElement {
   }
 
   handleClickPin(event) {
-    if (event.target.innerText === this.answer) {
+    if (event.target.dataset.answer === '1') {
       this.dispatchSuccess();
     } else {
       this.dispatchFailure();
@@ -120,6 +120,7 @@ export default class MapApp extends LitElement {
 
     .pin {
       position: absolute;
+      z-index: 1;
       left: calc(var(--x) * 1%);
       top: calc(var(--y) * 1%);
       background: url('${unsafeCSS(pinImageUrl)}');

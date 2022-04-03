@@ -20,6 +20,7 @@
         --color-black: #000;
         --size-app-icon: 5em;
         --size-app-grid-track: 5rem;
+        --font-size-min: 1em;
       }
 
       html,
@@ -34,13 +35,18 @@
 
       body {
         display: flex;
-        font-size: calc(0.5em + 0.5vw + 0.5vh);
+        font-size: max(var(--font-size-min), calc(0.5em + 0.25vw + 0.25vh));
+      }
+
+      game-window {
+        cursor: default;
       }
 
       @media screen and (min-width: 35.5em), (orientation: landscape) {
         :root {
           --size-app-grid-track: 3rem;
           --size-app-icon: 3em;
+          --font-size-min: 0.8em;
         }
 
         game-window {
