@@ -33,7 +33,15 @@ export default class Deck {
   }
 
   shuffle() {
-    shuffle(this.#cards);
+    if (this.count <= 0) {
+      return;
+    }
+
+    const topCard = this.#cards[0];
+
+    while (this.#cards[0] === topCard) {
+      shuffle(this.#cards);
+    }
   }
 
   get count() {
