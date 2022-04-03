@@ -51,7 +51,7 @@ export default class EmailApp extends LitElement {
 
   render() {
     return html`
-      <ul class="messages-list">
+      <ul class="email-list">
         ${this.emails.map(this.renderEmail.bind(this))}
       </ul>
     `;
@@ -82,7 +82,23 @@ export default class EmailApp extends LitElement {
     :host {
       display: block;
       background: lightgray;
-      padding: 1em;
+    }
+
+    .email-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .email-list > * + * {
+      border-top: 0.0625rem solid gray;
+    }
+
+    .email {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 1em;
     }
   `;
 }

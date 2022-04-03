@@ -2,6 +2,7 @@ import shuffle from './utils/shuffle';
 
 /** @template T */
 export default class Deck {
+  /** @type {T[]} */
   #cards = [];
 
   /**
