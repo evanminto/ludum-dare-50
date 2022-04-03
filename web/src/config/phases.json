@@ -2,38 +2,38 @@
   {
     "apps": [
       {
-        "notification": "i sent you that christmas party invite. delete the spam!",
-        "notificationApp": "HarassApp",
+        "notification": "Delete the spam!",
+        "notificationApp": "Email",
         "app": "email"
       },
       {
-        "notification": "Everybody's meeting at the Comrade! You know where that is, right?",
-        "notificationApp": "HarassApp",
+        "notification": "Let's meet at the Comrade",
+        "notificationApp": "Maps",
         "app": "maps"
       },
       {
-        "notification": "Hey, I know you're going home but quick question",
+        "notification": "You have a new text message",
         "notificationApp": "HarassApp",
         "app": "messages"
       },
       {
-        "notification": "Read the Latest Article on Basic Bias Channel",
+        "notification": "Read the latest article on Basic Bias Channel",
         "notificationApp": "Browser",
         "app": "browser"
       },
       {
-        "notification": "Did you like that cat photo from Melissa yet?",
-        "notificationApp": "HarassApp",
+        "notification": "Please like my cat post, it's struggling",
+        "notificationApp": "Instigator",
         "app": "instagram"
       },
       {
         "notification": "Block the haters!",
-        "notificationApp": "HarassApp",
+        "notificationApp": "Shitbird",
         "app": "twitter"
       },
       {
-        "notification": "How many tries did this week's Curdle take you?",
-        "notificationApp": "HarassApp",
+        "notification": "Solve today's puzzle before it disappears!",
+        "notificationApp": "Curdle",
         "app": "wordle"
       }
     ]
