@@ -145,7 +145,7 @@ export default class TwitterApp extends LitElement {
       <ul>
         ${this.posts.map(
           post => html`
-            <li>
+            <li class="post">
               <b>${post.handle}</b> ${post.content}
 
               <div>
@@ -185,16 +185,24 @@ export default class TwitterApp extends LitElement {
     :host {
       display: block;
       background: lightgray;
-      padding: 1em;
     }
 
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
+    }
+
+    ul > * + * {
+      border-top: 0.0625rem solid gray;
     }
 
     button {
       font: inherit;
+    }
+
+    .post {
+      padding: 0.5em;
     }
   `;
 }

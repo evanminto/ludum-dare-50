@@ -143,7 +143,7 @@ export default class GameWindow extends LitElement {
               },
             ],
             {
-              duration: 1000,
+              duration: 300,
               fill: 'forwards',
             }
           );
