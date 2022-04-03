@@ -82,12 +82,16 @@ export default class TwitterApp extends LitElement {
     :host {
       display: block;
       background: lightgray;
+      display: flex;
+      flex-direction: column;
     }
 
     ul {
       margin: 0;
       padding: 0;
       list-style: none;
+      flex: 1 1 auto;
+      overflow: auto;
     }
 
     button {

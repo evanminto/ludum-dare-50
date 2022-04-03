@@ -312,11 +312,17 @@ export default class GameWindow extends LitElement {
 
     .app-container {
       flex: 1 1 auto;
-      overflow: auto;
+      overflow: hidden;
     }
 
     .app-container > * {
-      min-height: 100%;
+      position: relative;
+      z-index: 0;
+      transform: translate(0%, 0%);
+
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
     }
 
     .notifications-tray {

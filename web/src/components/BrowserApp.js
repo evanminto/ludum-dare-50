@@ -113,11 +113,18 @@ export default class BrowserApp extends LitElement {
       display: block;
       background: lightgray;
       padding: 1em;
-      position: relative;
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    p + p {
+      margin-top: 1em;
     }
 
     button {
@@ -125,7 +132,7 @@ export default class BrowserApp extends LitElement {
     }
 
     .banner {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -142,7 +149,7 @@ export default class BrowserApp extends LitElement {
     }
 
     .newsletter-popup {
-      position: absolute;
+      position: fixed;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
