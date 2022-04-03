@@ -62,6 +62,10 @@ export default class GameWindow extends LitElement {
       type: App,
       attribute: false,
     },
+    hideIntroMessage: {
+      type: Boolean,
+      attribute: false,
+    },
   };
 
   constructor() {
@@ -88,20 +92,14 @@ export default class GameWindow extends LitElement {
           )
       )
     );
+  }
 
-    this.start();
-
+  beginPlay() {
     setInterval(() => {
       this.increaseSeconds();
       this.decreaseBattery();
     }, 1000);
-  }
 
-  start() {
-    setTimeout(() => this.beginPlay(), 5000);
-  }
-
-  beginPlay() {
     /** @type {Phase} */
     this.currentPhase = this.phases.draw();
 
@@ -217,6 +215,52 @@ export default class GameWindow extends LitElement {
       });
       this.hideAppAnimation.play();
     });
+  }
+
+  firstUpdated() {
+    const introMessage = this.renderRoot.querySelector('.intro-message');
+    this.introMessageShowAnimation = introMessage.animate(
+      [
+        {
+          opacity: 0,
+          transform: 'translate(0%, -25%)',
+        },
+        {
+          opacity: 1,
+          transform: 'translate(0%, 0%)',
+        },
+      ],
+      {
+        duration: 250,
+        fill: 'both',
+      }
+    );
+    this.introMessageShowAnimation.cancel();
+
+    this.introMessageHideAnimation = introMessage.animate(
+      [
+        {
+          opacity: 1,
+          transform: 'translate(0%, 0%)',
+        },
+        {
+          opacity: 0,
+          transform: 'translate(0%, 25%)',
+        },
+      ],
+      {
+        duration: 250,
+        fill: 'forwards',
+      }
+    );
+    this.introMessageHideAnimation.cancel();
+
+    this.introMessageHideAnimation.addEventListener(
+      'finish',
+      () => (this.hideIntroMessage = true)
+    );
+
+    setTimeout(() => this.introMessageShowAnimation.play(), 2000);
   }
 
   updated(changed) {
@@ -343,7 +387,25 @@ export default class GameWindow extends LitElement {
 
       ${this.notification ? this.renderNotification() : ''}
       ${this.currentApp ? this.renderCurrentApp() : this.renderHomeScreen()}
+      ${this.hideIntroMessage
+        ? ''
+        : html`<div class="intro-message-wrapper">
+            <div class="intro-message">
+              <div class="intro-message-inner">
+                <img src=${new URL('../images/battery.png', import.meta.url)} />
+                <p>
+                  Battery is dangerously low. Complete all tasks before it dies!
+                </p>
+              </div>
+              <basic-button @click=${this.handleClickStart}>Start</basic-button>
+            </div>
+          </div>`}
     `;
+  }
+
+  handleClickStart() {
+    this.introMessageHideAnimation.play();
+    setTimeout(() => this.beginPlay(), 1000);
   }
 
   static styles = css`
@@ -408,6 +470,27 @@ export default class GameWindow extends LitElement {
 
     notification-bubble {
       box-shadow: var(--shadow);
+    }
+
+    .intro-message-wrapper {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 2em);
+    }
+
+    .intro-message {
+      opacity: 0;
+      background: var(--color-white);
+      padding: 1em;
+      box-shadow: var(--shadow);
+    }
+
+    .intro-message-inner {
+      display: flex;
+      gap: 1em;
+      align-items: center;
     }
   `;
 }
