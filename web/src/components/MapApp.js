@@ -1,6 +1,9 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html, unsafeCSS } from 'lit';
+import { styleMap } from 'lit/directives/style-map';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+const mapImageUrl = new URL('../images/map.png', import.meta.url);
+const pinImageUrl = new URL('../images/pin.png', import.meta.url);
 
 /**
  * @customElement map-app
@@ -9,37 +12,56 @@ import FailureEvent from '../events/FailureEvent';
 export default class MapApp extends LitElement {
   static tagName = 'map-app';
 
-  posts = [
+  pins = [
     {
-      handle: 'dril',
-      content: 'Lorem ipsum',
-      rtToComplete: true,
+      name: 'A',
+      x: 15 + 70 * Math.random(),
+      y: 15 + 70 * Math.random(),
     },
     {
-      handle: 'fart',
-      content: 'Dolor sit amet',
+      name: 'B',
+      x: 15 + 70 * Math.random(),
+      y: 15 + 70 * Math.random(),
     },
-    {},
+    {
+      name: 'C',
+      x: 15 + 70 * Math.random(),
+      y: 15 + 70 * Math.random(),
+    },
+    {
+      name: 'D',
+      x: 15 + 70 * Math.random(),
+      y: 15 + 70 * Math.random(),
+    },
   ];
 
+  answer = 'B';
+
   render() {
-    return html` Map
-
-      <button type="button" @click=${this.handleSuccess}>Success</button>
-
-      <button type="button" @click=${this.handleFailure}>Failure</button>`;
+    return html`
+      ${this.pins.map(
+        pin => html`
+          <div
+            class="pin"
+            style=${styleMap({
+              '--x': pin.x,
+              '--y': pin.y,
+            })}
+            @click=${this.handleClickPin}
+          >
+            ${pin.name}
+          </div>
+        `
+      )}
+    `;
   }
 
-  handleSuccess() {
-    this.dispatchSuccess();
-  }
-
-  handleFailure() {
-    this.dispatchFailure();
-  }
-
-  dispatchSuccess() {
-    this.dispatchEvent(new SuccessEvent());
+  handleClickPin(event) {
+    if (event.target.innerText === this.answer) {
+      this.dispatchSuccess();
+    } else {
+      this.dispatchFailure();
+    }
   }
 
   dispatchFailure() {
@@ -49,12 +71,19 @@ export default class MapApp extends LitElement {
   static styles = css`
     :host {
       display: block;
-      background: lightgray;
-      padding: 1em;
+      background: url(${unsafeCSS(mapImageUrl)});
+      background-size: cover;
+      position: relative;
     }
 
-    button {
-      font: inherit;
+    .pin {
+      position: absolute;
+      left: calc(var(--x) * 1%);
+      top: calc(var(--y) * 1%);
+      background: url('${unsafeCSS(pinImageUrl)}');
+      background-repeat: no-repeat;
+      padding: 0.25em 1em 3em 2.5em;
+      color: #fc0d1b;
     }
   `;
 }
