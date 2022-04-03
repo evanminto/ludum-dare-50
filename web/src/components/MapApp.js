@@ -5,6 +5,33 @@ import FailureEvent from '../events/FailureEvent';
 const mapImageUrl = new URL('../images/map.png', import.meta.url);
 const pinImageUrl = new URL('../images/pin.png', import.meta.url);
 
+const points = {
+  list: [],
+
+  create() {
+    return {
+      x: 5 + 40 * Math.random(),
+      y: 5 + 70 * Math.random(),
+    };
+  },
+
+  createAndAdd() {
+    let point = this.create();
+
+    while (this.list.map(p => this.distance(p, point)).some(d => d < 5)) {
+      point = this.create();
+    }
+
+    this.list.push(point);
+
+    return point;
+  },
+
+  distance(p1, p2) {
+    return Math.sqrt(((p1.x - p2.x) ^ 2) + ((p1.y - p2.y) ^ 2));
+  },
+};
+
 /**
  * @customElement map-app
  * @fires success
@@ -15,23 +42,19 @@ export default class MapApp extends LitElement {
   pins = [
     {
       name: 'The Comrade',
-      x: 5 + 60 * Math.random(),
-      y: 5 + 70 * Math.random(),
+      ...points.createAndAdd(),
     },
     {
       name: 'Burgerface',
-      x: 5 + 60 * Math.random(),
-      y: 5 + 70 * Math.random(),
+      ...points.createAndAdd(),
     },
     {
       name: 'The Dead Pigeon',
-      x: 5 + 60 * Math.random(),
-      y: 5 + 70 * Math.random(),
+      ...points.createAndAdd(),
     },
     {
       name: 'The Broken Bottle',
-      x: 5 + 60 * Math.random(),
-      y: 5 + 70 * Math.random(),
+      ...points.createAndAdd(),
     },
   ];
 
