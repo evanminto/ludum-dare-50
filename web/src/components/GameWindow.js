@@ -94,6 +94,38 @@ export default class GameWindow extends LitElement {
 
     /** @type {Notification} */
     this.notification = this.currentApp.notification;
+
+    this.screenShakeAnimation = this.animate(
+      [
+        {
+          transform: 'translate(2%, 0%)',
+        },
+        {
+          transform: 'translate(-2%, 0%)',
+        },
+      ],
+      {
+        duration: 170,
+        iterations: 2,
+      }
+    );
+    this.screenShakeAnimation.cancel();
+
+    this.redTintAnimation = this.animate(
+      [
+        {
+          filter: 'none',
+        },
+        {
+          filter:
+            'contrast(50%) brightness(50%) sepia(100%) saturate(300%) hue-rotate(-29deg)',
+        },
+      ],
+      {
+        duration: 170 * 2,
+      }
+    );
+    this.redTintAnimation.cancel();
   }
 
   decreaseBattery() {
@@ -117,12 +149,30 @@ export default class GameWindow extends LitElement {
     }
   }
 
-  handleFailure() {
+  async handleFailure() {
+    await this.playFailureAnimation();
     const { appDeck } = this.currentPhase;
     appDeck.putBack(this.currentApp);
     appDeck.shuffle();
     this.currentApp = this.currentPhase.appDeck.draw();
     this.notification = this.currentApp.notification;
+  }
+
+  playFailureAnimation() {
+    return Promise.all([
+      new Promise(resolve => {
+        this.screenShakeAnimation.addEventListener('finish', resolve, {
+          once: true,
+        });
+        this.screenShakeAnimation.play();
+      }),
+      new Promise(resolve => {
+        this.redTintAnimation.addEventListener('finish', resolve, {
+          once: true,
+        });
+        this.redTintAnimation.play();
+      }),
+    ]);
   }
 
   updated(changed) {
