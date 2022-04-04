@@ -1,5 +1,4 @@
 import { LitElement, css, html } from 'lit';
-import Deck from '../Deck';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
 
@@ -20,19 +19,7 @@ export default class TwitterApp extends LitElement {
   constructor() {
     super();
 
-    // Ditch Date
-    // Track box wine shipment
-    // Get cracked screen fixed
-    // Fix friend’s screen too
-    // And my dad’s
-    // Come up with rent excuse
-    // Post apology screenshot
-    // Unfollow Bad Take Guy
-    // Cancel YubNub Premium
-    // Meditate Infinities
-    // Solve Cold Fusion
-
-    this.items = Deck.randomize([
+    this.items = [
       {
         content: 'Ditch Date',
         checked: false,
@@ -77,7 +64,7 @@ export default class TwitterApp extends LitElement {
         content: 'Solve Cold Fusion',
         checked: false,
       },
-    ]);
+    ];
 
     [
       Math.floor(Math.random() * 10),
