@@ -22,13 +22,19 @@ export default class AudioPlayer extends LitElement {
       type: String,
       attribute: false,
     },
+    loop: {
+      type: Boolean,
+      attribute: false,
+    },
   };
 
   /** @type {import('lit/directives/ref').Ref<HTMLAudioElement>} */
   audioRef = createRef();
 
   render() {
-    return html` <audio src=${this.src} ${ref(this.audioRef)}></audio> `;
+    return html`
+      <audio src=${this.src} ?loop=${this.loop} @ ${ref(this.audioRef)}></audio>
+    `;
   }
 
   async playSound(name, { loop = false } = {}) {
@@ -39,11 +45,20 @@ export default class AudioPlayer extends LitElement {
     }
 
     this.src = src;
+    this.loop = loop;
     await this.updated;
     const el = this.audioRef.value;
 
     if (el) {
       el.play();
+    }
+  }
+
+  pauseSound() {
+    const el = this.audioRef.value;
+
+    if (el) {
+      el.pause();
     }
   }
 

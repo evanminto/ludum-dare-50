@@ -270,6 +270,10 @@ export default class GameWindow extends LitElement {
 
   updated(changed) {
     if (changed.has('notification') && this.notification) {
+      if (this.notification.app === 'Phone') {
+        this.playSound('ringtone', { loop: true });
+      }
+
       const tray = this.renderRoot.querySelector('.notifications-tray');
 
       if (tray) {
