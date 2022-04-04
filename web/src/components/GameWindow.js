@@ -1,14 +1,15 @@
 import { LitElement, css, html } from 'lit';
 import { ref, createRef } from 'lit/directives/ref';
 import dayjs from 'dayjs';
-import config from '../config.json';
 import phases from '../config/phases.json';
 import Phase from '../Phase';
 import Deck from '../Deck';
 import App from '../App';
 import Notification from '../Notification';
 
+const BATTERY_START = 15;
 const BATTERY_NG_PLUS = 5;
+const BATTERY_PER_SECOND = 0.25;
 
 /**
  * @param {String} name
@@ -84,8 +85,6 @@ const keyframes = {
 export default class GameWindow extends LitElement {
   static tagName = 'game-window';
 
-  static BATTERY_START = 25;
-
   static properties = {
     playing: Boolean,
     seconds: Number,
@@ -132,7 +131,7 @@ export default class GameWindow extends LitElement {
 
     this.seconds = 0;
     this.dayJs = dayjs('2022-01-01T16:20:00');
-    this.battery = GameWindow.BATTERY_START;
+    this.battery = BATTERY_START;
 
     this.startNewGame();
 
@@ -185,8 +184,7 @@ export default class GameWindow extends LitElement {
   }
 
   decreaseBattery() {
-    this.battery -=
-      GameWindow.BATTERY_START / config.batteryMinutesDefault / 60;
+    this.battery -= BATTERY_PER_SECOND;
   }
 
   async handleSuccess() {
