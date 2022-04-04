@@ -66,6 +66,10 @@ export default class GameWindow extends LitElement {
       type: Boolean,
       attribute: false,
     },
+    hideWinMessage: {
+      type: Boolean,
+      attribute: false,
+    },
   };
 
   constructor() {
@@ -74,6 +78,9 @@ export default class GameWindow extends LitElement {
     this.seconds = 0;
     this.dayJs = dayjs('2022-01-01T16:20:00');
     this.battery = GameWindow.BATTERY_START;
+
+    this.hideIntroMessage = false;
+    this.hideWinMessage = true;
 
     this.phases = new Deck(
       phases.map(
@@ -114,10 +121,10 @@ export default class GameWindow extends LitElement {
     this.screenShakeAnimation = this.animate(
       [
         {
-          transform: 'translate(2%, 0%)',
+          transform: 'translate3d(2%, 0%, 0)',
         },
         {
-          transform: 'translate(-2%, 0%)',
+          transform: 'translate3d(-2%, 0%, 0)',
         },
       ],
       {
@@ -218,21 +225,25 @@ export default class GameWindow extends LitElement {
   }
 
   firstUpdated() {
-    const introMessage = this.renderRoot.querySelector('.intro-message');
+    const introMessage = this.renderRoot.querySelector(
+      '.intro-message-wrapper'
+    );
+
     this.introMessageShowAnimation = introMessage.animate(
       [
         {
           opacity: 0,
-          transform: 'translate(0%, -25%)',
+          transform: 'translate3d(0%, -25%, 0)',
         },
         {
           opacity: 1,
-          transform: 'translate(0%, 0%)',
+          transform: 'translate3d(0%, 0%, 0)',
         },
       ],
       {
         duration: 250,
-        fill: 'both',
+        fill: 'forwards',
+        id: 'intro-message-show',
       }
     );
     this.introMessageShowAnimation.cancel();
@@ -241,16 +252,17 @@ export default class GameWindow extends LitElement {
       [
         {
           opacity: 1,
-          transform: 'translate(0%, 0%)',
+          transform: 'translate3d(0%, 0%, 0)',
         },
         {
           opacity: 0,
-          transform: 'translate(0%, 25%)',
+          transform: 'translate3d(0%, 25%, 0)',
         },
       ],
       {
         duration: 250,
         fill: 'forwards',
+        id: 'intro-message-hide',
       }
     );
     this.introMessageHideAnimation.cancel();
@@ -310,10 +322,10 @@ export default class GameWindow extends LitElement {
         .animate(
           [
             {
-              transform: 'translate(0%, 0%)',
+              transform: 'translate3d(0%, 0%)',
             },
             {
-              transform: 'translate(0%, 100%)',
+              transform: 'translate3d(0%, 100%)',
             },
           ],
           {
@@ -321,6 +333,16 @@ export default class GameWindow extends LitElement {
           }
         );
       this.hideAppAnimation.cancel();
+    }
+
+    if (changed.has('win') && this.win) {
+      this.hideWinMessage = false;
+    }
+
+    if (changed.has('hideWinMessage') && !this.hideWinMessage) {
+      this.introMessageHideAnimation.cancel();
+      this.introMessageShowAnimation.cancel();
+      this.introMessageShowAnimation.play();
     }
   }
 
@@ -371,11 +393,7 @@ export default class GameWindow extends LitElement {
   render() {
     const { battery, win } = this;
 
-    if (win) {
-      return html`<win-screen></win-screen>`;
-    }
-
-    if (battery <= 0) {
+    if (!win && battery <= 0) {
       return html`<shutdown-screen></shutdown-screen>`;
     }
 
@@ -385,21 +403,26 @@ export default class GameWindow extends LitElement {
         battery=${this.battery}
       ></nav-bar>
 
-      ${this.notification ? this.renderNotification() : ''}
-      ${this.currentApp ? this.renderCurrentApp() : this.renderHomeScreen()}
-      ${this.hideIntroMessage
-        ? ''
-        : html`<div class="intro-message-wrapper">
-            <div class="intro-message">
-              <div class="intro-message-inner">
-                <img src=${new URL('../images/battery.png', import.meta.url)} />
-                <p>
-                  Battery is dangerously low. Complete all tasks before it dies!
-                </p>
-              </div>
-              <basic-button @click=${this.handleClickStart}>Start</basic-button>
-            </div>
-          </div>`}
+      ${this.notification && !win ? this.renderNotification() : ''}
+      ${this.currentApp && !win
+        ? this.renderCurrentApp()
+        : this.renderHomeScreen()}
+
+      <div class="intro-message-wrapper">
+        <div class="intro-message" ?hidden=${this.hideIntroMessage}>
+          <div class="intro-message-inner">
+            <img src=${new URL('../images/battery.png', import.meta.url)} />
+            <p>
+              Battery is dangerously low. Complete all tasks before it dies!
+            </p>
+          </div>
+          <basic-button @click=${this.handleClickStart}>Start</basic-button>
+        </div>
+
+        <div class="win-message" ?hidden=${this.hideWinMessage}>
+          <p>You did it! Now go find a charger.</p>
+        </div>
+      </div>
     `;
   }
 
@@ -433,7 +456,7 @@ export default class GameWindow extends LitElement {
     .app-container > * {
       position: relative;
       z-index: 0;
-      transform: translate(0%, 0%);
+      transform: translate3d(0%, 0%, 0);
 
       height: 100%;
       max-height: 100%;
@@ -473,15 +496,28 @@ export default class GameWindow extends LitElement {
     }
 
     .intro-message-wrapper {
+      opacity: 0;
+
+      display: block;
+      top: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .intro-message-wrapper > * {
+      pointer-events: auto;
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate3d(-50%, -50%, 0);
       width: calc(100% - 2em);
     }
 
     .intro-message {
-      opacity: 0;
       background: var(--color-white);
       padding: 1em;
       box-shadow: var(--shadow);
@@ -491,6 +527,12 @@ export default class GameWindow extends LitElement {
       display: flex;
       gap: 1em;
       align-items: center;
+    }
+
+    .win-message {
+      background: var(--color-white);
+      padding: 1em;
+      box-shadow: var(--shadow);
     }
   `;
 }
