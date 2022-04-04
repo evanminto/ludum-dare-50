@@ -224,59 +224,7 @@ export default class GameWindow extends LitElement {
   }
 
   firstUpdated() {
-    const introMessage = this.renderRoot.querySelector(
-      '.intro-message-wrapper'
-    );
-
-    this.introMessageShowAnimation = introMessage.animate(
-      [
-        {
-          opacity: 0,
-          transform: 'translate3d(0%, -25%, 0)',
-        },
-        {
-          opacity: 1,
-          transform: 'translate3d(0%, 0%, 0)',
-        },
-      ],
-      {
-        duration: 250,
-        fill: 'forwards',
-        id: 'intro-message-show',
-      }
-    );
-    this.introMessageShowAnimation.cancel();
-
-    this.introMessageHideAnimation = introMessage.animate(
-      [
-        {
-          opacity: 1,
-          transform: 'translate3d(0%, 0%, 0)',
-        },
-        {
-          opacity: 0,
-          transform: 'translate3d(0%, 25%, 0)',
-        },
-      ],
-      {
-        duration: 250,
-        fill: 'forwards',
-        id: 'intro-message-hide',
-      }
-    );
-    this.introMessageHideAnimation.cancel();
-
-    this.introMessageHideAnimation.addEventListener(
-      'finish',
-      () => (this.hideIntroMessage = true)
-    );
-
-    setTimeout(() => {
-      this.hidePopup = false;
-      this.introMessageHideAnimation.cancel();
-      // this.introMessageShowAnimation.play();
-      // this.introMessageShowAnimation.persist();
-    }, 2000);
+    setTimeout(() => (this.hidePopup = false), 2000);
   }
 
   updated(changed) {
@@ -337,15 +285,6 @@ export default class GameWindow extends LitElement {
           }
         );
       this.hideAppAnimation.cancel();
-    }
-
-    if (changed.has('hideWinMessage') && !this.hideWinMessage) {
-      this.introMessageHideAnimation.cancel();
-      this.introMessageShowAnimation.cancel();
-      setTimeout(() => {
-        // this.introMessageShowAnimation.play();
-        // this.introMessageShowAnimation.persist();
-      }, 5000);
     }
   }
 
@@ -431,10 +370,7 @@ export default class GameWindow extends LitElement {
   }
 
   handleClickStart() {
-    this.introMessageShowAnimation.cancel();
     this.hidePopup = true;
-    // this.introMessageHideAnimation.play();
-    // this.introMessageHideAnimation.persist();
     setTimeout(() => this.beginPlay(), 1000);
   }
 
