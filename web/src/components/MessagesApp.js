@@ -55,7 +55,7 @@ export default class MessagesApp extends LitElement {
 
   static styles = css`
     :host {
-      background: lightgray;
+      background: var(--color-white);
       display: flex;
       flex-direction: column-reverse;
     }
@@ -72,6 +72,7 @@ export default class MessagesApp extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 0.5em;
+      border-top: 0.125em solid #ddd;
     }
 
     .input > * {
@@ -92,8 +93,8 @@ export default class MessagesApp extends LitElement {
     }
 
     .message {
-      background: black;
-      color: white;
+      background: #ddd;
+      color: black;
       padding: 0.5em;
       max-width: max-content;
     }
