@@ -94,7 +94,7 @@ export default class TiktokApp extends LitElement {
       padding: 0;
       margin: 0;
 
-      overflow: scroll;
+      overflow: auto;
       max-height: 100%;
       flex: 1 1 auto;
     }

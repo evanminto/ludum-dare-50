@@ -114,7 +114,7 @@ export default class EmailApp extends LitElement {
 
     ul {
       flex: 1 1 auto;
-      overflow: scroll;
+      overflow: auto;
     }
 
     .email-list {
