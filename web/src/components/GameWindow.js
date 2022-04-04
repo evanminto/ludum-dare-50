@@ -466,6 +466,7 @@ export default class GameWindow extends LitElement {
     .notifications-tray {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 0.25em;
       position: absolute;
       z-index: 1;
