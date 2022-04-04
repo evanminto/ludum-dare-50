@@ -3,6 +3,11 @@
     "apps": [
       {
         "notification": "Incoming call. Choose!",
+        "notificationApp": "To-Do",
+        "app": "todo"
+      },
+      {
+        "notification": "Incoming call. Choose!",
         "notificationApp": "Phone",
         "app": "phone"
       },

@@ -31,6 +31,8 @@ function renderApp(name) {
       return html`<tiktok-app></tiktok-app>`;
     case 'phone':
       return html`<phone-app></phone-app>`;
+    case 'todo':
+      return html`<todo-app></todo-app>`;
   }
 
   return '';

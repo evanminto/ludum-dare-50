@@ -17,6 +17,7 @@ Promise.all([
   import('./components/InstagramApp.js'),
   import('./components/WordleApp.js'),
   import('./components/PhoneApp.js'),
+  import('./components/ToDoApp.js'),
 ])
   .then(results => results.map(result => result.default))
   .then(components =>
