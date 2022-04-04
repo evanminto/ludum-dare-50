@@ -37,19 +37,15 @@ export default class TwitterApp extends LitElement {
   renderPost({ username, content, imageUrl, answer }) {
     return html`
       <li>
-        <img src=${imageUrl} width="128" height="128" />
+        <img
+          src=${imageUrl}
+          width="128"
+          height="128"
+          data-answer=${answer ? '1' : '0'}
+          @click=${this.handleClickLike}
+        />
 
-        <div class="post-text">
-          <div>
-            <icon-button
-              icon="heart"
-              data-answer=${answer ? '1' : '0'}
-              @click=${this.handleClickLike}
-            ></icon-button>
-          </div>
-
-          <b>${username}</b> ${content}
-        </div>
+        <div class="post-text"><b>${username}</b> ${content}</div>
       </li>
     `;
   }
@@ -81,7 +77,8 @@ export default class TwitterApp extends LitElement {
   static styles = css`
     :host {
       display: block;
-      background: lightgray;
+      background: var(--color-black);
+      color: var(--color-white);
       display: flex;
       flex-direction: column;
     }
