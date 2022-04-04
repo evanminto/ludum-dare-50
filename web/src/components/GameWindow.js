@@ -121,10 +121,10 @@ export default class GameWindow extends LitElement {
     this.screenShakeAnimation = this.animate(
       [
         {
-          transform: 'translate3d(2%, 0%, 0)',
+          transform: 'rotate(1deg) translate3d(2%, 0%, 0)',
         },
         {
-          transform: 'translate3d(-2%, 0%, 0)',
+          transform: 'rotate(-1deg) translate3d(-2%, 0%, 0)',
         },
       ],
       {
@@ -200,12 +200,14 @@ export default class GameWindow extends LitElement {
   playFailureAnimation() {
     return Promise.all([
       new Promise(resolve => {
+        this.screenShakeAnimation.cancel();
         this.screenShakeAnimation.addEventListener('finish', resolve, {
           once: true,
         });
         this.screenShakeAnimation.play();
       }),
       new Promise(resolve => {
+        this.redTintAnimation.cancel();
         this.redTintAnimation.addEventListener('finish', resolve, {
           once: true,
         });

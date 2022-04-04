@@ -37,6 +37,11 @@
       body {
         display: flex;
         font-size: max(var(--font-size-min), calc(0.5em + 0.25vw + 0.25vh));
+        background: var(--color-black);
+      }
+
+      * {
+        box-sizing: border-box;
       }
 
       .aspect-ratio-1, .aspect-ratio-2, game-window {
@@ -58,6 +63,7 @@
 
         game-window {
           font-size: 1em;
+          border: 0.125rem solid var(--color-white);
         }
 
         .aspect-ratio-1 {
