@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit';
+import { ref, createRef } from 'lit/directives/ref';
 import dayjs from 'dayjs';
 import config from '../config.json';
 import phases from '../config/phases.json';
@@ -78,6 +79,9 @@ export default class GameWindow extends LitElement {
     },
   };
 
+  /** @type {import('lit/directives/ref').Ref<import('./AudioPlayer').default>} */
+  audioRef = createRef();
+
   constructor() {
     super();
 
@@ -109,6 +113,8 @@ export default class GameWindow extends LitElement {
   }
 
   beginPlay() {
+    this.playSound('ring');
+
     setInterval(() => {
       if (!this.win) {
         this.increaseSeconds();
@@ -215,6 +221,10 @@ export default class GameWindow extends LitElement {
       this.screenShakeAnimation.finished,
       this.redTintAnimation.finished,
     ]);
+  }
+
+  playSound() {
+    return this.audioRef.value && this.audioRef.value.playSound(...arguments);
   }
 
   playHideAppAnimation() {
@@ -333,6 +343,10 @@ export default class GameWindow extends LitElement {
     `;
   }
 
+  renderAudio() {
+    return html` <audio-player ${ref(this.audioRef)}></audio-player> `;
+  }
+
   render() {
     const { battery, win } = this;
 
@@ -366,6 +380,8 @@ export default class GameWindow extends LitElement {
           <p>You did it! Now go find a charger.</p>
         </div>
       </div>
+
+      ${this.renderAudio()}
     `;
   }
 

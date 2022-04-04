@@ -7,6 +7,7 @@ Promise.all([
   import('./components/ShutdownScreen.js'),
   import('./components/BasicButton.js'),
   import('./components/IconButton.js'),
+  import('./components/AudioPlayer.js'),
   import('./components/TwitterApp.js'),
   import('./components/TiktokApp.js'),
   import('./components/MapApp.js'),
