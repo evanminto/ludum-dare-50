@@ -215,10 +215,13 @@ export default class GameWindow extends LitElement {
       this.currentPhase = this.phases.draw();
 
       if (this.currentPhase === null) {
-        this.win = true;
-        this.hidePopup = false;
-        this.hideIntroMessage = true;
-        this.hideWinMessage = false;
+        setTimeout(() => {
+          this.win = true;
+          this.hidePopup = false;
+          this.hideIntroMessage = true;
+          this.hideWinMessage = false;
+          this.playSound('win');
+        }, 500);
       }
     }
   }

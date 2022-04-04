@@ -9,6 +9,7 @@ const NAME_TO_URL = {
   ringtone: new URL('../sfx/ringtone.mp3', import.meta.url),
   shutdown: new URL('../sfx/shutdown.mp3', import.meta.url),
   success: new URL('../sfx/success.mp3', import.meta.url),
+  win: new URL('../sfx/win.mp3', import.meta.url),
 };
 
 /**
