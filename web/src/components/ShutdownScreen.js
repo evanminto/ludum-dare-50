@@ -29,7 +29,7 @@ export default class ShutdownScreen extends LitElement {
       }
 
       100% {
-        transform: rotate(360deg);
+        transform: rotate(-360deg);
       }
     }
 
