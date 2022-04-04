@@ -20,13 +20,13 @@ export default class MessagesApp extends LitElement {
 
     this.buttons = Deck.randomize([
       html`<basic-button @click=${this.dispatchFailure}>
-        Yet I’m congrats
+        Ueah im congrats
       </basic-button>`,
       html`<basic-button @click=${this.dispatchSuccess}>
         Yeah I’m coming
       </basic-button>`,
       html`<basic-button @click=${this.dispatchFailure}>
-        Yeah in cringing
+        Yas in cringing
       </basic-button>`,
     ]);
   }

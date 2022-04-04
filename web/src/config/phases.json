@@ -2,7 +2,7 @@
   {
     "apps": [
       {
-        "notification": "Delete the spam!",
+        "notification": "Delete the spam ONLY!",
         "notificationApp": "Email",
         "app": "email"
       },
@@ -22,17 +22,17 @@
         "app": "browser"
       },
       {
-        "notification": "My cat post is struggling. Please like it!",
+        "notification": "Someone posted a cat. Like the cat post!",
         "notificationApp": "Instigator",
         "app": "instagram"
       },
       {
-        "notification": "New haters found. Block them all!",
+        "notification": "New haters detected. Block them all!",
         "notificationApp": "Shitbird",
         "app": "twitter"
       },
       {
-        "notification": "Solve today's puzzle before it disappears!",
+        "notification": "Solve today's puzzle!",
         "notificationApp": "Curdle",
         "app": "wordle"
       }
