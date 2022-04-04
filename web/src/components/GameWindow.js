@@ -85,6 +85,7 @@ export default class GameWindow extends LitElement {
   static BATTERY_START = 25;
 
   static properties = {
+    playing: Boolean,
     seconds: Number,
     battery: Number,
     win: Boolean,
@@ -125,6 +126,8 @@ export default class GameWindow extends LitElement {
   constructor() {
     super();
 
+    this.playing = false;
+
     this.seconds = 0;
     this.dayJs = dayjs('2022-01-01T16:20:00');
     this.battery = GameWindow.BATTERY_START;
@@ -150,6 +153,8 @@ export default class GameWindow extends LitElement {
           )
       )
     );
+
+    this.addEventListener('click', () => (this.playing = true));
   }
 
   beginPlay() {
@@ -265,15 +270,15 @@ export default class GameWindow extends LitElement {
     return this.hideAppAnimation.finished;
   }
 
-  firstUpdated() {
-    setTimeout(() => {
-      this.hideIntroMessage = false;
-      this.hidePopup = false;
-      this.playSound('intro');
-    }, 2000);
-  }
-
   updated(changed) {
+    if (changed.has('playing') && this.playing) {
+      setTimeout(() => {
+        this.hideIntroMessage = false;
+        this.hidePopup = false;
+        this.playSound('intro');
+      }, 500);
+    }
+
     if (changed.has('notification') && this.notification) {
       if (this.notification.app === 'Phone') {
         this.playSound('ringtone', { loop: true });
@@ -390,7 +395,16 @@ export default class GameWindow extends LitElement {
   }
 
   render() {
-    const { battery, win } = this;
+    const { playing, battery, win } = this;
+
+    if (!playing) {
+      return html`
+        <div class="click-to-play">
+          <p>Click to play</p>
+          <p>(Best played on a modern mobile browser)</p>
+        </div>
+      `;
+    }
 
     if (!win && battery <= 0) {
       this.playSound('shutdown');
@@ -451,6 +465,19 @@ export default class GameWindow extends LitElement {
 
     * {
       box-sizing: border-box;
+    }
+
+    .click-to-play {
+      color: var(--color-white);
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      text-align: center;
     }
 
     .app-container {
