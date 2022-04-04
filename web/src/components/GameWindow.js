@@ -201,6 +201,7 @@ export default class GameWindow extends LitElement {
   }
 
   async handleSuccess() {
+    this.playSound('success');
     this.greenTintAnimation.play();
     await wait(400);
     const { currentPhase } = this;
@@ -223,6 +224,7 @@ export default class GameWindow extends LitElement {
   }
 
   async handleFailure() {
+    this.playSound('failure');
     await this.playFailureAnimation();
     // await this.playHideAppAnimation();
     const { appDeck } = this.currentPhase;

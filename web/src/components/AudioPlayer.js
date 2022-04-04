@@ -1,7 +1,15 @@
 import { LitElement, css, html } from 'lit';
 import { ref, createRef } from 'lit/directives/ref';
 
-const NAME_TO_URL = {};
+const NAME_TO_URL = {
+  click: new URL('../sfx/click.mp3', import.meta.url),
+  failure: new URL('../sfx/failure.mp3', import.meta.url),
+  intro: new URL('../sfx/intro.mp3', import.meta.url),
+  notification: new URL('../sfx/notification.mp3', import.meta.url),
+  ringtone: new URL('../sfx/ringtone.mp3', import.meta.url),
+  shutdown: new URL('../sfx/shutdown.mp3', import.meta.url),
+  success: new URL('../sfx/success.mp3', import.meta.url),
+};
 
 /**
  * @customElement audio-player
@@ -30,7 +38,8 @@ export default class AudioPlayer extends LitElement {
       return;
     }
 
-    this.src = await this.updated;
+    this.src = src;
+    await this.updated;
     const el = this.audioRef.value;
 
     if (el) {
