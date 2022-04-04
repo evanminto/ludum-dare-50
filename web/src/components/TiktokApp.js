@@ -12,7 +12,7 @@ export default class TiktokApp extends LitElement {
   static tagName = 'tiktok-app';
 
   static properties = {
-    emails: {
+    videos: {
       type: Array,
       attribute: false,
     },
@@ -21,80 +21,56 @@ export default class TiktokApp extends LitElement {
   constructor() {
     super();
 
-    const emailsDeck = new Deck([
-      {
-        subject: 'Overpaying for Rent? GOOD',
-        spam: true,
-        deleted: false,
-      },
-      { subject: 'Lonely Scammers In Your Area', spam: true, deleted: false },
-      {
-        subject: 'You’re A Degenerate Gambler. Free BlackJack',
-        spam: true,
-        deleted: false,
-      },
-      {
-        subject: 'ShitCoin - Invest Now Please Bro Please',
-        spam: true,
-        deleted: false,
-      },
-      {
-        subject: 'Party Invite - Hey, so we’re celebrating my birthday…',
-        spam: false,
-        deleted: false,
-      },
-      {
-        subject: 'Comment Reply on YubNub Video - You have a reply…',
-        spam: false,
-        deleted: false,
-      },
-      {
-        subject: 'Company Christmas Party - We’re meeting at…',
-        spam: false,
-        deleted: false,
-      },
-      {
-        subject: 'Nile Shopping - Your order will be arriving today.',
-        spam: false,
-        deleted: false,
-      },
-    ]);
+    function createVideos() {
+      return Deck.randomize([
+        {
+          image: new URL('../images/dystop-1.png', import.meta.url),
+          hueRotate: Math.random() * 359 + 'deg',
+        },
+        {
+          image: new URL('../images/dystop-2.png', import.meta.url),
+          hueRotate: Math.random() * 359 + 'deg',
+        },
+        {
+          image: new URL('../images/dystop-3.png', import.meta.url),
+          hueRotate: Math.random() * 359 + 'deg',
+        },
+        {
+          image: new URL('../images/dystop-4.png', import.meta.url),
+          hueRotate: Math.random() * 359 + 'deg',
+        },
+      ]);
+    }
 
-    emailsDeck.shuffle();
-    this.emails = emailsDeck.toArray();
+    this.videos = [...createVideos(), ...createVideos(), ...createVideos()];
   }
 
-  renderEmail({ subject, deleted }, index) {
-    return html`<li class="email ${deleted ? 'email--deleted' : ''}">
-      ${subject}
-      <icon-button
-        icon="trash"
-        ?disabled=${deleted}
-        data-index=${index}
-        @click=${this.handleClickDeleteSpam}
-      ></icon-button>
+  firstUpdated() {
+    const lastItem = this.renderRoot.querySelector('li:last-child');
+
+    setTimeout(
+      () =>
+        new IntersectionObserver(records => {
+          if (records.some(record => record.isIntersecting)) {
+            this.dispatchSuccess();
+          }
+        }).observe(lastItem),
+      500
+    );
+  }
+
+  renderVideo({ image, hueRotate }) {
+    return html`<li class="video">
+      <img src=${image} style="filter: hue-rotate(${hueRotate});" />
     </li>`;
   }
 
   render() {
     return html`
-      <ul class="email-list">
-        ${this.emails.map(this.renderEmail.bind(this))}
+      <ul class="video-list">
+        ${this.videos.map(this.renderVideo.bind(this))}
       </ul>
     `;
-  }
-
-  handleClickDeleteSpam(event) {
-    const email = this.emails[event.target.dataset.index];
-
-    email.deleted = true;
-    this.requestUpdate('emails');
-
-    if (this.emails.some(({ spam, deleted }) => !spam && deleted)) {
-      this.dispatchFailure();
-    } else if (!this.emails.some(({ spam, deleted }) => spam && !deleted)) {
-      this.dispatchSuccess();
-    }
   }
 
   dispatchSuccess() {
@@ -107,39 +83,29 @@ export default class TiktokApp extends LitElement {
 
   static styles = css`
     :host {
+      display: block;
+      background: black;
       display: flex;
       flex-direction: column;
-      background: lightgray;
     }
 
     ul {
-      flex: 1 1 auto;
-      overflow: scroll;
-    }
-
-    .email-list {
       list-style: none;
       padding: 0;
-      margin-top: 0;
-      margin-bottom: 0;
+      margin: 0;
+
+      overflow: scroll;
+      max-height: 100%;
+      flex: 1 1 auto;
     }
 
-    .email-list > * + * {
+    ul > * + * {
       border-top: 0.0625rem solid gray;
     }
 
-    .email {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5em 1em;
-    }
-
-    .email--deleted {
-      opacity: 0.25;
-    }
-
-    button {
-      font: inherit;
+    img {
+      width: 100%;
+      display: block;
     }
   `;
 }

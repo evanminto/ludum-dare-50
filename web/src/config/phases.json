@@ -2,6 +2,11 @@
   {
     "apps": [
       {
+        "notification": "You have unconsumed content. Shame on you. Keep scrolling!",
+        "notificationApp": "DysTop",
+        "app": "tiktok"
+      },
+      {
         "notification": "Delete the spam ONLY!",
         "notificationApp": "Email",
         "app": "email"
