@@ -451,8 +451,6 @@ export default class GameWindow extends LitElement {
     .app-container {
       flex: 1 1 auto;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .app-container > * {
@@ -460,7 +458,6 @@ export default class GameWindow extends LitElement {
       z-index: 0;
       transform: translate3d(0%, 0%, 0);
 
-      flex: 1 1 auto;
       height: 100%;
       max-height: 100%;
       overflow: hidden;
