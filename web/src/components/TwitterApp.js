@@ -118,7 +118,7 @@ export default class TwitterApp extends LitElement {
   static styles = css`
     :host {
       display: block;
-      background: lightgray;
+      background: var(--color-white);
       display: flex;
       flex-direction: column;
     }
@@ -144,7 +144,7 @@ export default class TwitterApp extends LitElement {
     .user {
       display: flex;
       align-items: center;
-      padding: 0.5em;
+      padding: 1em;
       justify-content: space-between;
       gap: 1em;
     }
