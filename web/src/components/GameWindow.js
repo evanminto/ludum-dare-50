@@ -70,6 +70,10 @@ export default class GameWindow extends LitElement {
       type: Boolean,
       attribute: false,
     },
+    hidePopup: {
+      type: Boolean,
+      attribute: false,
+    },
   };
 
   constructor() {
@@ -81,6 +85,7 @@ export default class GameWindow extends LitElement {
 
     this.hideIntroMessage = false;
     this.hideWinMessage = true;
+    this.hidePopup = true;
 
     this.phases = new Deck(
       phases.map(
@@ -175,15 +180,16 @@ export default class GameWindow extends LitElement {
 
       if (this.currentPhase === null) {
         this.win = true;
+        this.hidePopup = false;
+        this.hideIntroMessage = true;
+        this.hideWinMessage = false;
       }
     }
   }
 
   async handleFailure() {
-    await Promise.all([
-      this.playFailureAnimation(),
-      this.playHideAppAnimation(),
-    ]);
+    await this.playFailureAnimation();
+    // await this.playHideAppAnimation();
     const { appDeck } = this.currentPhase;
     appDeck.putBack(this.currentApp);
     appDeck.shuffle();
@@ -198,32 +204,19 @@ export default class GameWindow extends LitElement {
   }
 
   playFailureAnimation() {
+    this.screenShakeAnimation.play();
+    this.redTintAnimation.play();
+
     return Promise.all([
-      new Promise(resolve => {
-        this.screenShakeAnimation.cancel();
-        this.screenShakeAnimation.addEventListener('finish', resolve, {
-          once: true,
-        });
-        this.screenShakeAnimation.play();
-      }),
-      new Promise(resolve => {
-        this.redTintAnimation.cancel();
-        this.redTintAnimation.addEventListener('finish', resolve, {
-          once: true,
-        });
-        this.redTintAnimation.play();
-      }),
+      this.screenShakeAnimation.finished,
+      this.redTintAnimation.finished,
     ]);
   }
 
   playHideAppAnimation() {
-    return new Promise(resolve => {
-      this.hideAppAnimation.cancel();
-      this.hideAppAnimation.addEventListener('finish', resolve, {
-        once: true,
-      });
-      this.hideAppAnimation.play();
-    });
+    this.hideAppAnimation.play();
+
+    return this.hideAppAnimation.finished;
   }
 
   firstUpdated() {
@@ -274,7 +267,12 @@ export default class GameWindow extends LitElement {
       () => (this.hideIntroMessage = true)
     );
 
-    setTimeout(() => this.introMessageShowAnimation.play(), 2000);
+    setTimeout(() => {
+      this.hidePopup = false;
+      this.introMessageHideAnimation.cancel();
+      // this.introMessageShowAnimation.play();
+      // this.introMessageShowAnimation.persist();
+    }, 2000);
   }
 
   updated(changed) {
@@ -300,7 +298,7 @@ export default class GameWindow extends LitElement {
             }
           );
 
-          this.trayShowAnimation.pause();
+          this.trayShowAnimation.cancel();
         }
 
         this.trayShowAnimation.cancel();
@@ -324,10 +322,10 @@ export default class GameWindow extends LitElement {
         .animate(
           [
             {
-              transform: 'translate3d(0%, 0%)',
+              transform: 'translate3d(0%, 0%, 0)',
             },
             {
-              transform: 'translate3d(0%, 100%)',
+              transform: 'translate3d(0%, 100%, 0)',
             },
           ],
           {
@@ -337,14 +335,13 @@ export default class GameWindow extends LitElement {
       this.hideAppAnimation.cancel();
     }
 
-    if (changed.has('win') && this.win) {
-      this.hideWinMessage = false;
-    }
-
     if (changed.has('hideWinMessage') && !this.hideWinMessage) {
       this.introMessageHideAnimation.cancel();
       this.introMessageShowAnimation.cancel();
-      this.introMessageShowAnimation.play();
+      setTimeout(() => {
+        // this.introMessageShowAnimation.play();
+        // this.introMessageShowAnimation.persist();
+      }, 5000);
     }
   }
 
@@ -410,7 +407,7 @@ export default class GameWindow extends LitElement {
         ? this.renderCurrentApp()
         : this.renderHomeScreen()}
 
-      <div class="intro-message-wrapper">
+      <div class="intro-message-wrapper" ?hidden=${this.hidePopup}>
         <div class="intro-message" ?hidden=${this.hideIntroMessage}>
           <div class="intro-message-inner">
             <img src=${new URL('../images/battery.png', import.meta.url)} />
@@ -429,7 +426,10 @@ export default class GameWindow extends LitElement {
   }
 
   handleClickStart() {
-    this.introMessageHideAnimation.play();
+    this.introMessageShowAnimation.cancel();
+    this.hidePopup = true;
+    // this.introMessageHideAnimation.play();
+    // this.introMessageHideAnimation.persist();
     setTimeout(() => this.beginPlay(), 1000);
   }
 
@@ -499,8 +499,6 @@ export default class GameWindow extends LitElement {
     }
 
     .intro-message-wrapper {
-      opacity: 0;
-
       display: block;
       top: 0;
       position: absolute;
@@ -509,6 +507,17 @@ export default class GameWindow extends LitElement {
       height: 100%;
       width: 100%;
       pointer-events: none;
+
+      transition: opacity 250ms ease-out, transform 250ms ease-out;
+    }
+
+    .intro-message-wrapper[hidden] {
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(0%, -15%, 0);
+
+      transition: opacity 250ms ease-out, transform 250ms ease-out;
     }
 
     .intro-message-wrapper > * {
