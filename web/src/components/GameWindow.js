@@ -129,7 +129,7 @@ export default class GameWindow extends LitElement {
     this.dayJs = dayjs('2022-01-01T16:20:00');
     this.battery = GameWindow.BATTERY_START;
 
-    this.hideIntroMessage = false;
+    this.hideIntroMessage = true;
     this.hideWinMessage = true;
     this.hidePopup = true;
 
@@ -261,7 +261,11 @@ export default class GameWindow extends LitElement {
   }
 
   firstUpdated() {
-    setTimeout(() => (this.hidePopup = false), 2000);
+    setTimeout(() => {
+      this.hideIntroMessage = false;
+      this.hidePopup = false;
+      this.playSound('intro');
+    }, 2000);
   }
 
   updated(changed) {
@@ -378,6 +382,7 @@ export default class GameWindow extends LitElement {
     const { battery, win } = this;
 
     if (!win && battery <= 0) {
+      this.playSound('shutdown');
       return html`<shutdown-screen></shutdown-screen>`;
     }
 
