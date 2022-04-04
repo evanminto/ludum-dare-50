@@ -109,7 +109,7 @@ export default class EmailApp extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
-      background: lightgray;
+      background: var(--color-white);
     }
 
     ul {
@@ -131,7 +131,10 @@ export default class EmailApp extends LitElement {
     .email {
       display: flex;
       justify-content: space-between;
-      padding: 0.5em 1em;
+      align-items: center;
+      padding: 2em 1em;
+      align-items: center;
+      gap: 2em;
     }
 
     .email--deleted {
