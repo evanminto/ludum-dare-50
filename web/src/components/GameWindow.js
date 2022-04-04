@@ -488,6 +488,7 @@ export default class GameWindow extends LitElement {
       left: 0;
       height: 100%;
       width: 100%;
+      padding: 1em;
 
       transition: opacity 250ms ease-out, transform 250ms ease-out;
     }
@@ -496,7 +497,7 @@ export default class GameWindow extends LitElement {
       display: block;
       opacity: 0;
       pointer-events: none;
-      transform: translate3d(0%, -15%, 0);
+      transform: translate3d(0%, 15%, 0);
 
       transition: opacity 250ms ease-out, transform 250ms ease-out;
     }
@@ -504,8 +505,8 @@ export default class GameWindow extends LitElement {
     .intro-message-wrapper > * {
       position: absolute;
       left: 50%;
-      top: 50%;
-      transform: translate3d(-50%, -50%, 0);
+      bottom: 1em;
+      transform: translate3d(-50%, 0, 0);
       width: calc(100% - 2em);
     }
 
