@@ -97,6 +97,10 @@ export default class TwitterApp extends LitElement {
   handleClickCheckbox(event, index) {
     const item = this.items[index];
 
+    if (item.checked) {
+      setTimeout(() => this.dispatchFailure(), 100);
+    }
+
     item.checked = !item.checked;
     this.requestUpdate('items');
 
