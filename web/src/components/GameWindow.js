@@ -221,6 +221,7 @@ export default class GameWindow extends LitElement {
           this.hidePopup = false;
           this.hideIntroMessage = true;
           this.hideWinMessage = false;
+          this.battery = 100;
           this.playSound('win');
         }, 500);
       }
@@ -419,7 +420,10 @@ export default class GameWindow extends LitElement {
         </div>
 
         <div class="win-message" ?hidden=${this.hideWinMessage}>
-          <p>You did it! Now go find a charger.</p>
+          <p>
+            You stop at some artisanal bean dungeon of a coffee shop. You buy
+            one (1) scone to use their charger. Success!
+          </p>
         </div>
       </div>
 
