@@ -11,7 +11,9 @@ export default class ShutdownScreen extends LitElement {
   };
 
   firstUpdated() {
-    setTimeout(() => (this.dead = true), 4000);
+    setTimeout(() => {
+      this.dead = true;
+    }, 4000);
   }
 
   render() {
@@ -19,6 +21,8 @@ export default class ShutdownScreen extends LitElement {
       <div class="inner" ?hidden=${this.dead}>
         <img src=${new URL('../images/shutdown-spin.png', import.meta.url)} />
         <p>Shutting down...</p>
+
+        <p>Refresh the page to start over</p>
       </div>
     `;
   }
