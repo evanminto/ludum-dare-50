@@ -161,6 +161,9 @@ export default class TwitterApp extends LitElement {
     img {
       display: block;
       transition: opacity 100ms ease-out, transform 100ms ease-out;
+      image-rendering: pixelated;
+      width: 1em;
+      height: 1em;
     }
 
     [aria-pressed='false'] img {

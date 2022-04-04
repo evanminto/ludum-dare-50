@@ -2,7 +2,7 @@
   {
     "apps": [
       {
-        "notification": "Incoming call. Choose!",
+        "notification": "Not productive enough. Complete them all!",
         "notificationApp": "To-Do",
         "app": "todo"
       },
