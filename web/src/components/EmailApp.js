@@ -64,9 +64,9 @@ export default class EmailApp extends LitElement {
     this.emails = emailsDeck.toArray();
   }
 
-  renderEmail({ subject, deleted }, index) {
+  renderEmail({ subject, spam, deleted }, index) {
     return html`<li class="email ${deleted ? 'email--deleted' : ''}">
-      ${subject}
+      ${spam ? html`<span class="spam">!</span>` : ''} ${subject}
       <icon-button
         icon="trash"
         ?disabled=${deleted}
@@ -110,6 +110,10 @@ export default class EmailApp extends LitElement {
       display: flex;
       flex-direction: column;
       background: var(--color-white);
+    }
+
+    .spam {
+      color: #ff1e1f;
     }
 
     ul {
