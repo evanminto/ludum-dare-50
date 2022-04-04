@@ -17,7 +17,24 @@ export default class MapApp extends LitElement {
     super();
 
     const rows = new Deck([1, 2, 3, 4, 5]);
-    rows.shuffle();
+    const names = new Deck([
+      'Rated Bar',
+      'Ass Dungeon',
+      'Plus Dumb',
+      'The Dead Pigeon',
+      'Burgerface',
+      'Pound Town',
+      'Bread & Gutter',
+      'The Lie Berry',
+      'The Broken Bottle',
+      'Please Do Tell',
+      'The Gulf',
+      'Fraudulent Ministries',
+      'Crumb Stain Bakery',
+    ]);
+
+    rows.shuffle({ avoidSameCard: false });
+    names.shuffle({ avoidSameCard: false });
 
     this.pins = [
       {
@@ -27,19 +44,28 @@ export default class MapApp extends LitElement {
         answer: true,
       },
       {
-        name: 'Burgerface',
+        name: names.draw(),
         row: rows.draw(),
         col: 1 + Math.floor(Math.random() * 2),
+        answer: false,
       },
       {
-        name: 'The Dead Pigeon',
+        name: names.draw(),
         row: rows.draw(),
         col: 1 + Math.floor(Math.random() * 2),
+        answer: false,
       },
       {
-        name: 'The Broken Bottle',
+        name: names.draw(),
         row: rows.draw(),
         col: 1 + Math.floor(Math.random() * 2),
+        answer: false,
+      },
+      {
+        name: names.draw(),
+        row: rows.draw(),
+        col: 1 + Math.floor(Math.random() * 2),
+        answer: false,
       },
     ];
   }
