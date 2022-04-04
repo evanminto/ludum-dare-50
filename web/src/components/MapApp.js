@@ -101,7 +101,10 @@ export default class MapApp extends LitElement {
       width: 100%;
       max-width: 12em;
       box-sizing: border-box;
-      filter: drop-shadow(var(--shadow));
+      filter: drop-shadow(0.0625em 0.0625em 0px white)
+        drop-shadow(0.0625em -0.0625em 0px white)
+        drop-shadow(-0.0625em -0.0625em 0px white)
+        drop-shadow(-0.0625em 0.0625em 0px white);
       grid-area: var(--row) / var(--col);
     }
 
