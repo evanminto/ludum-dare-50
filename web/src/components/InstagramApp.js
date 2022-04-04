@@ -37,7 +37,7 @@ export default class TwitterApp extends LitElement {
   renderPost({ username, content, imageUrl, answer }) {
     return html`
       <li>
-        <img src=${imageUrl} />
+        <img src=${imageUrl} width="128" height="128" />
 
         <div class="post-text">
           <div>
@@ -101,6 +101,7 @@ export default class TwitterApp extends LitElement {
     img {
       display: block;
       width: 100%;
+      height: auto;
       image-rendering: pixelated;
     }
 

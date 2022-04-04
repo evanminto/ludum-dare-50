@@ -61,7 +61,12 @@ export default class TiktokApp extends LitElement {
 
   renderVideo({ image, hueRotate }) {
     return html`<li class="video">
-      <img src=${image} style="filter: hue-rotate(${hueRotate});" />
+      <img
+        src=${image}
+        style="filter: hue-rotate(${hueRotate});"
+        width="500"
+        height="700"
+      />
     </li>`;
   }
 
@@ -105,6 +110,7 @@ export default class TiktokApp extends LitElement {
 
     img {
       width: 100%;
+      height: auto;
       display: block;
     }
   `;
