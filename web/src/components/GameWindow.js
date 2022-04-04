@@ -207,6 +207,7 @@ export default class GameWindow extends LitElement {
     const { currentPhase } = this;
     const nextApp = currentPhase.appDeck.draw();
     this.currentApp = null;
+    await wait(400);
 
     if (nextApp) {
       this.notification = nextApp.notification;
@@ -275,6 +276,8 @@ export default class GameWindow extends LitElement {
     if (changed.has('notification') && this.notification) {
       if (this.notification.app === 'Phone') {
         this.playSound('ringtone', { loop: true });
+      } else {
+        this.playSound('notification');
       }
 
       const tray = this.renderRoot.querySelector('.notifications-tray');
