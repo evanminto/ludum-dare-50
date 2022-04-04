@@ -125,7 +125,7 @@ export default class EmailApp extends LitElement {
     }
 
     .email-list > * + * {
-      border-top: 0.0625rem solid gray;
+      border-top: 0.0625em solid gray;
     }
 
     .email {

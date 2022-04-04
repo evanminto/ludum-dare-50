@@ -69,5 +69,11 @@ export default class NavBar extends LitElement {
     .battery > * {
       flex: 0 0 auto;
     }
+
+    .battery img {
+      width: 1em;
+      height: 1em;
+      image-rendering: pixelated;
+    }
   `;
 }

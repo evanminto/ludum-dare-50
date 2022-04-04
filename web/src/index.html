@@ -19,7 +19,7 @@
         --color-white: #FFF;
         --color-black: #000;
         --size-app-icon: 5.5em;
-        --size-app-grid-track: 5.5rem;
+        --size-app-grid-track: 5.5em;
         --font-size-min: 1em;
         --shadow: 1px 1px 10px hsla(0, 0%, 0%, 0.5);
       }
@@ -56,20 +56,21 @@
 
       @media screen and (min-width: 35.5em), (orientation: landscape) {
         :root {
-          --size-app-grid-track: 4rem;
+          --size-app-grid-track: 4em;
           --size-app-icon: 3em;
           --font-size-min: 0.8em;
         }
 
         game-window {
           font-size: 1em;
-          border: 0.125rem solid var(--color-white);
+          font-size: 2vh;
+          border: 0.125em solid var(--color-white);
         }
 
         .aspect-ratio-1 {
           aspect-ratio: 375 / 812;
           width: calc(90vh * 375 / 812);
-          max-width: 40rem;
+          max-width: 40em;
           height: auto;
           margin: auto;
         }

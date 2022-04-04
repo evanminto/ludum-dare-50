@@ -155,6 +155,7 @@ export default class BrowserApp extends LitElement {
       padding: 2em 1em;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 1em;
       box-shadow: var(--shadow);
     }
@@ -182,10 +183,11 @@ export default class BrowserApp extends LitElement {
     .button-options {
       display: flex;
       gap: 0.5em;
+      width: 100%;
     }
 
     .button-options > * {
-      flex: 1 1 calc((40rem - 100%) * 9999);
+      flex: 1 1 calc((40em - 100%) * 9999);
     }
 
     [hidden] {

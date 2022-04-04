@@ -134,7 +134,7 @@ export default class TwitterApp extends LitElement {
     }
 
     ul > * + * {
-      border-top: 0.0625rem solid gray;
+      border-top: 0.0625em solid gray;
     }
 
     button {
