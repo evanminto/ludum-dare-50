@@ -394,6 +394,7 @@ export default class GameWindow extends LitElement {
         class="app-container"
         @success=${this.handleSuccess}
         @failure=${this.handleFailure}
+        @tap=${this.handleTap}
       >
         ${currentApp.content}
       </div>
@@ -402,6 +403,10 @@ export default class GameWindow extends LitElement {
 
   renderAudio() {
     return html` <audio-player ${ref(this.audioRef)}></audio-player> `;
+  }
+
+  handleTap() {
+    this.playSound('click');
   }
 
   render() {

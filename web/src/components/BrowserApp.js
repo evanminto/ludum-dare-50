@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import TapEvent from '../events/TapEvent';
 
 /**
  * @customElement browser-app
@@ -112,6 +113,8 @@ export default class BrowserApp extends LitElement {
       this.cookieBannerDismissed
     ) {
       this.dispatchSuccess();
+    } else {
+      this.dispatchEvent(new TapEvent());
     }
   }
 

@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import TapEvent from '../events/TapEvent';
 
 /**
  * @customElement todo-app
@@ -102,9 +103,16 @@ export default class TwitterApp extends LitElement {
     }
 
     item.checked = !item.checked;
+
+    const success = !this.items.some(item => !item.checked);
+
+    if (!success) {
+      this.dispatchEvent(new TapEvent());
+    }
+
     this.requestUpdate('items');
 
-    if (!this.items.some(item => !item.checked)) {
+    if (success) {
       this.dispatchSuccess();
     }
   }

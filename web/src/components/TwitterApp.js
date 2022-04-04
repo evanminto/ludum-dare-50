@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit';
 import Deck from '../Deck';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import TapEvent from '../events/TapEvent';
 
 /**
  * @customElement twitter-app
@@ -100,15 +101,25 @@ export default class TwitterApp extends LitElement {
 
     this.users[index].blocked = true;
 
+    const success = !this.users.some(user => !user.blocked);
+
+    if (!success) {
+      this.dispatchTap();
+    }
+
     this.requestUpdate('users', oldUsers);
 
-    if (!this.users.some(user => !user.blocked)) {
+    if (success) {
       this.dispatchSuccess();
     }
   }
 
   dispatchSuccess() {
     this.dispatchEvent(new SuccessEvent());
+  }
+
+  dispatchTap() {
+    this.dispatchEvent(new TapEvent());
   }
 
   dispatchFailure() {
