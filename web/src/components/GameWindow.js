@@ -8,6 +8,8 @@ import Deck from '../Deck';
 import App from '../App';
 import Notification from '../Notification';
 
+const BATTERY_NG_PLUS = 5;
+
 /**
  * @param {String} name
  */
@@ -132,34 +134,12 @@ export default class GameWindow extends LitElement {
     this.dayJs = dayjs('2022-01-01T16:20:00');
     this.battery = GameWindow.BATTERY_START;
 
-    this.hideIntroMessage = true;
-    this.hideWinMessage = true;
-    this.hidePopup = true;
-
-    this.phases = new Deck(
-      phases.map(
-        ({ apps }) =>
-          new Phase(
-            apps.map(
-              ({ notification, notificationApp, app }) =>
-                new App({
-                  notification: new Notification({
-                    content: notification,
-                    app: notificationApp,
-                  }),
-                  content: renderApp(app),
-                })
-            )
-          )
-      )
-    );
+    this.startNewGame();
 
     this.addEventListener('click', () => (this.playing = true));
   }
 
   beginPlay() {
-    this.playSound('ring');
-
     setInterval(() => {
       if (!this.win) {
         this.increaseSeconds();
@@ -167,16 +147,7 @@ export default class GameWindow extends LitElement {
       }
     }, 1000);
 
-    /** @type {Phase} */
-    this.currentPhase = this.phases.draw();
-
-    /** @type {App} */
-    const app = this.currentPhase.appDeck.draw();
-
-    /** @type {Notification} */
-    this.notification = app.notification;
-
-    setTimeout(() => (this.currentApp = app), 1500 + 350);
+    this.beginPlayCore();
 
     this.screenShakeAnimation = this.animate(keyframes.screenShake, {
       duration: 170,
@@ -193,6 +164,19 @@ export default class GameWindow extends LitElement {
       duration: 400,
     });
     this.greenTintAnimation.cancel();
+  }
+
+  beginPlayCore() {
+    /** @type {Phase} */
+    this.currentPhase = this.phases.draw();
+
+    /** @type {App} */
+    const app = this.currentPhase.appDeck.draw();
+
+    /** @type {Notification} */
+    this.notification = app.notification;
+
+    setTimeout(() => (this.currentApp = app), 1500 + 350);
   }
 
   increaseSeconds() {
@@ -226,7 +210,7 @@ export default class GameWindow extends LitElement {
           this.hidePopup = false;
           this.hideIntroMessage = true;
           this.hideWinMessage = false;
-          this.battery = 100;
+          this.battery += BATTERY_NG_PLUS;
           this.playSound('win');
         }, 500);
       }
@@ -268,6 +252,32 @@ export default class GameWindow extends LitElement {
     this.hideAppAnimation.play();
 
     return this.hideAppAnimation.finished;
+  }
+
+  startNewGame() {
+    this.win = false;
+
+    this.hideIntroMessage = true;
+    this.hideWinMessage = true;
+    this.hidePopup = true;
+
+    this.phases = new Deck(
+      phases.map(
+        ({ apps }) =>
+          new Phase(
+            apps.map(
+              ({ notification, notificationApp, app }) =>
+                new App({
+                  notification: new Notification({
+                    content: notification,
+                    app: notificationApp,
+                  }),
+                  content: renderApp(app),
+                })
+            )
+          )
+      )
+    );
   }
 
   updated(changed) {
@@ -436,8 +446,17 @@ export default class GameWindow extends LitElement {
         <div class="win-message" ?hidden=${this.hideWinMessage}>
           <p>
             You stop at some artisanal bean dungeon of a coffee shop. You buy
-            one (1) scone to use their charger. Success!
+            one (1) scone to use their charger.
           </p>
+          <p>You gain ${BATTERY_NG_PLUS}% battery!</p>
+
+          <basic-button
+            @click=${() => {
+              this.startNewGame();
+              this.beginPlayCore();
+            }}
+            >Keep Going</basic-button
+          >
         </div>
       </div>
 
