@@ -38,6 +38,44 @@ function renderApp(name) {
   return '';
 }
 
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const keyframes = {
+  screenShake: [
+    {
+      transform: 'rotate(1deg) translate3d(2%, 0%, 0)',
+    },
+    {
+      transform: 'rotate(-1deg) translate3d(-2%, 0%, 0)',
+    },
+  ],
+  redTint: [
+    {
+      filter: 'none',
+    },
+    {
+      filter:
+        'contrast(50%) brightness(50%) sepia(100%) saturate(300%) hue-rotate(-29deg)',
+    },
+  ],
+  greenTint: [
+    {
+      filter: 'none',
+    },
+    {
+      filter:
+        'contrast(50%) brightness(50%) sepia(100%) saturate(300%) hue-rotate(59deg)',
+      offset: 0.25,
+    },
+    {
+      filter:
+        'contrast(50%) brightness(50%) sepia(100%) saturate(300%) hue-rotate(59deg)',
+    },
+  ],
+};
+
 /**
  * @customElement game-window
  */
@@ -135,37 +173,21 @@ export default class GameWindow extends LitElement {
 
     setTimeout(() => (this.currentApp = app), 1500 + 350);
 
-    this.screenShakeAnimation = this.animate(
-      [
-        {
-          transform: 'rotate(1deg) translate3d(2%, 0%, 0)',
-        },
-        {
-          transform: 'rotate(-1deg) translate3d(-2%, 0%, 0)',
-        },
-      ],
-      {
-        duration: 170,
-        iterations: 2,
-      }
-    );
+    this.screenShakeAnimation = this.animate(keyframes.screenShake, {
+      duration: 170,
+      iterations: 2,
+    });
     this.screenShakeAnimation.cancel();
 
-    this.redTintAnimation = this.animate(
-      [
-        {
-          filter: 'none',
-        },
-        {
-          filter:
-            'contrast(50%) brightness(50%) sepia(100%) saturate(300%) hue-rotate(-29deg)',
-        },
-      ],
-      {
-        duration: 170 * 2,
-      }
-    );
+    this.redTintAnimation = this.animate(keyframes.redTint, {
+      duration: 170 * 2,
+    });
     this.redTintAnimation.cancel();
+
+    this.greenTintAnimation = this.animate(keyframes.greenTint, {
+      duration: 400,
+    });
+    this.greenTintAnimation.cancel();
   }
 
   increaseSeconds() {
@@ -179,7 +201,8 @@ export default class GameWindow extends LitElement {
   }
 
   async handleSuccess() {
-    this.playHideAppAnimation();
+    this.greenTintAnimation.play();
+    await wait(400);
     const { currentPhase } = this;
     const nextApp = currentPhase.appDeck.draw();
     this.currentApp = null;
