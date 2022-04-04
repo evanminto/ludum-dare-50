@@ -28,6 +28,8 @@ function renderApp(name) {
       return html`<wordle-app></wordle-app>`;
     case 'tiktok':
       return html`<tiktok-app></tiktok-app>`;
+    case 'phone':
+      return html`<phone-app></phone-app>`;
   }
 
   return '';
@@ -108,8 +110,10 @@ export default class GameWindow extends LitElement {
 
   beginPlay() {
     setInterval(() => {
-      this.increaseSeconds();
-      this.decreaseBattery();
+      if (!this.win) {
+        this.increaseSeconds();
+        this.decreaseBattery();
+      }
     }, 1000);
 
     /** @type {Phase} */
@@ -359,6 +363,7 @@ export default class GameWindow extends LitElement {
         <app-icon name="To-Do"></app-icon>
         <app-icon name="Browser"></app-icon>
         <app-icon name="YubNub"></app-icon>
+        <app-icon name="Phone"></app-icon>
       </div>
     `;
   }

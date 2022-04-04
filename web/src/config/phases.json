@@ -2,6 +2,11 @@
   {
     "apps": [
       {
+        "notification": "Incoming call. Choose!",
+        "notificationApp": "Phone",
+        "app": "phone"
+      },
+      {
         "notification": "You have unconsumed content. Shame on you. Keep scrolling!",
         "notificationApp": "DysTop",
         "app": "tiktok"

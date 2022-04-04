@@ -9,6 +9,6 @@ export default class Phase {
    */
   constructor(apps) {
     this.appDeck = new Deck(apps);
-    this.appDeck.shuffle();
+    this.appDeck.shuffle({ avoidSameCard: false });
   }
 }

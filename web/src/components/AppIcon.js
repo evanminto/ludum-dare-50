@@ -12,6 +12,7 @@ const NAME_TO_IMAGE = {
   Browser: new URL('../images/browser.png', import.meta.url),
   'To-Do': new URL('../images/to-do.png', import.meta.url),
   YubNub: new URL('../images/yubnub.png', import.meta.url),
+  Phone: new URL('../images/pick-up.png', import.meta.url),
 };
 
 /**

@@ -7,9 +7,19 @@ export default class Deck {
    */
   static randomize(arr) {
     const deck = new Deck(arr);
-    deck.shuffle();
+    deck.shuffle({ avoidSameCard: false });
 
     return deck.toArray();
+  }
+
+  /**
+   * @param {T[]} arr
+   */
+  static pickRandom(arr) {
+    const deck = new Deck(arr);
+    deck.shuffle({ avoidSameCard: false });
+
+    return deck.draw();
   }
 
   /** @type {T[]} */
@@ -42,14 +52,18 @@ export default class Deck {
     this.#cards = [card, ...this.#cards];
   }
 
-  shuffle() {
+  shuffle({ avoidSameCard = true } = {}) {
     if (this.count <= 1) {
       return;
     }
 
-    const topCard = this.#cards[0];
+    if (avoidSameCard) {
+      const topCard = this.#cards[0];
 
-    while (this.#cards[0] === topCard) {
+      while (this.#cards[0] === topCard) {
+        shuffle(this.#cards);
+      }
+    } else {
       shuffle(this.#cards);
     }
   }
