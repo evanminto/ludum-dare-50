@@ -64,7 +64,7 @@ export default class ShutdownScreen extends LitElement {
     }
 
     img {
-      animation: spin 2s linear infinite;
+      animation: spin 1s linear infinite;
       max-width: 100%;
     }
   `;

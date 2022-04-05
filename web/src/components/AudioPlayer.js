@@ -34,7 +34,7 @@ export default class AudioPlayer extends LitElement {
 
   render() {
     return html`
-      <audio src=${this.src} ?loop=${this.loop} @ ${ref(this.audioRef)}></audio>
+      <audio src=${this.src} ?loop=${this.loop} ${ref(this.audioRef)}></audio>
     `;
   }
 
@@ -52,14 +52,6 @@ export default class AudioPlayer extends LitElement {
 
     if (el) {
       el.play();
-    }
-  }
-
-  pauseSound() {
-    const el = this.audioRef.value;
-
-    if (el) {
-      el.pause();
     }
   }
 

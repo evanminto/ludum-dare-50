@@ -7,7 +7,7 @@ import Deck from '../Deck';
 import App from '../App';
 import Notification from '../Notification';
 
-const BATTERY_START = 15;
+const BATTERY_START = 1;
 const BATTERY_NG_PLUS = 5;
 const BATTERY_PER_SECOND = 0.25;
 
@@ -184,6 +184,10 @@ export default class GameWindow extends LitElement {
   }
 
   decreaseBattery() {
+    if (this.battery <= 0) {
+      return;
+    }
+
     this.battery -= BATTERY_PER_SECOND;
   }
 
@@ -353,6 +357,10 @@ export default class GameWindow extends LitElement {
         );
       this.hideAppAnimation.cancel();
     }
+
+    if (changed.has('battery') && this.battery <= 0 && !this.win) {
+      this.playSound('shutdown');
+    }
   }
 
   renderHomeScreen() {
@@ -421,50 +429,53 @@ export default class GameWindow extends LitElement {
       `;
     }
 
-    if (!win && battery <= 0) {
-      this.playSound('shutdown');
-      return html`<shutdown-screen></shutdown-screen>`;
-    }
-
     return html`
-      <nav-bar
-        time=${this.dayJs.format('hh:mm')}
-        battery=${this.battery}
-      ></nav-bar>
+      ${!win && battery <= 0
+        ? html`<shutdown-screen></shutdown-screen>`
+        : html`
+            <nav-bar
+              time=${this.dayJs.format('hh:mm')}
+              battery=${this.battery}
+            ></nav-bar>
 
-      ${this.notification && !win ? this.renderNotification() : ''}
-      ${this.currentApp && !win
-        ? this.renderCurrentApp()
-        : this.renderHomeScreen()}
+            ${this.notification && !win ? this.renderNotification() : ''}
+            ${this.currentApp && !win
+              ? this.renderCurrentApp()
+              : this.renderHomeScreen()}
 
-      <div class="intro-message-wrapper" ?hidden=${this.hidePopup}>
-        <div class="intro-message" ?hidden=${this.hideIntroMessage}>
-          <div class="intro-message-inner">
-            <img src=${new URL('../images/battery.png', import.meta.url)} />
-            <p>
-              Battery is dangerously low. Complete all tasks before it dies!
-            </p>
-          </div>
-          <basic-button @click=${this.handleClickStart}>Start</basic-button>
-        </div>
+            <div class="intro-message-wrapper" ?hidden=${this.hidePopup}>
+              <div class="intro-message" ?hidden=${this.hideIntroMessage}>
+                <div class="intro-message-inner">
+                  <img
+                    src=${new URL('../images/battery.png', import.meta.url)}
+                  />
+                  <p>
+                    Battery is dangerously low. Complete all tasks before it
+                    dies!
+                  </p>
+                </div>
+                <basic-button @click=${this.handleClickStart}
+                  >Start</basic-button
+                >
+              </div>
 
-        <div class="win-message" ?hidden=${this.hideWinMessage}>
-          <p>
-            You stop at some artisanal bean dungeon of a coffee shop. You buy
-            one (1) scone to use their charger.
-          </p>
-          <p>You gain ${BATTERY_NG_PLUS}% battery!</p>
+              <div class="win-message" ?hidden=${this.hideWinMessage}>
+                <p>
+                  You stop at some artisanal bean dungeon of a coffee shop. You
+                  buy one (1) scone to use their charger.
+                </p>
+                <p>You gain ${BATTERY_NG_PLUS}% battery!</p>
 
-          <basic-button
-            @click=${() => {
-              this.startNewGame();
-              this.beginPlayCore();
-            }}
-            >Keep Going</basic-button
-          >
-        </div>
-      </div>
-
+                <basic-button
+                  @click=${() => {
+                    this.startNewGame();
+                    this.beginPlayCore();
+                  }}
+                  >Keep Going</basic-button
+                >
+              </div>
+            </div>
+          `}
       ${this.renderAudio()}
     `;
   }
