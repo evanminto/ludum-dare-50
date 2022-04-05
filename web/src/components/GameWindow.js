@@ -434,7 +434,10 @@ export default class GameWindow extends LitElement {
     if (!playing) {
       return html`
         <div class="click-to-play">
-          <p>DRAINED</p>
+          <img
+            class="logo"
+            src=${new URL('../images/drained-logo.png', import.meta.url)}
+          />
           <p>Click to play</p>
           <p>(Best played on a modern mobile browser)</p>
           <p>Created by Dave Derwin & Evan Minto</p>
@@ -510,6 +513,12 @@ export default class GameWindow extends LitElement {
 
     * {
       box-sizing: border-box;
+    }
+
+    .logo {
+      display: block;
+      width: 100%;
+      image-rendering: pixelated;
     }
 
     .click-to-play {
