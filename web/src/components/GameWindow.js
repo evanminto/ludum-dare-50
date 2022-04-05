@@ -434,8 +434,10 @@ export default class GameWindow extends LitElement {
     if (!playing) {
       return html`
         <div class="click-to-play">
+          <p>DRAINED</p>
           <p>Click to play</p>
           <p>(Best played on a modern mobile browser)</p>
+          <p>Created by Dave Derwin & Evan Minto</p>
         </div>
       `;
     }
@@ -522,6 +524,7 @@ export default class GameWindow extends LitElement {
       align-items: center;
       cursor: pointer;
       text-align: center;
+      padding: 1em;
     }
 
     .app-container {
