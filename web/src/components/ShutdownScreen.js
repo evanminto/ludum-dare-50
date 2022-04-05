@@ -18,11 +18,13 @@ export default class ShutdownScreen extends LitElement {
 
   render() {
     return html`
-      <div class="inner" ?hidden=${this.dead}>
-        <img src=${new URL('../images/shutdown-spin.png', import.meta.url)} />
-        <p>Shutting down...</p>
-
-        <p>Refresh the page to start over</p>
+      <div class="inner">
+        <img
+          src=${new URL('../images/shutdown-spin.png', import.meta.url)}
+          ?hidden=${this.dead}
+        />
+        <p ?hidden=${this.dead}>Shutting down...</p>
+        <p ?hidden=${!this.dead}>Refresh the page to start over</p>
       </div>
     `;
   }
@@ -45,6 +47,7 @@ export default class ShutdownScreen extends LitElement {
 
     * {
       box-sizing: border-box;
+      transition: opacity 250ms ease-in;
     }
 
     .inner {
@@ -56,7 +59,6 @@ export default class ShutdownScreen extends LitElement {
       justify-content: center;
       height: 100%;
       flex-direction: column;
-      transition: opacity 250ms ease-in;
     }
 
     [hidden] {
