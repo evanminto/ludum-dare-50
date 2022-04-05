@@ -21,7 +21,7 @@ export default class EmailApp extends LitElement {
   constructor() {
     super();
 
-    const emailsDeck = new Deck([
+    const spamEmails = Deck.randomize([
       {
         subject: 'Overpaying for Rent? GOOD',
         spam: true,
@@ -38,6 +38,9 @@ export default class EmailApp extends LitElement {
         spam: true,
         deleted: false,
       },
+    ]).slice(0, 2);
+
+    const nonSpamEmails = Deck.randomize([
       {
         subject: 'Party Invite - Hey, so we’re celebrating my birthday…',
         spam: false,
@@ -58,10 +61,9 @@ export default class EmailApp extends LitElement {
         spam: false,
         deleted: false,
       },
-    ]);
+    ]).slice(0, 3);
 
-    emailsDeck.shuffle();
-    this.emails = emailsDeck.toArray();
+    this.emails = Deck.randomize([...spamEmails, ...nonSpamEmails]);
   }
 
   renderEmail({ subject, spam, deleted }, index) {

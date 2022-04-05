@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
 import TapEvent from '../events/TapEvent';
+import Deck from '../Deck';
 
 /**
  * @customElement todo-app
@@ -20,7 +21,7 @@ export default class TwitterApp extends LitElement {
   constructor() {
     super();
 
-    this.items = [
+    this.items = Deck.randomize([
       {
         content: 'Ditch Date',
         checked: false,
@@ -31,14 +32,6 @@ export default class TwitterApp extends LitElement {
       },
       {
         content: 'Get cracked screen fixed',
-        checked: false,
-      },
-      {
-        content: 'Fix friend’s screen too',
-        checked: false,
-      },
-      {
-        content: 'And my dad’s',
         checked: false,
       },
       {
@@ -65,12 +58,12 @@ export default class TwitterApp extends LitElement {
         content: 'Solve Cold Fusion',
         checked: false,
       },
-    ];
+    ]).slice(0, 7);
 
     [
-      Math.floor(Math.random() * 10),
-      Math.floor(Math.random() * 10),
-      Math.floor(Math.random() * 10),
+      Math.floor(Math.random() * 6),
+      Math.floor(Math.random() * 6),
+      Math.floor(Math.random() * 6),
     ].forEach(index => (this.items[index].checked = true));
   }
 

@@ -72,7 +72,7 @@ export default class TwitterApp extends LitElement {
         username: 'rudeOil',
         blocked: false,
       },
-    ]);
+    ]).slice(0, 6);
   }
 
   render() {

@@ -276,6 +276,8 @@ export default class GameWindow extends LitElement {
           )
       )
     );
+
+    this.phases.shuffle({ avoidSameCard: false });
   }
 
   updated(changed) {
