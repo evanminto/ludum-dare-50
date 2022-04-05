@@ -23,13 +23,57 @@ export default class EmailApp extends LitElement {
 
     const spamEmails = Deck.randomize([
       {
+        subject: 'HOT PUZZLES WAITING FOR YOUR SOLVE',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'Awful Pizza at Even Worse Prices',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'You’re A Degenerate Gambler. Free BlackJack',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'Want disappointment? Download HateDate Today',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'SEND DUDES - Enlist in the Marines',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'Lonely Scammers In Your Area',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'You’re A Degenerate Gambler. Free BlackJack',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'These Cookies Will MAke you Crumb in a Millisecond',
+        spam: true,
+        deleted: false,
+      },
+      {
         subject: 'Overpaying for Rent? GOOD',
         spam: true,
         deleted: false,
       },
-      { subject: 'Lonely Scammers In Your Area', spam: true, deleted: false },
       {
-        subject: 'You’re A Degenerate Gambler. Free BlackJack',
+        subject: 'School’s Been Trying to Teach You…',
+        spam: true,
+        deleted: false,
+      },
+      {
+        subject: 'Lonely Scammers In Your Area',
         spam: true,
         deleted: false,
       },
@@ -47,6 +91,11 @@ export default class EmailApp extends LitElement {
         deleted: false,
       },
       {
+        subject: 'TPS Report - Coordinate with Tim Apple on these',
+        spam: false,
+        deleted: false,
+      },
+      {
         subject: 'Comment Reply on YubNub Video - You have a reply…',
         spam: false,
         deleted: false,
@@ -58,6 +107,26 @@ export default class EmailApp extends LitElement {
       },
       {
         subject: 'Nile Shopping - Your order will be arriving today.',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'Cursed Mobile - We haven’t received your payment.',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'eBy’s Auction - Nobody wants to buy your sHiT,',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'YubNub Video - Please stop uploading we’re begging',
+        spam: false,
+        deleted: false,
+      },
+      {
+        subject: 'Updated Privacy Policy for HateDate',
         spam: false,
         deleted: false,
       },
