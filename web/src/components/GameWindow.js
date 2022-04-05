@@ -7,7 +7,7 @@ import Deck from '../Deck';
 import App from '../App';
 import Notification from '../Notification';
 
-const BATTERY_START = 1;
+const BATTERY_START = 15;
 const BATTERY_NG_PLUS = 5;
 const BATTERY_PER_SECOND = 0.25;
 
