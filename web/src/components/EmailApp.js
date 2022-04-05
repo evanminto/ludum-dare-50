@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import SuccessEvent from '../events/SuccessEvent';
 import FailureEvent from '../events/FailureEvent';
+import TapEvent from '../events/TapEvent';
 import Deck from '../Deck';
 
 /**
@@ -159,11 +160,19 @@ export default class EmailApp extends LitElement {
     const email = this.emails[event.target.dataset.index];
 
     email.deleted = true;
+
+    const failure = this.emails.some(({ spam, deleted }) => !spam && deleted);
+    const success = !this.emails.some(({ spam, deleted }) => spam && !deleted);
+
+    if (!failure && !success) {
+      this.dispatchEvent(new TapEvent());
+    }
+
     this.requestUpdate('emails');
 
-    if (this.emails.some(({ spam, deleted }) => !spam && deleted)) {
+    if (failure) {
       this.dispatchFailure();
-    } else if (!this.emails.some(({ spam, deleted }) => spam && !deleted)) {
+    } else if (success) {
       this.dispatchSuccess();
     }
   }
