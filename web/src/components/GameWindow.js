@@ -9,7 +9,7 @@ import Notification from '../Notification';
 
 const BATTERY_START = 15;
 const BATTERY_NG_PLUS = 5;
-const BATTERY_PER_SECOND = 0;
+const BATTERY_PER_SECOND = 0.2;
 
 /**
  * @param {String} name
