@@ -9,7 +9,7 @@ import Notification from '../Notification';
 
 const BATTERY_START = 15;
 const BATTERY_NG_PLUS = 5;
-const BATTERY_PER_SECOND = 0.25;
+const BATTERY_PER_SECOND = 0.2;
 
 /**
  * @param {String} name
@@ -175,7 +175,7 @@ export default class GameWindow extends LitElement {
     /** @type {Notification} */
     this.notification = app.notification;
 
-    setTimeout(() => (this.currentApp = app), 1500 + 350);
+    setTimeout(() => (this.currentApp = app), 1200 + 350);
   }
 
   increaseSeconds() {
@@ -202,7 +202,7 @@ export default class GameWindow extends LitElement {
 
     if (nextApp) {
       this.notification = nextApp.notification;
-      setTimeout(() => (this.currentApp = nextApp), 1500 + 350);
+      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
     } else {
       this.currentPhase = this.phases.draw();
 
@@ -232,7 +232,7 @@ export default class GameWindow extends LitElement {
 
     setTimeout(() => {
       this.notification = nextApp.notification;
-      setTimeout(() => (this.currentApp = nextApp), 1500 + 350);
+      setTimeout(() => (this.currentApp = nextApp), 1200 + 350);
     }, 250);
   }
 
@@ -331,7 +331,7 @@ export default class GameWindow extends LitElement {
             () => (this.notification = null)
           );
           this.trayShowAnimation.play();
-        }, 1500);
+        }, 1200);
       }
     }
 
