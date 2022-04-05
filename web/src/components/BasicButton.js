@@ -17,6 +17,7 @@ export default class BasicButton extends LitElement {
     button {
       border-image: url('${unsafeCSS(imageUrl)}') 5 8 7 8 fill stretch;
       font: inherit;
+      color: var(--color-black);
       background: none;
       min-width: 100%;
       min-height: 100%;

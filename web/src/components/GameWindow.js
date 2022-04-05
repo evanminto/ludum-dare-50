@@ -9,7 +9,7 @@ import Notification from '../Notification';
 
 const BATTERY_START = 15;
 const BATTERY_NG_PLUS = 5;
-const BATTERY_PER_SECOND = 0.2;
+const BATTERY_PER_SECOND = 0;
 
 /**
  * @param {String} name
@@ -511,6 +511,7 @@ export default class GameWindow extends LitElement {
     }
 
     .click-to-play {
+      flex: 1 1 0;
       color: var(--color-white);
       margin: 0;
       height: 100%;
@@ -526,6 +527,8 @@ export default class GameWindow extends LitElement {
     .app-container {
       flex: 1 1 auto;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .app-container > * {

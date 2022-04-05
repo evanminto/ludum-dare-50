@@ -39,19 +39,23 @@ export default class AudioPlayer extends LitElement {
   }
 
   async playSound(name, { loop = false } = {}) {
-    const src = NAME_TO_URL[name];
+    try {
+      const src = NAME_TO_URL[name];
 
-    if (!src) {
-      return;
-    }
+      if (!src) {
+        return;
+      }
 
-    this.src = src;
-    this.loop = loop;
-    await this.updated;
-    const el = this.audioRef.value;
+      this.src = src;
+      this.loop = loop;
+      await this.updated;
+      const el = this.audioRef.value;
 
-    if (el) {
-      el.play();
+      if (el) {
+        el.play();
+      }
+    } catch (error) {
+      // Do nothing
     }
   }
 
