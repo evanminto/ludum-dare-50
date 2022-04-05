@@ -542,6 +542,10 @@ export default class GameWindow extends LitElement {
       overflow: hidden;
     }
 
+    shutdown-screen {
+      flex: 1 1 auto;
+    }
+
     .notifications-tray {
       display: flex;
       flex-direction: column;

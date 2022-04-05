@@ -40,7 +40,8 @@ export default class ShutdownScreen extends LitElement {
     }
 
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
       background: black;
       min-height: 100%;
     }
@@ -51,6 +52,7 @@ export default class ShutdownScreen extends LitElement {
     }
 
     .inner {
+      margin: auto;
       color: white;
       text-align: center;
       padding: 1em;

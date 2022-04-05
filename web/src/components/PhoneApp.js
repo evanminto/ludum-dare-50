@@ -117,6 +117,8 @@ export default class PhoneApp extends LitElement {
       display: block;
       background: var(--color-black);
       color: var(--color-white);
+      display: flex;
+      flex-direction: column;
     }
 
     .inner {
@@ -125,6 +127,7 @@ export default class PhoneApp extends LitElement {
       flex-direction: column;
       align-items: center;
       gap: 0;
+      flex: 1 1 auto;
     }
 
     * {
