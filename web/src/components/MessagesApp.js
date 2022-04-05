@@ -11,24 +11,66 @@ import FailureEvent from '../events/FailureEvent';
 export default class MessagesApp extends LitElement {
   static tagName = 'messages-app';
 
-  messages = [
-    'hey are you going to that thing after work i dont wanna go alone',
-  ];
+  messages = [];
 
   constructor() {
     super();
 
-    this.buttons = Deck.randomize([
-      html`<basic-button @click=${this.dispatchFailure}>
-        Ueah im congrats
-      </basic-button>`,
-      html`<basic-button @click=${this.dispatchSuccess}>
-        Yeah I’m coming
-      </basic-button>`,
-      html`<basic-button @click=${this.dispatchFailure}>
-        Yas in cringing
-      </basic-button>`,
-    ]);
+    const { message, buttons } = Deck.randomize([
+      {
+        message:
+          'hey are you going to that thing after work i dont wanna go alone',
+        buttons: () => {
+          return [
+            html`<basic-button @click=${this.dispatchFailure}>
+              Ueah im congrats
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchSuccess}>
+              Yeah I’m coming
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchFailure}>
+              Yas in cringing
+            </basic-button>`,
+          ];
+        },
+      },
+      {
+        message: 'how are you getting to the work party',
+        buttons: () => {
+          return [
+            html`<basic-button @click=${this.dispatchSuccess}>
+              Don’t know yet
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchFailure}>
+              Done know yeet
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchFailure}>
+              Dont none yet
+            </basic-button>`,
+          ];
+        },
+      },
+      {
+        message:
+          'how far away are you??? i’m too shy and the bartender is talking to me',
+        buttons: () => {
+          return [
+            html`<basic-button @click=${this.dispatchSuccess}>
+              order a beer, coward
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchFailure}>
+              odd her a beer, conehead
+            </basic-button>`,
+            html`<basic-button @click=${this.dispatchFailure}>
+              older a bee, corning
+            </basic-button>`,
+          ];
+        },
+      },
+    ])[0];
+
+    this.buttons = buttons();
+    this.messages = [message];
   }
 
   render() {
