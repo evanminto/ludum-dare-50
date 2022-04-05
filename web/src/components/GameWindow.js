@@ -79,6 +79,14 @@ const keyframes = {
   ],
 };
 
+const winMessages = new Deck([
+  'Desperately you plug your phone into a mysterious ceiling outlet in the subway station. People are eyeing you, jealous of your ingenuity.',
+  'You stop at some artisanal bean dungeon of a coffee shop. You buy one (1) scone to use their charger.',
+  'A hipster carrying a solar panel offers to plug you in. As you charge, he offers you Xanax and starts to tell you about his cult.',
+]);
+
+winMessages.shuffle();
+
 /**
  * @customElement game-window
  */
@@ -119,6 +127,7 @@ export default class GameWindow extends LitElement {
       type: Boolean,
       attribute: false,
     },
+    winMessage: String,
   };
 
   /** @type {import('lit/directives/ref').Ref<import('./AudioPlayer').default>} */
@@ -209,6 +218,8 @@ export default class GameWindow extends LitElement {
       if (this.currentPhase === null) {
         setTimeout(() => {
           this.win = true;
+          this.winMessage = winMessages.toArray()[0];
+          winMessages.shuffle();
           this.hidePopup = false;
           this.hideIntroMessage = true;
           this.hideWinMessage = false;
@@ -460,11 +471,8 @@ export default class GameWindow extends LitElement {
               </div>
 
               <div class="win-message" ?hidden=${this.hideWinMessage}>
-                <p>
-                  You stop at some artisanal bean dungeon of a coffee shop. You
-                  buy one (1) scone to use their charger.
-                </p>
-                <p>You gain ${BATTERY_NG_PLUS}% battery!</p>
+                <p>${this.winMessage}</p>
+                <p>Success! You gain ${BATTERY_NG_PLUS}% battery!</p>
 
                 <basic-button
                   @click=${() => {
