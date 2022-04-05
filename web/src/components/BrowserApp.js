@@ -69,17 +69,17 @@ export default class BrowserApp extends LitElement {
 
         <div class="button-options">
           <basic-button @click=${this.handleClickNewsletter}>
-            Yes, please spam me
+            Yes
           </basic-button>
 
           <basic-button @click=${this.handleClickNewsletter}>
-            No, I hate emails
+            Please go away
           </basic-button>
         </div>
       </div>
 
       <div class="banner cookie-banner" ?hidden=${this.cookieBannerDismissed}>
-        <p>Let us track everything you do please.</p>
+        <p>We’re tracking everything you do on here.</p>
 
         <div class="button-options">
           <basic-button @click=${this.handleClickCookie}>Allow</basic-button>
