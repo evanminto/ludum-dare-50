@@ -69,7 +69,7 @@ export default class MessagesApp extends LitElement {
       },
     ])[0];
 
-    this.buttons = buttons();
+    this.buttons = Deck.randomize(buttons());
     this.messages = [message];
   }
 
